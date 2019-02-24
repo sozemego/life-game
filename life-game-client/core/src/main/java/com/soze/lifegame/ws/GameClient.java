@@ -34,7 +34,11 @@ public class GameClient extends WebSocketClient {
   public void register(Object object) {
     this.eventBus.register(object);
   }
-
+  
+  public void unregister(Object object) {
+    eventBus.unregister(object);
+  }
+  
   public void login(Player player) {
     if (getGameState() != GameState.DISCONNECTED) {
       LOG.info("Cannot login. Client already in state {}", getGameState());

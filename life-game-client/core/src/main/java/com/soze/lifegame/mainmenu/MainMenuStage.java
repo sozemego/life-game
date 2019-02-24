@@ -1,4 +1,4 @@
-package com.soze.lifegame;
+package com.soze.lifegame.mainmenu;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;

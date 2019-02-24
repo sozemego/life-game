@@ -1,10 +1,12 @@
-package com.soze.lifegame;
+package com.soze.lifegame.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.utils.Timer;
 import com.google.common.eventbus.Subscribe;
+import com.soze.lifegame.LifeGame;
 import com.soze.lifegame.ws.event.AuthorizedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +42,12 @@ public class MainMenuScreen implements Screen {
   @Subscribe
   public void onAuthorized(AuthorizedEvent e) {
     LOG.info("Game server authorized client!");
-    lifeGame.loadGameScreen();
+    Timer.post(new Timer.Task() {
+      @Override
+      public void run() {
+        lifeGame.loadGameScreen();
+      }
+    });
   }
 
   public void resize(int width, int height) {
@@ -69,6 +76,6 @@ public class MainMenuScreen implements Screen {
 
   @Override
   public void dispose() {
-
+    lifeGame.getClient().unregister(this);
   }
 }
