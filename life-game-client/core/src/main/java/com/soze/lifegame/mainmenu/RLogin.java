@@ -110,8 +110,7 @@ public class RLogin extends Component {
         nextState.set("player", player);
         setState(nextState);
       })
-      .exceptionally(this::handleError)
-      .thenRun(this::stopProcessing);
+      .exceptionally(this::handleError);
 
     return true;
   }
@@ -160,6 +159,7 @@ public class RLogin extends Component {
     } else {
       setState("message", "Network issue occured!");
     }
+    stopProcessing();
     return null;
   }
   
