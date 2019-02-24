@@ -13,7 +13,7 @@ public class UserExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(InvalidPasswordException.class)
   public ResponseEntity<?> handleInvalidPasswordException(InvalidPasswordException e) {
     int statusCode = HttpStatus.UNAUTHORIZED.value();
-    ErrorResponse errorResponse = new ErrorResponse(statusCode, e.getMessage());
+    ErrorResponse errorResponse = new ErrorResponse(statusCode, "Invalid username or password");
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
