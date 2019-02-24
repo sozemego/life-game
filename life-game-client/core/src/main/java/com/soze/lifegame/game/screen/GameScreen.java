@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.soze.lifegame.LifeGame;
 import com.soze.lifegame.ws.GameClient;
+import com.soze.lifegame.ws.GameState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ public class GameScreen implements Screen {
   
   @Override
   public void show() {
-  
+    client.requestWorld();
   }
   
   @Override

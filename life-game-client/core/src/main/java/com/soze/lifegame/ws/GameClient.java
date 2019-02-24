@@ -3,6 +3,7 @@ package com.soze.lifegame.ws;
 import com.google.common.eventbus.EventBus;
 import com.soze.lifegame.common.json.JsonUtils;
 import com.soze.lifegame.common.ws.message.client.AuthorizeMessage;
+import com.soze.lifegame.common.ws.message.client.RequestWorldMessage;
 import com.soze.lifegame.common.ws.message.server.AuthorizedMessage;
 import com.soze.lifegame.common.ws.message.server.ServerMessage;
 import com.soze.lifegame.player.Player;
@@ -20,8 +21,10 @@ import java.util.UUID;
 public class GameClient extends WebSocketClient {
 
   private static final Logger LOG = LoggerFactory.getLogger(GameClient.class);
-
+  
   private final EventBus eventBus;
+  
+  private GameState gameState = GameState.DISCONNECTED;
 
   public GameClient(URI serverUri, EventBus eventBus) {
     super(serverUri);
@@ -33,6 +36,10 @@ public class GameClient extends WebSocketClient {
   }
 
   public void login(Player player) {
+    if (getGameState() != GameState.DISCONNECTED) {
+      LOG.info("Cannot login. Client already in state {}", getGameState());
+      return;
+    }
     if (!isOpen()) {
       LOG.info("Connecting to game client");
       try {
@@ -66,6 +73,7 @@ public class GameClient extends WebSocketClient {
     ServerMessage message = JsonUtils.jsonToObject(body, ServerMessage.class);
     LOG.info("Received message! {}", message);
     if (message instanceof AuthorizedMessage) {
+      setGameState(GameState.LOGGED_IN);
       eventBus.post(new AuthorizedEvent());
     }
   }
@@ -74,5 +82,25 @@ public class GameClient extends WebSocketClient {
   public void onError(Exception ex) {
     LOG.warn("Error in game client {}", ex);
   }
-
+  
+  public void requestWorld() {
+    if (getGameState() == GameState.LOGGED_IN) {
+      LOG.info("Sending RequestWorldMessage");
+      send(new RequestWorldMessage(UUID.randomUUID()));
+    } else {
+      LOG.info("requestWorld method called, but game state has to be LOGGED_IN, it's {}", getGameState());
+    }
+  }
+  
+  private void send(Object object) {
+    send(JsonUtils.objectToJson(object));
+  }
+  
+  public GameState getGameState() {
+    return gameState;
+  }
+  
+  public void setGameState(GameState gameState) {
+    this.gameState = gameState;
+  }
 }
