@@ -20,7 +20,6 @@ public class GameStage extends Stage {
     
     this.client.register(this);
   
-    R2D.render(R.createElement(GameUi.class), getRoot());
     setDebugAll(true);
   
     this.stageCamera = new OrthographicCamera();
@@ -29,6 +28,7 @@ public class GameStage extends Stage {
   }
   
   public void resize(int width, int height) {
+    R2D.render(R.createElement(GameUi.class), getRoot());
     getViewport().update(width, height, true);
   }
   
