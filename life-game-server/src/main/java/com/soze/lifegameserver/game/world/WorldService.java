@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -30,6 +32,7 @@ public class WorldService {
     LOG.info("Generating world for user {}", user.getName());
     World world = new World();
     world.setUserId(user.getId());
+    world.setCreatedAt(new Timestamp(Instant.now().toEpochMilli()));
     generateTiles(world);
     worldRepository.addWorld(world);
     return world;

@@ -4,6 +4,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
@@ -15,6 +17,7 @@ import java.util.Set;
 public class World {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
   private long id;
 
@@ -31,7 +34,7 @@ public class World {
   private Timestamp deletedAt;
   
   @ElementCollection
-  @CollectionTable(name = "tile", joinColumns = @JoinColumn(name = "tile_id"))
+  @CollectionTable(name = "tile", joinColumns = @JoinColumn(name = "world_id"))
   private Set<Tile> tiles;
 
   public long getId() {
