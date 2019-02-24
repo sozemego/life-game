@@ -12,12 +12,14 @@ public class UserExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(InvalidPasswordException.class)
   public ResponseEntity<?> handleInvalidPasswordException(InvalidPasswordException e) {
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    int statusCode = HttpStatus.UNAUTHORIZED.value();
+    ErrorResponse errorResponse = new ErrorResponse(statusCode, e.getMessage());
+    return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
   @ExceptionHandler(UserRegistrationException.class)
   public ResponseEntity<?> handleUserRegistrationException(UserRegistrationException e) {
-    int statusCode = 400;
+    int statusCode = HttpStatus.BAD_REQUEST.value();
     ErrorResponse errorResponse = new ErrorResponse(statusCode, e.getMessage());
     errorResponse.addData("field", e.getField());
     return ExceptionUtils.convertErrorResponse(errorResponse);
@@ -25,19 +27,22 @@ public class UserExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(AuthUserDoesNotExistException.class)
   public ResponseEntity<?> handleAuthUserDoesNotExistException(AuthUserDoesNotExistException e) {
-    ErrorResponse errorResponse = new ErrorResponse(401, "Invalid username or password");
+    ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Invalid username or password");
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
   @ExceptionHandler(NotAuthenticatedException.class)
   public ResponseEntity<?> handleNotAuthorizedException(NotAuthenticatedException e) {
-    ErrorResponse errorResponse = new ErrorResponse(401, e.getMessage());
+    ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
   @ExceptionHandler(TokenRegistrationException.class)
   public ResponseEntity<?> handleTokenRegistrationException(TokenRegistrationException e) {
-    ErrorResponse errorResponse = new ErrorResponse(500, "Cannot contact game server");
+    ErrorResponse errorResponse = new ErrorResponse(
+      HttpStatus.INTERNAL_SERVER_ERROR.value(),
+      "Cannot contact game server"
+    );
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
