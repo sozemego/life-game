@@ -1,10 +1,14 @@
 package com.soze.lifegameserver.game.world;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 @Table(name = "world")
@@ -25,6 +29,10 @@ public class World {
 
   @Column(name = "deleted_at")
   private Timestamp deletedAt;
+  
+  @ElementCollection
+  @CollectionTable(name = "tile", joinColumns = @JoinColumn(name = "tile_id"))
+  private Set<Tile> tiles;
 
   public long getId() {
     return id;
@@ -64,5 +72,13 @@ public class World {
 
   public void setDeletedAt(Timestamp deletedAt) {
     this.deletedAt = deletedAt;
+  }
+  
+  public Set<Tile> getTiles() {
+    return tiles;
+  }
+  
+  public void setTiles(Set<Tile> tiles) {
+    this.tiles = tiles;
   }
 }
