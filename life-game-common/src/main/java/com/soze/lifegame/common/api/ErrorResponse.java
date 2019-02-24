@@ -13,18 +13,18 @@ public class ErrorResponse {
   private String errorMessage;
   private Map<String, Object> data = new HashMap<>();
 
-  public ErrorResponse(final int statusCode, final String errorMessage) {
+  public ErrorResponse(int statusCode, String errorMessage) {
     this.statusCode = statusCode;
-    this.errorMessage = Objects.requireNonNull(errorMessage);
+    this.errorMessage = errorMessage;
   }
 
   @JsonCreator
-  public ErrorResponse(@JsonProperty("statusCode") final int statusCode,
-                       @JsonProperty("errorMessage") final String errorMessage,
-                       @JsonProperty("data") final Map<String, Object> data) {
+  public ErrorResponse(@JsonProperty("statusCode") int statusCode,
+                       @JsonProperty("errorMessage") String errorMessage,
+                       @JsonProperty("data") Map<String, Object> data) {
     this.statusCode = statusCode;
-    this.errorMessage = Objects.requireNonNull(errorMessage);
-    this.data = Objects.requireNonNull(data);
+    this.errorMessage = errorMessage;
+    this.data = data;
   }
 
   public Map<String, Object> addData(String key, Object value) {
@@ -36,7 +36,7 @@ public class ErrorResponse {
     return statusCode;
   }
 
-  public void setStatusCode(final int statusCode) {
+  public void setStatusCode(int statusCode) {
     this.statusCode = statusCode;
   }
 
@@ -44,7 +44,7 @@ public class ErrorResponse {
     return errorMessage;
   }
 
-  public void setErrorMessage(final String errorMessage) {
+  public void setErrorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
   }
 
@@ -52,7 +52,7 @@ public class ErrorResponse {
     return data;
   }
 
-  public void setData(final Map<String, Object> data) {
+  public void setData(Map<String, Object> data) {
     this.data = data;
   }
 }
