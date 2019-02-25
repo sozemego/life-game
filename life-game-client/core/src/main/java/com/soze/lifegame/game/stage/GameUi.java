@@ -12,19 +12,16 @@ public class GameUi extends Component {
   public GameUi(UiState props) {
     super(props);
     UiState state = getState();
-    state.set("dialogTitle", "Status");
-    state.set("text", "WHAT IS HAPPENING ARE YOU LOADING?");
-    state.set("showDialog", true);
   }
   
   private Element createMessageDialog() {
     UiState dialogProps = new UiState();
     dialogProps.set("fillParent", true);
-    dialogProps.set("show", getState().get("showDialog"));
+    dialogProps.set("show", getProps().get("dialogMessage") != null);
     dialogProps.set("debug", true);
   
     UiState labelProps = new UiState();
-    labelProps.set("text", getState().get("text"));
+    labelProps.set("text", getProps().get("dialogMessage"));
   
     return R.createElement(MessageDialog.class, dialogProps, Arrays.asList(
       R.createElement("LABEL", labelProps)

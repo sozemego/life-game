@@ -8,6 +8,7 @@ import com.soze.lifegame.common.ws.message.server.AuthorizedMessage;
 import com.soze.lifegame.common.ws.message.server.ServerMessage;
 import com.soze.lifegame.player.Player;
 import com.soze.lifegame.ws.event.AuthorizedEvent;
+import com.soze.lifegame.ws.event.GameStateChangedEvent;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
@@ -91,6 +92,7 @@ public class GameClient extends WebSocketClient {
     if (getGameState() == GameState.LOGGED_IN) {
       LOG.info("Sending RequestWorldMessage");
       send(new RequestWorldMessage(UUID.randomUUID()));
+      setGameState(GameState.WORLD_REQUESTED);
     } else {
       LOG.info("requestWorld method called, but game state has to be LOGGED_IN, it's {}", getGameState());
     }
@@ -106,5 +108,6 @@ public class GameClient extends WebSocketClient {
   
   public void setGameState(GameState gameState) {
     this.gameState = gameState;
+    eventBus.post(new GameStateChangedEvent(gameState));
   }
 }
