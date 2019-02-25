@@ -3,6 +3,7 @@ package com.soze.lifegame.game.stage;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.common.eventbus.Subscribe;
 import com.soze.lifegame.ws.GameClient;
@@ -35,7 +36,7 @@ public class GameStage extends Stage {
   }
   
   public void resize(int width, int height) {
-    R2D.render(R.createElement(GameUi.class), getRoot());
+    update();
     getViewport().update(width, height, true);
   }
   
@@ -45,14 +46,18 @@ public class GameStage extends Stage {
   
   @Subscribe
   public void handleGameStateChanged(GameStateChangedEvent e) {
+    System.out.println(e);
     if (e.getGameState() == GameState.WORLD_REQUESTED) {
       setDialogMessage("REQUESTING WORLD DATA!");
+    }
+    if (e.getGameState() == GameState.WORLD_LOADED) {
+      setDialogMessage("RENDERING WORLD");
     }
   }
   
   public void setDialogMessage(String message) {
     uiState.set("dialogMessage", message);
-    update();
+    update(); //TODO do this in lwjg thread
   }
   
 }

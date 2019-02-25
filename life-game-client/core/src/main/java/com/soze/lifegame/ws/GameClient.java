@@ -6,6 +6,7 @@ import com.soze.lifegame.common.ws.message.client.AuthorizeMessage;
 import com.soze.lifegame.common.ws.message.client.RequestWorldMessage;
 import com.soze.lifegame.common.ws.message.server.AuthorizedMessage;
 import com.soze.lifegame.common.ws.message.server.ServerMessage;
+import com.soze.lifegame.common.ws.message.server.WorldMessage;
 import com.soze.lifegame.player.Player;
 import com.soze.lifegame.ws.event.AuthorizedEvent;
 import com.soze.lifegame.ws.event.GameStateChangedEvent;
@@ -80,6 +81,9 @@ public class GameClient extends WebSocketClient {
     if (message instanceof AuthorizedMessage) {
       setGameState(GameState.LOGGED_IN);
       eventBus.post(new AuthorizedEvent());
+    }
+    if (message instanceof WorldMessage) {
+      setGameState(GameState.WORLD_LOADED);
     }
   }
 

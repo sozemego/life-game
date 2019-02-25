@@ -13,4 +13,11 @@ public class GameStateChangedEvent {
   public GameState getGameState() {
     return gameState;
   }
+  
+  @Override
+  public String toString() {
+    return "GameStateChangedEvent{" +
+             "gameState=" + gameState +
+             '}';
+  }
 }
