@@ -3,7 +3,9 @@ package com.soze.lifegameserver.game.world;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -17,7 +19,14 @@ public class WorldRepository {
   private EntityManager em;
 
   public Optional<World> findWorldByUserId(long userId) {
-    return Optional.ofNullable(em.find(World.class, userId));
+    Query query = em.createQuery("SELECT w FROM World w WHERE w.userId = :userId");
+    query.setParameter("userId", userId);
+    
+    try {
+      return Optional.of((World) query.getSingleResult());
+    } catch (NoResultException e) {
+      return Optional.empty();
+    }
   }
 
   public World addWorld(World world) {
