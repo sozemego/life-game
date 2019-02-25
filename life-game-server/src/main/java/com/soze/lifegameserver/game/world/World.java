@@ -4,6 +4,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ public class World {
   @Column(name = "deleted_at")
   private Timestamp deletedAt;
   
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "tile", joinColumns = @JoinColumn(name = "world_id"))
   private Set<Tile> tiles;
 

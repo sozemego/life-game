@@ -1,5 +1,6 @@
 package com.soze.lifegameserver.game.ws;
 
+import com.soze.lifegame.common.json.JsonUtils;
 import com.soze.lifegameserver.dto.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,10 @@ public class GameSession {
 
   public Instant getCreatedAt() {
     return createdAt;
+  }
+  
+  public void send(Object object) {
+    send(JsonUtils.objectToJson(object));
   }
   
   public void send(String body) {
