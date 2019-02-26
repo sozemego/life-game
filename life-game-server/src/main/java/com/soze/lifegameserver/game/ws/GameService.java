@@ -43,6 +43,7 @@ public class GameService {
     
     World world = worldOptional.isPresent() ? worldOptional.get() : worldService.generateWorld(gameSession.getUser());
     WorldDto dto = convertToDto(world);
+    
     LOG.info("Sending world data to {}", gameSession.getSession().getId());
     gameSession.send(new WorldMessage(UUID.randomUUID(), dto));
   }
