@@ -3,17 +3,21 @@ package com.soze.lifegame.game.stage;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.common.eventbus.Subscribe;
+import com.soze.lifegame.utils.TimerUtils;
 import com.soze.lifegame.ws.GameClient;
 import com.soze.lifegame.ws.GameState;
 import com.soze.lifegame.ws.event.GameStateChangedEvent;
 import com.soze.r2d.R;
 import com.soze.r2d.R2D;
 import com.soze.r2d.UiState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GameStage extends Stage {
+  
+  private static final Logger LOG = LoggerFactory.getLogger(GameStage.class);
   
   private final ScreenViewport stageViewport;
   private final Camera stageCamera;
@@ -32,7 +36,8 @@ public class GameStage extends Stage {
     setViewport(stageViewport);
     
     this.uiState = new UiState();
-    uiState.set("dialogMessage",null);
+    uiState.set("dialogMessage", null);
+    update();
   }
   
   public void resize(int width, int height) {
@@ -46,7 +51,7 @@ public class GameStage extends Stage {
   
   @Subscribe
   public void handleGameStateChanged(GameStateChangedEvent e) {
-    System.out.println(e);
+    LOG.info("Game state changed to {}", e.getGameState());
     if (e.getGameState() == GameState.WORLD_REQUESTED) {
       setDialogMessage("REQUESTING WORLD DATA!");
     }
@@ -56,8 +61,11 @@ public class GameStage extends Stage {
   }
   
   public void setDialogMessage(String message) {
-    uiState.set("dialogMessage", message);
-    update(); //TODO do this in lwjg thread
+    TimerUtils.post(() -> {
+      LOG.info("Setting dialog message {}", message);
+      uiState.set("dialogMessage", message);
+      update();
+    });
   }
   
 }

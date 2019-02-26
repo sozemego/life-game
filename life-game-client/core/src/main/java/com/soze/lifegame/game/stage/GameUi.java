@@ -22,7 +22,7 @@ public class GameUi extends Component {
   
     UiState labelProps = new UiState();
     labelProps.set("text", getProps().get("dialogMessage"));
-  
+    System.out.println(labelProps.get("text"));
     return R.createElement(MessageDialog.class, dialogProps, Arrays.asList(
       R.createElement("LABEL", labelProps)
     ));

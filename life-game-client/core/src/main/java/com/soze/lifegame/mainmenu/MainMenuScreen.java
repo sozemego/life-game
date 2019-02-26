@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Timer;
 import com.google.common.eventbus.Subscribe;
 import com.soze.lifegame.LifeGame;
+import com.soze.lifegame.utils.TimerUtils;
 import com.soze.lifegame.ws.event.AuthorizedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +43,8 @@ public class MainMenuScreen implements Screen {
   @Subscribe
   public void onAuthorized(AuthorizedEvent e) {
     LOG.info("Game server authorized client!");
-    Timer.post(new Timer.Task() {
-      @Override
-      public void run() {
-        lifeGame.loadGameScreen();
-      }
+    TimerUtils.post(() -> {
+      lifeGame.loadGameScreen();
     });
   }
 
