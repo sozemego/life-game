@@ -12,15 +12,15 @@ const Header = ({ isLoggedIn, logout }) => {
   return (
     <div className={styles.container}>
       <div className={styles['header-content']}>
-        <div style={{ visibility: 'hidden' }}>
+        <div style={{ flex: 1, visibility: 'hidden' }}>
           what
         </div>
-        <div className={styles['game_name']}>
+        <div className={styles['game-name']}>
           <Link to={'/'}>
             LIFE GAME
           </Link>
         </div>
-        <div className={styles['login_content']}>
+        <div className={styles['login-content']}>
           {!isLoggedIn &&
           <Link to={'/login'}>
             LOGIN
