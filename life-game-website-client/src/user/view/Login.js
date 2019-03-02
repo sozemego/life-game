@@ -4,41 +4,8 @@ import { connect } from 'react-redux';
 import { createReducer, makePayloadActionCreators } from '../../store/utils';
 import { isLoggedIn } from '../selectors';
 import * as userActions from '../actions';
+import styles from './Login.module.css';
 
-const containerStyle = {
-  display: 'flex',
-  width: '100%',
-  height: '100%',
-  justifyContent: 'center',
-  alignItems: 'center',
-};
-const formStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  border: '1px solid gray',
-  borderRadius: '4px',
-  padding: '8px',
-  boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-  minWidth: '250px',
-};
-
-const inputContainerStyle = {
-  display: 'flex',
-  justifyContent: 'space-between',
-};
-
-const buttonContainer = {
-  display: 'flex',
-  justifyContent: 'center',
-};
-
-const successMessageStyle = {
-  color: 'green',
-};
-
-const errorMessageStyle = {
-  color: 'red',
-};
 
 const initialState = {
   username: '',
@@ -57,7 +24,7 @@ const reducer = createReducer(initialState, {
 
 const Login = ({ isLoggedIn, register, login }) => {
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [ state, dispatch ] = useReducer(reducer, initialState);
   const { username, password, message, error } = state;
 
   const onRegisterClick = (_) => {
@@ -73,20 +40,20 @@ const Login = ({ isLoggedIn, register, login }) => {
   };
 
   return (
-    <div style={containerStyle}>
-      <div style={formStyle}>
-        <div style={inputContainerStyle}>
+    <div className={styles.container}>
+      <div className={styles.form}>
+        <div className={styles['input-container']}>
           <span>Username</span>
           <input onChange={event => dispatch(setUsername(event.target.value))} value={username}/>
         </div>
-        <div style={inputContainerStyle}>
+        <div className={styles['input-container']}>
           <span>Password</span>
           <input onChange={event => dispatch(setPassword(event.target.value))} value={password}/>
         </div>
-        <div style={error ? errorMessageStyle : successMessageStyle}>
+        <div className={error ? styles['error-message'] : styles['success-message']}>
           {message}
         </div>
-        <div style={buttonContainer}>
+        <div className={styles['button-container']}>
           <button disabled={!username || !password || isLoggedIn} onClick={onRegisterClick}>
             REGISTER
           </button>
