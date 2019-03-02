@@ -1,18 +1,10 @@
 import React from 'react';
-
-const containerStyle = {
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'flex-start',
-  marginTop: '24px',
-};
+import styles from "./MainPage.module.css";
 
 const MainPage = (props) => {
 
   return (
-    <div style={containerStyle}>
+    <div className={styles.container}>
       HELLO TO THE LIFE GAME
     </div>
   );
