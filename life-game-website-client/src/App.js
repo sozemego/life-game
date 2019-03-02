@@ -9,8 +9,8 @@ const App = (props) => {
   return (
     <div style={{ height: '100%' }}>
       <Header/>
-      <Route path={'/'} component={MainPage}/>
-      <Route path={'/login'} component={Login}/>
+      <Route path={'/'} component={MainPage} exact/>
+      <Route path={'/login'} component={Login} exact/>
     </div>
   );
 };
