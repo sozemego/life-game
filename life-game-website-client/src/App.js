@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from './Header';
+import Header from './Header/Header';
 import { Route } from 'react-router';
 import Login from './user/view/Login';
 import MainPage from './main/MainPage';
