@@ -1,5 +1,5 @@
 {
-  "name": "life-game-website",
+  "name": "life-game-website-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
