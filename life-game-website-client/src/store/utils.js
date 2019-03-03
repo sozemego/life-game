@@ -20,18 +20,26 @@ export const makePayloadActionCreators = (...types) => {
 };
 
 /*
-  A reducer which checks if state with key 'action.type' is present
+  !! USE ONLY FOR React.useReducer !!
+  If a handler is given for an action.type, then it's used as a reducer.
+  Otherwise checks if state with key 'action.type' is present
   and if so, returns new spread state, with value from 'action.payload'
   assigned to 'action.type'. Otherwise returns old state.
   Forces user to provide all possible fields in 'initial state' passed to reducers.
   If they don't, this reducer will return old state.
  */
-const reducer = (state = {}, action) => {
-  const previousState = state[action.type];
-  if (previousState != null) {
-    return { ...state, [action.type]: action.payload };
-  }
-  return state;
+export const createHookReducer = (initialState, handlers = {}) => {
+  return (state = initialState, action) => {
+    if (handlers.hasOwnProperty(action.type)) {
+      return handlers[action.type](state, action);
+    } else {
+      const previousState = state[action.type];
+      if (previousState != null) {
+        return { ...state, [action.type]: action.payload };
+      }
+      return state;
+    }
+  };
 };
 
 export const createReducer = (initialState, handlers = {}) => {
@@ -39,7 +47,7 @@ export const createReducer = (initialState, handlers = {}) => {
     if (handlers.hasOwnProperty(action.type)) {
       return handlers[action.type](state, action);
     } else {
-      return reducer(state, action);
+      return state;
     }
   };
 };
