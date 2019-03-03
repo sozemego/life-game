@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Divider from '../components/Divider';
 import { isLoggedIn } from '../user/selectors';
 import { connect } from 'react-redux';
 import * as userActions from '../user/actions';
 import styles from './Header.module.css';
+import LineProgress from '../components/LineProgress/LineProgress';
+import Divider from '../components/Divider';
 
 const Header = ({ isLoggedIn, logout }) => {
 
@@ -33,6 +34,7 @@ const Header = ({ isLoggedIn, logout }) => {
         </div>
       </div>
       <Divider/>
+      <LineProgress />
     </div>
   );
 };
