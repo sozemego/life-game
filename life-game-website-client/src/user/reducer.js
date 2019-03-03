@@ -1,7 +1,7 @@
 import { createReducer } from '../store/utils';
 
 const initialState = {
-  loggedIn: false,
+  name: null
 };
 
 const reducer = createReducer(initialState);
