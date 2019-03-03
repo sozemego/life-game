@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import styles from './LineProgress.module.css';
+import { isFetching } from '../../app/selectors';
 
 export const LineProgress = (props) => {
 
@@ -22,7 +23,7 @@ export const LineProgress = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    isFetching: true,
+    isFetching: isFetching(state),
   };
 };
 
