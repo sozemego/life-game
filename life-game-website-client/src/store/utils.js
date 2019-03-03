@@ -20,7 +20,7 @@ export const makePayloadActionCreators = (...types) => {
 };
 
 /*
-  Creates a reducer which checks if state with key 'action.type' is present
+  A reducer which checks if state with key 'action.type' is present
   and if so, returns new spread state, with value from 'action.payload'
   assigned to 'action.type'. Otherwise returns old state.
   Forces user to provide all possible fields in 'initial state' passed to reducers.
