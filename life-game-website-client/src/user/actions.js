@@ -1,5 +1,6 @@
 import { makePayloadActionCreator } from '../store/utils';
 import { getLoginService } from '../api/ServiceFactory';
+import {history} from '../app/history';
 
 const loginService = getLoginService();
 
@@ -15,7 +16,8 @@ export const register = (username, password) => {
 export const login = (username, password) => {
   return (dispatch, getState) => {
     return loginService.login(username, password)
-      .then(() => dispatch(setName(username)));
+      .then(() => dispatch(setName(username)))
+      .then(() => setImmediate(() => history.push('/')));
   };
 };
 
