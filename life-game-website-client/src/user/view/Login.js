@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createReducer, makePayloadActionCreators } from '../../store/utils';
+import { createHookReducer, makePayloadActionCreators } from '../../store/utils';
 import { isLoggedIn } from '../selectors';
 import * as userActions from '../actions';
 import styles from './Login.module.css';
@@ -11,14 +11,14 @@ const initialState = {
   username: '',
   password: '',
   message: '',
-  error: '',
+  error: false,
 };
 
 const [
   setUsername, setPassword, setMessage,
 ] = makePayloadActionCreators('username', 'password', 'message');
 
-const reducer = createReducer(initialState, {
+const reducer = createHookReducer(initialState, {
   message: (state, action) => ({ ...state, error: action.payload.error, message: action.payload.message }),
 });
 
