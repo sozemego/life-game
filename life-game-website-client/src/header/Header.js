@@ -5,8 +5,8 @@ import { isLoggedIn } from '../user/selectors';
 import { connect } from 'react-redux';
 import * as userActions from '../user/actions';
 import styles from './Header.module.css';
-import LineProgress from '../components/LineProgress/LineProgress';
-import Divider from '../components/Divider';
+import LineProgress from '../components/line-progress/LineProgress';
+import Divider from '../components/divider/Divider';
 
 const Header = ({ isLoggedIn, logout }) => {
 
