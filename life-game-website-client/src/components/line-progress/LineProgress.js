@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import styles from './LineProgress.module.css';
@@ -19,6 +20,14 @@ export const LineProgress = (props) => {
       </div>
     </div>
   );
+};
+
+LineProgress.props = {
+  isFetching: PropTypes.bool,
+};
+
+LineProgress.defaultProps = {
+  isFetching: false,
 };
 
 const mapStateToProps = (state) => {
