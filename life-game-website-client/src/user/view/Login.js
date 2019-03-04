@@ -1,11 +1,11 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createHookReducer, makePayloadActionCreators } from '../../store/utils';
 import { isLoggedIn } from '../selectors';
 import * as userActions from '../actions';
 import styles from './Login.module.css';
-
+import { Button } from '../../components/button/Button';
 
 const initialState = {
   username: '',
@@ -26,17 +26,22 @@ const Login = ({ isLoggedIn, register, login }) => {
 
   const [ state, dispatch ] = useReducer(reducer, initialState);
   const { username, password, message, error } = state;
+  const [ fetching, setFetching ] = useState(false);
 
   const onRegisterClick = (_) => {
-    register(username, password)
+    setFetching(true);
+    return register(username, password)
       .then(() => dispatch(setMessage({ message: 'Registered!', error: false })))
-      .catch(error => dispatch(setMessage({ message: error.message, error: true })));
+      .catch(error => dispatch(setMessage({ message: error.message, error: true })))
+      .then(() => setFetching(false));
   };
 
   const onLoginClick = (_) => {
-    login(username, password)
+    setFetching(true);
+    return login(username, password)
       .then(() => dispatch(setMessage({ message: 'Logged in!', error: false })))
-      .catch(error => dispatch(setMessage({ message: error.message, error: true })));
+      .catch(error => dispatch(setMessage({ message: error.message, error: true })))
+      .then(() => setFetching(false));
   };
 
   return (
@@ -54,12 +59,12 @@ const Login = ({ isLoggedIn, register, login }) => {
           {message}
         </div>
         <div className={styles['button-container']}>
-          <button disabled={!username || !password || isLoggedIn} onClick={onRegisterClick}>
+          <Button disabled={!username || !password || isLoggedIn || fetching} onClick={onRegisterClick}>
             REGISTER
-          </button>
-          <button disabled={!username || !password} onClick={onLoginClick}>
+          </Button>
+          <Button disabled={!username || !password || fetching} onClick={onLoginClick}>
             LOGIN
-          </button>
+          </Button>
         </div>
       </div>
     </div>
