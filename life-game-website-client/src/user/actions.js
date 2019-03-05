@@ -1,10 +1,11 @@
-import { makePayloadActionCreator } from '../store/utils';
 import { getLoginService } from '../api/ServiceFactory';
-import {history} from '../app/history';
+import { history } from '../app/history';
+import { makePayloadActionCreator } from '../store/utils';
+import { SET_USER_NAME } from './action-types';
 
 const loginService = getLoginService();
 
-const setName = makePayloadActionCreator('SET_USER_NAME');
+export const setName = makePayloadActionCreator(SET_USER_NAME);
 
 export const register = (username, password) => {
   return (dispatch, getState) => {
