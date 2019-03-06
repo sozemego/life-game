@@ -3,7 +3,7 @@ import Header from '../../header/Header';
 import { Route } from 'react-router';
 import Login from '../../user/view/Login';
 import MainPage from '../../main/MainPage';
-import { Game } from '../../game/Game';
+import GameComponent from '../../game/view/GameComponent';
 
 const App = (props) => {
 
@@ -12,7 +12,7 @@ const App = (props) => {
       <Header/>
       <Route path={'/'} component={MainPage} exact/>
       <Route path={'/login'} component={Login} exact/>
-      <Route path={'/game'} component={Game} exact/>
+      <Route path={'/game'} component={GameComponent} exact/>
     </div>
   );
 };
