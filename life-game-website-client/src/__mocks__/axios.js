@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const mockAxios = {
   create: () => mockAxios
 };
@@ -25,5 +27,10 @@ const response = {
 mockAxios.interceptors.response = response;
 
 mockAxios.post = jest.fn()
+
+mockAxios.defaults = {
+  headers: {}
+};
+
 
 export default mockAxios;
