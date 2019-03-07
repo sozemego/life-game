@@ -11,7 +11,10 @@ class LoginService extends NetworkService {
 
   login(username, password) {
     return this.post(LOGIN, { username, password })
-      .then(token => setAuthorizationToken(token.jwt))
+      .then(({ jwt }) => {
+        setAuthorizationToken(jwt);
+        return jwt;
+      })
       .catch(error => {
         if (error.status === 401) {
           throw new Error("Invalid username or password!");
