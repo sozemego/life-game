@@ -1,16 +1,14 @@
-import { createReducer } from '../store/utils';
-import { SET_USER_NAME } from './action-types';
+import { createPayloadSetter, createReducer } from '../store/utils';
+import { SET_TOKEN, SET_USER_NAME } from './action-types';
 
 const initialState = {
   name: null,
-};
-
-const setUserName = (state, action) => {
-  return { ...state, name: action.payload };
+  token: null,
 };
 
 const reducer = createReducer(initialState, {
-  [SET_USER_NAME]: setUserName,
+  [SET_USER_NAME]: createPayloadSetter('name'),
+  [SET_TOKEN]: createPayloadSetter('token'),
 });
 
 export default reducer;

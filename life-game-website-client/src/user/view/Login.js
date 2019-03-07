@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createHookReducer, makePayloadActionCreators } from '../../store/utils';
@@ -8,8 +8,8 @@ import styles from './Login.module.css';
 import { Button } from '../../components/button/Button';
 
 const initialState = {
-  username: '',
-  password: '',
+  username: 'asd',
+  password: 'asd',
   message: '',
   error: false,
 };
@@ -43,6 +43,10 @@ const Login = ({ isLoggedIn, register, login }) => {
       .catch(error => dispatch(setMessage({ message: error.message, error: true })))
       .then(() => setFetching(false));
   };
+
+  useEffect(() => {
+    onLoginClick();
+  }, [])
 
   return (
     <div className={styles.container}>

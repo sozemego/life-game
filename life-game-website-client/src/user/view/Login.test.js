@@ -1,5 +1,5 @@
 // import React from 'react';
-// import { act, cleanup, fireEvent, render, wait } from 'react-testing-library';
+// import { act, cleanup, fireEvent, render, waitForElement } from 'react-testing-library';
 //
 // import 'jest-dom/extend-expect';
 // import Login from './Login';
@@ -29,8 +29,8 @@
 //   };
 // }
 //
-// test('can render with redux with defaults', async () => {
-//   const { getByTestId, getByText, getByLabelText, store } = renderWithRedux(<Login/>, { store: realStore });
+// test('can render with redux with defaults', async (done) => {
+//   const { getByText, getByLabelText, store, container } = renderWithRedux(<Login/>, { store: realStore });
 //   axiosMock.post.mockResolvedValueOnce({data: {greeting: 'hello there'}})
 //   act(() => {
 //     const usernameInput = getByLabelText('username');
@@ -40,14 +40,12 @@
 //   })
 //   act(() => {
 //     fireEvent.click(getByText('LOGIN'));
-//     // store.dispatch({type: 'SET_USER_NAME', payload: 'lol'});
-//     jest.runAllTimers();
 //   });
+//   console.log(store.getState())
+//   await waitForElement(() => getByText('Logged in!'))
+//   console.log(getByLabelText('message'));
 //   expect(axiosMock.post).toHaveBeenCalledTimes(1);
 //   console.log(store.getState())
-//   await wait(() => {
-//     return false
-//   });
-//   console.log(store.getState())
-//
+//   expect(isLoggedIn(store.getState())).toBeTruthy();
+//   return done()
 // });
