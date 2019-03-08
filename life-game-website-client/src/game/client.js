@@ -21,7 +21,8 @@ export const createGameClient = (user) => {
 
       socket.onmessage = (message) => {
         const parsed = JSON.parse(message.data);
-        console.log('received message from server ' + parsed);
+        console.log('received message from server');
+        console.log(parsed);
         listeners.forEach(listener => listener(parsed));
       };
 
