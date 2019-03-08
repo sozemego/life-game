@@ -3,15 +3,16 @@ package com.soze.lifegameserver.game.world;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Embeddable
 @Table(name = "tile")
 public class Tile {
   
-  @Column(name = "x")
+  @Column(name = "x", nullable = false)
   private long x;
   
-  @Column(name = "y")
+  @Column(name = "y", nullable = false)
   private long y;
   
   public long getX() {
@@ -30,4 +31,17 @@ public class Tile {
     this.y = y;
   }
   
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Tile tile = (Tile) o;
+    return x == tile.x &&
+             y == tile.y;
+  }
+  
+  @Override
+  public int hashCode() {
+    return Objects.hash(x, y);
+  }
 }

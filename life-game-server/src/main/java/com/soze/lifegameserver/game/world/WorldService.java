@@ -25,7 +25,10 @@ public class WorldService {
   }
 
   public Optional<World> findWorldByUserId(long userId) {
-    return worldRepository.findWorldByUserId(userId);
+    LOG.info("Searching for world by user id [{}]", userId);
+    Optional<World> worldByUserId = worldRepository.findWorldByUserId(userId);
+    LOG.info("World for user [{}] exists [{}]", userId, worldByUserId.isPresent());
+    return worldByUserId;
   }
   
   public World generateWorld(User user) {
