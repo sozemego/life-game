@@ -18,22 +18,30 @@ export const createGame = () => {
 
   camera.position.z = 5;
 
+  const game = {
+    running: false
+  };
+
+  game.start = () => {
+    console.log('Starting game loop!');
+    game.running = true;
+    animate();
+  };
+
+  game.destroy = () => {
+    game.running = false;
+  };
+
   const animate = () => {
+    if (!game.running) {
+      return;
+    }
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
 
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
     cube.rotation.z += 0.01;
-  };
-
-  const game = {
-
-  };
-
-  game.start = () => {
-    console.log('Starting game loop!');
-    animate();
   };
 
   return game;

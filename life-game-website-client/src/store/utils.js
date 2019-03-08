@@ -55,3 +55,11 @@ export const createReducer = (initialState, handlers = {}) => {
 export const rootSelector = rootName => state => {
   return typeof state === 'function' ? state()[rootName] : state[rootName];
 };
+
+/**
+ * Creates a setter used as a reducer.
+ * For example, if an action has 'payload' property, it's
+ * @param property
+ * @returns {function(*, *): {[p: string]: *}}
+ */
+export const createPayloadSetter = (property) => (state, action) => ({...state, [property]: action.payload});
