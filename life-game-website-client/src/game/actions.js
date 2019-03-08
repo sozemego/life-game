@@ -38,8 +38,18 @@ export const startGame = () => {
 export const createGame = (client) => {
   return (dispatch, getState) => {
     console.log('CREATING THE GAME ENGINE')
-    dispatch(setLoadGameMessage('LOADING WORLD'));
     const game = gameFactory(client);
     game.start();
+
+    dispatch(setLoadGameMessage('REQUESTING GAME WORLD'));
+
+    client.requestGameWorld();
+
+    client.onMessage((msg) => {
+      if (msg.type === 'WORLD') {
+        dispatch(setLoadGameMessage('RENDERING GAME WORLD'));
+      }
+    });
+
   };
 };
