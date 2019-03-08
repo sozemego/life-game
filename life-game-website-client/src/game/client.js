@@ -4,6 +4,7 @@ export const createGameClient = (user) => {
   let socket = null;
 
   const client = {};
+  const listeners = [];
 
   client.connect = () => {
     if (socket) {
@@ -20,13 +21,12 @@ export const createGameClient = (user) => {
 
       socket.onmessage = (message) => {
         const parsed = JSON.parse(message.data);
-        console.log('received message from server ' + parsed.type);
-        // dispatch(parsed);
+        console.log('received message from server ' + parsed);
+        listeners.forEach(listener => listener(parsed));
       };
 
       socket.onclose = () => {
         console.log('connection closed');
-        // dispatch(logoutThunk());
       };
 
       socket.onerror = (e) => {
@@ -47,6 +47,12 @@ export const createGameClient = (user) => {
       type: 'AUTHORIZE'
     };
     client.send(authMessage);
+  };
+
+  client.onMessage = (fn) => {
+    listeners.push(fn);
+    const index = listeners.length - 1;
+    return () => listeners.splice(0, index);
   };
 
   return client;
