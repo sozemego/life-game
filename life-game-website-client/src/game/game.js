@@ -7,6 +7,15 @@ export const createGame = () => {
 
   const renderer = new WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const resize = () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  };
+
+  window.addEventListener('resize', resize);
+
   const container = document.getElementById('game-container');
   container.append(renderer.domElement);
 
@@ -30,6 +39,7 @@ export const createGame = () => {
 
   game.destroy = () => {
     game.running = false;
+    window.removeEventListener('resize', resize);
   };
 
   const animate = () => {
