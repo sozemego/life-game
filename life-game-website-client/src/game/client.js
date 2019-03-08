@@ -11,7 +11,7 @@ export const createGameClient = (user) => {
       return Promise.reject('Already connected or connecting');
     }
 
-    socket = new WebSocket('ws://localhost:8000/game?what=what');
+    socket = new WebSocket('ws://localhost:8000/game');
 
     return new Promise((resolve, reject) => {
       socket.onopen = (ws) => {
@@ -51,8 +51,12 @@ export const createGameClient = (user) => {
 
   client.onMessage = (fn) => {
     listeners.push(fn);
-    const index = listeners.length - 1;
-    return () => listeners.splice(0, index);
+    return () => {
+      const index = listeners.findIndex(listener => listener === fn);
+      if (index > -1) {
+        listeners.splice(0, index);
+      }
+    };
   };
 
   return client;
