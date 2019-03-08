@@ -29,6 +29,7 @@ export const login = (username, password) => {
 export const logout = () => {
   return (dispatch, getState) => {
     return loginService.logout()
-      .then(() => dispatch(setName(null)));
+      .then(() => dispatch(setName(null)))
+      .then(() => setImmediate(() => history.push('/login')));
   };
 }
