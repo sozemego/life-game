@@ -49,6 +49,15 @@ export const createGameClient = (user) => {
     client.send(authMessage);
   };
 
+  client.requestGameWorld = () => {
+    const requestWorldMessage = {
+      messageId: uuid(),
+      type: 'REQUEST_WORLD'
+    };
+    client.send(requestWorldMessage);
+
+  };
+
   client.onMessage = (fn) => {
     listeners.push(fn);
     return () => {
