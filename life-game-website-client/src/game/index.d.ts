@@ -4,7 +4,7 @@ export interface GameService {
 
 export interface GameClient {
     connect(): Promise<any>
-    send(body: string): void
+    send(body: object): void
     authorize(): void
     requestGameWorld(): void
     onMessage(type: string, fn: () => void): () => void
