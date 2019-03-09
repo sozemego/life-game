@@ -1,5 +1,6 @@
 export interface GameService {
     start(): Promise<any>
+    destroy(): void
 }
 
 export interface GameClient {
@@ -8,4 +9,11 @@ export interface GameClient {
     authorize(): void
     requestGameWorld(): void
     onMessage(type: string, fn: () => void): () => void
+}
+
+export interface Engine {
+    start(): void
+    setWorld(world: any): void
+    stop(): void
+    running: boolean
 }
