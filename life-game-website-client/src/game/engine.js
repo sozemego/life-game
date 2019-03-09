@@ -1,6 +1,7 @@
 import {
+  AxesHelper,
   BoxGeometry,
-  CameraHelper,
+  CameraHelper, DoubleSide,
   FrontSide,
   Mesh,
   MeshBasicMaterial,
@@ -10,6 +11,9 @@ import {
   WebGLRenderer,
 } from 'three';
 
+/**
+ * @returns Engine
+ */
 export const createEngine = () => {
 
   const scene = new Scene();
@@ -18,12 +22,15 @@ export const createEngine = () => {
   const aspect = width / height;
   const frustumSize = 100;
   const camera = new PerspectiveCamera(75, aspect, 1, 1000);
-  camera.up = new Vector3(0, 0, 1);
+  camera.up.set(0, 0, 1);
   camera.position.x = 30;
   camera.position.y = 0;
   camera.position.z = 5;
   const helper = new CameraHelper(camera);
   scene.add(helper);
+
+  const axesHelper = new AxesHelper(5);
+  scene.add(axesHelper);
 
   const renderer = new WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -38,15 +45,19 @@ export const createEngine = () => {
 
   const pressedKeys = new Set();
 
-  window.addEventListener('keydown', (event) => {
+  const onKeyDown = (event) => {
     const { key } = event;
     pressedKeys.add(key);
-  });
+  };
 
-  window.addEventListener('keyup', (event) => {
+  window.addEventListener('keydown', onKeyDown);
+
+  const onKeyUp = (event) => {
     const { key } = event;
     pressedKeys.delete(key);
-  });
+  }
+
+  window.addEventListener('keyup', onKeyUp);
 
   const container = document.getElementById('game-container');
   container.append(renderer.domElement);
@@ -69,9 +80,34 @@ export const createEngine = () => {
     animate();
   };
 
-  engine.destroy = () => {
+  const world = {
+    tileSize: 12,
+    tiles: {},
+  };
+
+  engine.setWorld = (newWorld) => {
+    console.log(newWorld);
+    newWorld.tiles.forEach(tile => {
+      const key = `${tile.x}:${tile.y}`;
+      world[key] = tile;
+
+      const geometry = new PlaneGeometry(world.tileSize, world.tileSize, 12);
+      const material = new MeshBasicMaterial({ color: 0x00ff00, side: DoubleSide });
+      const plane = new Mesh(geometry, material);
+      plane.position.x = tile.x * world.tileSize;
+      plane.position.y = tile.y * world.tileSize;
+      plane.position.z = 0;
+      tile.plane = plane;
+      scene.add(plane);
+
+    });
+  };
+
+  engine.stop = () => {
     engine.running = false;
     window.removeEventListener('resize', resize);
+    window.removeEventListener('keydown', onKeyDown);
+    window.removeEventListener('keyup', onKeyUp);
   };
 
   const animate = () => {
@@ -100,13 +136,10 @@ export const createEngine = () => {
       camera.position.z -= 1;
     }
 
-    if(pressedKeys.has('g')) {
+    if (pressedKeys.has('g')) {
       console.log(camera.position);
       console.log(cube.position);
-      camera.lookAt(cube.position);
     }
-
-    // camera.lookAt(cube.position);
 
     camera.updateProjectionMatrix();
     helper.update();
@@ -115,27 +148,6 @@ export const createEngine = () => {
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
     cube.rotation.z += 0.01;
-  };
-
-  const world = {
-    tileSize: 12,
-    tiles: {},
-  };
-
-  engine.setWorld = (newWorld) => {
-    console.log(newWorld);
-    newWorld.tiles.forEach(tile => {
-      return;
-      const key = `${tile.x}:${tile.y}`;
-      world[key] = tile;
-
-      const geometry = new PlaneGeometry(world.tileSize, world.tileSize, 12);
-      const material = new MeshBasicMaterial({ color: 0x00ff00, side: FrontSide });
-      const plane = new Mesh(geometry, material);
-      tile.plane = plane;
-      scene.add(plane);
-
-    });
   };
 
   return engine;
