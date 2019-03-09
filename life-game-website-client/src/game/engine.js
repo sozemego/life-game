@@ -3,14 +3,14 @@ import {
   CameraHelper,
   FrontSide,
   Mesh,
-  MeshBasicMaterial, OrthographicCamera,
+  MeshBasicMaterial,
   PerspectiveCamera,
   PlaneGeometry,
   Scene, Vector3,
   WebGLRenderer,
 } from 'three';
 
-export const createGame = (client) => {
+export const createEngine = () => {
 
   const scene = new Scene();
   const width = window.innerWidth;
@@ -59,23 +59,23 @@ export const createGame = (client) => {
 
   scene.add(cube);
 
-  const game = {
+  const engine = {
     running: false,
   };
 
-  game.start = () => {
+  engine.start = () => {
     console.log('Starting game loop!');
-    game.running = true;
+    engine.running = true;
     animate();
   };
 
-  game.destroy = () => {
-    game.running = false;
+  engine.destroy = () => {
+    engine.running = false;
     window.removeEventListener('resize', resize);
   };
 
   const animate = () => {
-    if (!game.running) {
+    if (!engine.running) {
       return;
     }
     requestAnimationFrame(animate);
@@ -122,7 +122,7 @@ export const createGame = (client) => {
     tiles: {},
   };
 
-  game.setWorld = (newWorld) => {
+  engine.setWorld = (newWorld) => {
     console.log(newWorld);
     newWorld.tiles.forEach(tile => {
       return;
@@ -138,5 +138,5 @@ export const createGame = (client) => {
     });
   };
 
-  return game;
+  return engine;
 };
