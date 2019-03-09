@@ -26,6 +26,16 @@ export const startGame = () => {
     const user = getUser(getState);
     const client = createGameClient(user);
     gameService = createGameService(client, dispatch, getState);
-    return gameService.start()
+    return gameService.start();
+  };
+};
+
+export const stopGame = () => {
+  return (dispatch, getState) => {
+    if (gameService != null) {
+      console.log('destroying game service');
+      gameService.destroy();
+      gameService = null;
+    }
   };
 };

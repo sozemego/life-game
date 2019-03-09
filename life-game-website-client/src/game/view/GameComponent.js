@@ -3,10 +3,11 @@ import * as gameActions from '../actions';
 import { getLoadGameMessage, isGameStarted } from '../selectors';
 import { connect } from 'react-redux';
 
-export const GameComponent = ({startGame, loadGameMessage}) => {
+export const GameComponent = ({startGame, stopGame, loadGameMessage}) => {
 
   useEffect(() => {
     startGame();
+    return () => stopGame();
   }, []);
 
   return (
