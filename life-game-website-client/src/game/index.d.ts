@@ -9,6 +9,7 @@ export interface GameClient {
     authorize(): void
     requestGameWorld(): void
     onMessage(type: string, fn: () => void): () => void
+    disconnect(): void
 }
 
 export interface Engine {

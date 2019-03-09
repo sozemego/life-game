@@ -9,6 +9,9 @@ export const setGameStarted = makePayloadActionCreator(GAME_STARTED);
 export const LOAD_GAME_MESSAGE = 'LOAD_GAME_MESSAGE';
 export const setLoadGameMessage = makePayloadActionCreator(LOAD_GAME_MESSAGE);
 
+/**
+ * @type {GameService}
+ */
 let gameService = null;
 
 export const startGame = () => {
@@ -16,8 +19,10 @@ export const startGame = () => {
     console.log('STARTING GAME')
 
     if (gameService != null) {
-      throw new Error('Game service already exists!');
+      gameService.destroy();
+      gameService = null;
     }
+
     const user = getUser(getState);
     const client = createGameClient(user);
     gameService = createGameService(client, dispatch, getState);

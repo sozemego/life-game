@@ -4,6 +4,9 @@ const uuid = require('uuid/v4');
  * @return GameClient
  */
 export const createGameClient = (user) => {
+  /**
+   * @type {WebSocket}
+   */
   let socket = null;
 
   const client = {};
@@ -38,6 +41,14 @@ export const createGameClient = (user) => {
         console.log(e);
       };
     });
+  };
+
+  client.disconnect = () => {
+    if (!socket) {
+      throw new Error('Cannot disconnect, socket does not exist!');
+    }
+    console.log('disconnecting socket!');
+    socket.close();
   };
 
   client.send = (message) => {
