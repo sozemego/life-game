@@ -3,7 +3,7 @@ import { createEngine } from './engine';
 
 /**
  *
- * @param client
+ * @param {GameClient} client
  * @param dispatch
  * @param getState
  * @return GameService
@@ -19,11 +19,9 @@ export const createGameService = (client, dispatch, getState) => {
         dispatch(setLoadGameMessage('AUTHENTICATING'));
         client.authorize();
 
-        client.onMessage((msg) => {
-          if (msg.type === 'AUTHORIZED') {
-            dispatch(setLoadGameMessage('AUTHENTICATED'));
-            createGame(client);
-          }
+        client.onMessage('AUTHORIZED', (msg) => {
+          dispatch(setLoadGameMessage('AUTHENTICATED'));
+          createGame(client);
         });
       });
   };
@@ -38,11 +36,9 @@ export const createGameService = (client, dispatch, getState) => {
 
     client.requestGameWorld();
 
-    client.onMessage((msg) => {
-      if (msg.type === 'WORLD') {
-        dispatch(setLoadGameMessage('RENDERING GAME WORLD'));
-        engine.setWorld(msg.world);
-      }
+    client.onMessage('WORLD', (msg) => {
+      dispatch(setLoadGameMessage('RENDERING GAME WORLD'));
+      engine.setWorld(msg.world);
     });
   };
 

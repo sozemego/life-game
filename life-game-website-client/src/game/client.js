@@ -1,10 +1,13 @@
 const uuid = require('uuid/v4');
 
+/**
+ * @return GameClient
+ */
 export const createGameClient = (user) => {
   let socket = null;
 
   const client = {};
-  const listeners = [];
+  const listeners = {};
 
   client.connect = () => {
     if (socket) {
@@ -23,7 +26,8 @@ export const createGameClient = (user) => {
         const parsed = JSON.parse(message.data);
         console.log('received message from server');
         console.log(parsed);
-        listeners.forEach(listener => listener(parsed));
+        const typeListeners = listeners[parsed.type] || [];
+        typeListeners.forEach(listener => listener(parsed));
       };
 
       socket.onclose = () => {
@@ -59,12 +63,14 @@ export const createGameClient = (user) => {
 
   };
 
-  client.onMessage = (fn) => {
-    listeners.push(fn);
+  client.onMessage = (type, fn) => {
+    const typedListeners = listeners[type] || [];
+    typedListeners.push(fn);
+    listeners[type] = typedListeners;
     return () => {
-      const index = listeners.findIndex(listener => listener === fn);
+      const index = typedListeners.findIndex(listener => listener === fn);
       if (index > -1) {
-        listeners.splice(0, index);
+        typedListeners.splice(0, index);
       }
     };
   };
