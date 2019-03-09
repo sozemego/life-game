@@ -1,8 +1,8 @@
 import {
-  AxesHelper,
+  AxesHelper, Box3,
   BoxGeometry,
   CameraHelper, DoubleSide,
-  FrontSide,
+  FrontSide, GridHelper,
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
@@ -101,6 +101,18 @@ export const createEngine = () => {
       scene.add(plane);
 
     });
+
+    const gridHelper = new GridHelper(50 * 12, 50);
+    gridHelper.position.setZ(0.1);
+    gridHelper.up.set(0, 0, 1);
+    gridHelper.rotateX(Math.PI / 2);
+    const box = new Box3().setFromObject(gridHelper);
+    const width = box.max.x - box.min.x;
+    const height = box.max.y - box.min.y;
+    gridHelper.position.add(new Vector3((width / 2) - 6, 0, 0));
+    gridHelper.position.add(new Vector3(0, (height / 2) - 6, 0));
+    console.log(box);
+    scene.add(gridHelper);
   };
 
   engine.stop = () => {
@@ -148,6 +160,7 @@ export const createEngine = () => {
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
     cube.rotation.z += 0.01;
+
   };
 
   return engine;
