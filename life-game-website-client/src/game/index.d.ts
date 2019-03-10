@@ -17,4 +17,5 @@ export interface Engine {
     setWorld(world: any): void
     stop(): void
     running: boolean
+    update(): void
 }

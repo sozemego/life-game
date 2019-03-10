@@ -11,6 +11,7 @@ import {
   WebGLRenderer,
 } from 'three';
 import { createLogger } from '../utils';
+import { createInputHandler } from './view/input-handler';
 
 const LOG = createLogger('engine.js');
 
@@ -49,21 +50,17 @@ export const createEngine = (tileSize) => {
 
   window.addEventListener('resize', resize);
 
-  const pressedKeys = new Set();
+  const inputHandler = createInputHandler();
 
-  const onKeyDown = (event) => {
-    const { key } = event;
-    pressedKeys.add(key);
-  };
-
-  window.addEventListener('keydown', onKeyDown);
-
-  const onKeyUp = (event) => {
-    const { key } = event;
+  inputHandler.onKeyUp((key) => {
     pressedKeys.delete(key);
-  }
+  });
 
-  window.addEventListener('keyup', onKeyUp);
+  inputHandler.onKeyDown((key) => {
+    pressedKeys.add(key);
+  });
+
+  const pressedKeys = new Set();
 
   const container = document.getElementById('game-container');
   container.append(renderer.domElement);
@@ -123,8 +120,11 @@ export const createEngine = (tileSize) => {
   engine.stop = () => {
     engine.running = false;
     window.removeEventListener('resize', resize);
-    window.removeEventListener('keydown', onKeyDown);
-    window.removeEventListener('keyup', onKeyUp);
+    inputHandler.destroy();
+  };
+
+  engine.update = () => {
+
   };
 
   const animate = () => {
@@ -132,6 +132,7 @@ export const createEngine = (tileSize) => {
       return;
     }
     requestAnimationFrame(animate);
+    engine.update();
 
     if (pressedKeys.has('a')) {
       camera.position.x -= 1;

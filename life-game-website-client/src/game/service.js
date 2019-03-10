@@ -1,5 +1,6 @@
 import { setLoadGameMessage } from './actions';
 import { createEngine } from './engine';
+import { createInputHandler } from './view/input-handler';
 
 /**
  *
@@ -15,6 +16,7 @@ export const createGameService = (client, dispatch, getState) => {
    * @type {Engine}
    */
   let engine = null;
+  let inputHandler = null;
 
   service.start = () => {
     dispatch(setLoadGameMessage('CONNECTING'));
@@ -36,6 +38,8 @@ export const createGameService = (client, dispatch, getState) => {
     engine = createEngine(tileSize);
     engine.start();
 
+    inputHandler = createInputHandler();
+
     dispatch(setLoadGameMessage('REQUESTING GAME WORLD'));
 
     client.requestGameWorld();
@@ -44,13 +48,20 @@ export const createGameService = (client, dispatch, getState) => {
       dispatch(setLoadGameMessage('RENDERING GAME WORLD'));
       engine.setWorld(msg.world);
     });
+
+    engine.update = () => {
+
+    };
   };
 
   service.destroy = () => {
     dispatch(setLoadGameMessage('RELEASING RESOURCES'));
     engine.stop();
     client.disconnect();
+    inputHandler.destroy();
   };
+
+
 
   return service;
 };
