@@ -33,8 +33,8 @@ export const createEngine = (tileSize) => {
   LOG(camera.rotation);
 
   camera.lookAt(new Vector3(0, 0, 0));
-  const helper = new CameraHelper(camera);
-  scene.add(helper);
+  // const helper = new CameraHelper(camera);
+  // scene.add(helper);
 
   const axesHelper = new AxesHelper(5);
   scene.add(axesHelper);
@@ -168,7 +168,7 @@ export const createEngine = (tileSize) => {
     }
 
     camera.updateProjectionMatrix();
-    helper.update();
+    // helper.update();
     renderer.render(scene, camera);
 
     cube.rotation.x += 0.01;
