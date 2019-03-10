@@ -23,7 +23,6 @@ export const createEngine = () => {
   const width = window.innerWidth;
   const height = window.innerHeight;
   const aspect = width / height;
-  const frustumSize = 100;
   const camera = new PerspectiveCamera(75, aspect, 1, 1000);
   camera.up.set(0, 0, 1);
   camera.position.x = 30;
