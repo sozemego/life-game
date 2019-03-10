@@ -4,12 +4,14 @@ const LOG = createLogger('input-handler.js');
 
 const KEY_DOWN = 'KEY_DOWN';
 const KEY_UP = 'KEY_UP';
+const MOUSE_WHEEL = 'MOUSE_WHEEL';
 
 export const createInputHandler = () => {
 
   const listeners = {
     [KEY_DOWN]: [],
-    [KEY_UP]: []
+    [KEY_UP]: [],
+    [MOUSE_WHEEL]: []
   };
 
   const subscribe = (type, fn) => {
@@ -33,6 +35,10 @@ export const createInputHandler = () => {
     return subscribe(KEY_DOWN, fn);
   };
 
+  const onMouseWheel = (fn) => {
+    return subscribe(MOUSE_WHEEL, fn);
+  };
+
   const keydown = (event) => {
     const { key } = event;
     const typeListeners = listeners[KEY_DOWN];
@@ -49,13 +55,25 @@ export const createInputHandler = () => {
 
   window.addEventListener('keyup', keyup);
 
+  const mouseWheel = (event) => {
+    const delta = Math.sign(event.deltaY);
+    const typeListeners = listeners[MOUSE_WHEEL];
+    typeListeners.forEach(listener => listener(delta));
+  };
+
+  window.addEventListener('wheel', mouseWheel);
+
   const destroy = () => {
     LOG('Destroying input handler');
     window.removeEventListener('keydown', keydown);
     window.removeEventListener('keyup', keyup);
+    window.removeEventListener('wheel', mouseWheel);
   };
 
   return {
-    onKeyUp, onKeyDown, destroy
+    onKeyUp,
+    onKeyDown,
+    onMouseWheel,
+    destroy,
   };
 };
