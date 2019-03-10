@@ -97,13 +97,13 @@ export const createEngine = (tileSize) => {
 
   engine.setWorld = (newWorld) => {
     LOG(newWorld);
+    const tileGeometry = new PlaneGeometry(tileSize, tileSize, 12);
+    const tileMaterial = new MeshBasicMaterial({ color: 0x00ff00, side: FrontSide });
     newWorld.tiles.forEach(tile => {
       const key = `${tile.x}:${tile.y}`;
       world[key] = tile;
 
-      const geometry = new PlaneGeometry(tileSize, tileSize, 12);
-      const material = new MeshBasicMaterial({ color: 0x00ff00, side: FrontSide });
-      const plane = new Mesh(geometry, material);
+      const plane = new Mesh(tileGeometry, tileMaterial);
       plane.position.x = tile.x * tileSize;
       plane.position.y = tile.y * tileSize;
       plane.position.z = 0;
