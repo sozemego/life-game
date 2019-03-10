@@ -39,7 +39,7 @@ export const createEngine = () => {
 
   const resize = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = aspect;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
   };
 
