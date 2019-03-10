@@ -12,6 +12,7 @@ import {
 } from 'three';
 import { createLogger } from '../utils';
 import { createInputHandler } from './view/input-handler';
+import Stats from 'stats-js';
 
 const LOG = createLogger('engine.js');
 
@@ -35,6 +36,9 @@ export const createEngine = (tileSize) => {
   camera.lookAt(new Vector3(0, 0, 0));
   // const helper = new CameraHelper(camera);
   // scene.add(helper);
+
+  const stats = new Stats();
+  stats.showPanel(0);
 
   const axesHelper = new AxesHelper(5);
   scene.add(axesHelper);
@@ -72,6 +76,7 @@ export const createEngine = (tileSize) => {
 
   const container = document.getElementById('game-container');
   container.append(renderer.domElement);
+  container.appendChild(stats.dom);
 
   const box = new BoxGeometry(4, 4, 4);
   const material = new MeshBasicMaterial({ color: 0xff0000 });
@@ -140,6 +145,7 @@ export const createEngine = (tileSize) => {
       return;
     }
     requestAnimationFrame(animate);
+    stats.begin();
     engine.update();
 
     if (pressedKeys.has('a')) {
@@ -175,6 +181,7 @@ export const createEngine = (tileSize) => {
     cube.rotation.y += 0.01;
     cube.rotation.z += 0.01;
 
+    stats.end();
   };
 
   return engine;

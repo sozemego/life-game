@@ -17,6 +17,7 @@
     "react-scripts": "2.1.5",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
+    "stats-js": "^1.0.0",
     "three": "^0.102.1",
     "typescript": "^3.3.3333",
     "uuid": "^3.3.2"
