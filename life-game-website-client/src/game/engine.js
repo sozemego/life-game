@@ -2,7 +2,7 @@ import {
   AxesHelper, Box3,
   BoxGeometry,
   CameraHelper, DoubleSide,
-  FrontSide, GridHelper,
+  FrontSide, Geometry, GridHelper,
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
@@ -100,9 +100,14 @@ export const createEngine = (tileSize) => {
     tiles: {},
   };
 
+  const worldGeometry = new Geometry();
+  let worldMesh = null;
+
   engine.setWorld = (newWorld) => {
+    worldGeometry.dispose()
+
     LOG(newWorld);
-    const tileGeometry = new PlaneGeometry(tileSize, tileSize, 12);
+    const tileGeometry = new PlaneGeometry(tileSize, tileSize, 1);
     const tileMaterial = new MeshBasicMaterial({ color: 0x00ff00, side: FrontSide });
     newWorld.tiles.forEach(tile => {
       const key = `${tile.x}:${tile.y}`;
@@ -113,9 +118,12 @@ export const createEngine = (tileSize) => {
       mesh.position.y = tile.y * tileSize;
       mesh.position.z = 0;
       tile.mesh = mesh;
-      scene.add(mesh);
-
+      mesh.updateMatrix();
+      worldGeometry.merge(tileGeometry, mesh.matrix);
     });
+
+    worldMesh = new Mesh(worldGeometry, tileMaterial);
+    scene.add(worldMesh);
 
     const gridHelper = new GridHelper(50 * tileSize, 50);
     gridHelper.position.setZ(0.1);
