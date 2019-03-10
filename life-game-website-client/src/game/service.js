@@ -10,6 +10,7 @@ import { createEngine } from './engine';
  */
 export const createGameService = (client, dispatch, getState) => {
   const service = {};
+  const tileSize = 6;
   /**
    * @type {Engine}
    */
@@ -32,7 +33,7 @@ export const createGameService = (client, dispatch, getState) => {
 
   const createGame = () => {
     dispatch(setLoadGameMessage('CREATING GAME ENGINE'));
-    engine = createEngine();
+    engine = createEngine(tileSize);
     engine.start();
 
     dispatch(setLoadGameMessage('REQUESTING GAME WORLD'));

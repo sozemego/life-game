@@ -15,9 +15,10 @@ import { createLogger } from '../utils';
 const LOG = createLogger('engine.js');
 
 /**
+ * @param {number} tileSize
  * @returns Engine
  */
-export const createEngine = () => {
+export const createEngine = (tileSize) => {
 
   const scene = new Scene();
   const width = window.innerWidth;
@@ -86,7 +87,6 @@ export const createEngine = () => {
   };
 
   const world = {
-    tileSize: 12,
     tiles: {},
   };
 
@@ -96,26 +96,26 @@ export const createEngine = () => {
       const key = `${tile.x}:${tile.y}`;
       world[key] = tile;
 
-      const geometry = new PlaneGeometry(world.tileSize, world.tileSize, 12);
-      const material = new MeshBasicMaterial({ color: 0x00ff00, side: DoubleSide });
+      const geometry = new PlaneGeometry(tileSize, tileSize, 12);
+      const material = new MeshBasicMaterial({ color: 0x00ff00, side: FrontSide });
       const plane = new Mesh(geometry, material);
-      plane.position.x = tile.x * world.tileSize;
-      plane.position.y = tile.y * world.tileSize;
+      plane.position.x = tile.x * tileSize;
+      plane.position.y = tile.y * tileSize;
       plane.position.z = 0;
       tile.plane = plane;
       scene.add(plane);
 
     });
 
-    const gridHelper = new GridHelper(50 * 12, 50);
+    const gridHelper = new GridHelper(50 * tileSize, 50);
     gridHelper.position.setZ(0.1);
     gridHelper.up.set(0, 0, 1);
     gridHelper.rotateX(Math.PI / 2);
     const box = new Box3().setFromObject(gridHelper);
     const width = box.max.x - box.min.x;
     const height = box.max.y - box.min.y;
-    gridHelper.position.add(new Vector3((width / 2) - 6, 0, 0));
-    gridHelper.position.add(new Vector3(0, (height / 2) - 6, 0));
+    gridHelper.position.add(new Vector3((width / 2) - (tileSize / 2), 0, 0));
+    gridHelper.position.add(new Vector3(0, (height / 2) - (tileSize / 2), 0));
     LOG(box);
     scene.add(gridHelper);
   };
