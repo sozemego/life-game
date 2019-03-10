@@ -117,8 +117,12 @@ export const createEngine = (tileSize) => {
       mesh.position.x = tile.x * tileSize;
       mesh.position.y = tile.y * tileSize;
       mesh.position.z = 0;
-      tile.mesh = mesh;
       mesh.updateMatrix();
+      /**
+       * The tile geometries are merged for performance reasons.
+       * This is only temporary however, as doing this makes it into 'one' big plane
+       * which will not be desirable later.
+       */
       worldGeometry.merge(tileGeometry, mesh.matrix);
     });
 
