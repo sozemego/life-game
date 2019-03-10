@@ -25,9 +25,12 @@ export const createEngine = () => {
   const aspect = width / height;
   const camera = new PerspectiveCamera(75, aspect, 1, 1000);
   camera.up.set(0, 0, 1);
-  camera.position.x = 30;
-  camera.position.y = 0;
-  camera.position.z = 5;
+  camera.position.y = -10;
+  camera.position.z = 30;
+
+  LOG(camera.rotation);
+
+  camera.lookAt(new Vector3(0, 0, 0));
   const helper = new CameraHelper(camera);
   scene.add(helper);
 
