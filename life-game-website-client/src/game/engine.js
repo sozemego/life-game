@@ -103,12 +103,12 @@ export const createEngine = (tileSize) => {
       const key = `${tile.x}:${tile.y}`;
       world[key] = tile;
 
-      const plane = new Mesh(tileGeometry, tileMaterial);
-      plane.position.x = tile.x * tileSize;
-      plane.position.y = tile.y * tileSize;
-      plane.position.z = 0;
-      tile.plane = plane;
-      scene.add(plane);
+      const mesh = new Mesh(tileGeometry, tileMaterial);
+      mesh.position.x = tile.x * tileSize;
+      mesh.position.y = tile.y * tileSize;
+      mesh.position.z = 0;
+      tile.mesh = mesh;
+      scene.add(mesh);
 
     });
 
