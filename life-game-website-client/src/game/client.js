@@ -1,4 +1,8 @@
+import { createLogger } from '../utils';
+
 const uuid = require('uuid/v4');
+
+const LOG = createLogger('client.js');
 
 /**
  * @return GameClient
@@ -21,24 +25,24 @@ export const createGameClient = (user) => {
 
     return new Promise((resolve, reject) => {
       socket.onopen = (ws) => {
-        console.log('connected to game server');
+        LOG('connected to game server');
         resolve();
       };
 
       socket.onmessage = (message) => {
         const parsed = JSON.parse(message.data);
-        console.log('received message from server');
-        console.log(parsed);
+        LOG('received message from server');
+        LOG(parsed);
         const typeListeners = listeners[parsed.type] || [];
         typeListeners.forEach(listener => listener(parsed));
       };
 
       socket.onclose = () => {
-        console.log('connection closed');
+        LOG('connection closed');
       };
 
       socket.onerror = (e) => {
-        console.log(e);
+        LOG(e);
       };
     });
   };
@@ -47,7 +51,7 @@ export const createGameClient = (user) => {
     if (!socket) {
       throw new Error('Cannot disconnect, socket does not exist!');
     }
-    console.log('disconnecting socket!');
+    LOG('disconnecting socket!');
     socket.close();
   };
 

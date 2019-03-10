@@ -10,6 +10,9 @@ import {
   Scene, Vector3,
   WebGLRenderer,
 } from 'three';
+import { createLogger } from '../utils';
+
+const LOG = createLogger('engine.js');
 
 /**
  * @returns Engine
@@ -75,7 +78,7 @@ export const createEngine = () => {
   };
 
   engine.start = () => {
-    console.log('Starting game loop!');
+    LOG('Starting game loop!');
     engine.running = true;
     animate();
   };
@@ -86,7 +89,7 @@ export const createEngine = () => {
   };
 
   engine.setWorld = (newWorld) => {
-    console.log(newWorld);
+    LOG(newWorld);
     newWorld.tiles.forEach(tile => {
       const key = `${tile.x}:${tile.y}`;
       world[key] = tile;
@@ -111,7 +114,7 @@ export const createEngine = () => {
     const height = box.max.y - box.min.y;
     gridHelper.position.add(new Vector3((width / 2) - 6, 0, 0));
     gridHelper.position.add(new Vector3(0, (height / 2) - 6, 0));
-    console.log(box);
+    LOG(box);
     scene.add(gridHelper);
   };
 
@@ -149,8 +152,8 @@ export const createEngine = () => {
     }
 
     if (pressedKeys.has('g')) {
-      console.log(camera.position);
-      console.log(cube.position);
+      LOG(camera.position);
+      LOG(cube.position);
     }
 
     camera.updateProjectionMatrix();
