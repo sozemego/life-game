@@ -22,8 +22,8 @@ const LOG = createLogger('engine.js');
 export const createEngine = (tileSize) => {
 
   const scene = new Scene();
-  const width = window.innerWidth;
-  const height = window.innerHeight;
+  const width = window.innerWidth - 17;
+  const height = window.innerHeight - 36 - 25;
   const aspect = width / height;
   const camera = new PerspectiveCamera(75, aspect, 1, 1000);
   camera.up.set(0, 0, 1);
@@ -40,11 +40,11 @@ export const createEngine = (tileSize) => {
   scene.add(axesHelper);
 
   const renderer = new WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth - 17, window.innerHeight - 36 - 25);
 
   const resize = () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
+    renderer.setSize(window.innerWidth - 17, window.innerHeight - 36 - 25);
+    camera.aspect = (window.innerWidth - 17) / (window.innerHeight - 36 - 25);
     camera.updateProjectionMatrix();
   };
 
@@ -59,6 +59,14 @@ export const createEngine = (tileSize) => {
   inputHandler.onKeyDown((key) => {
     pressedKeys.add(key);
   });
+
+  inputHandler.onMouseWheel((delta) => {
+    if (delta > 0) {
+      camera.position.z += 1;
+    } else {
+      camera.position.z -= 1;
+    }
+  })
 
   const pressedKeys = new Set();
 
