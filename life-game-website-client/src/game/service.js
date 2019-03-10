@@ -31,7 +31,6 @@ export const createGameService = (client, dispatch, getState) => {
   };
 
   const createGame = () => {
-    console.log('CREATING THE GAME ENGINE');
     dispatch(setLoadGameMessage('CREATING GAME ENGINE'));
     engine = createEngine();
     engine.start();
