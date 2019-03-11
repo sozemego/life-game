@@ -1,14 +1,10 @@
-import { createLogger } from '../../utils';
-
-const LOG = createLogger('input-handler.js');
-
 const KEY_DOWN = 'KEY_DOWN';
 const KEY_UP = 'KEY_UP';
 const MOUSE_WHEEL = 'MOUSE_WHEEL';
 const MOUSE_MOVE = 'MOUSE_MOVE';
 
 export const createInputHandler = (dom = window) => {
-  LOG(`Creating input handler for ${dom}`);
+  console.log(`Creating input handler for ${dom}`);
 
   const listeners = {
     [KEY_DOWN]: [],
@@ -20,6 +16,7 @@ export const createInputHandler = (dom = window) => {
   const subscribe = (type, fn) => {
     const typeListeners = listeners[type];
     typeListeners.push(fn);
+    console.log(`Subscribed ${type} ${dom}`)
     return unsubscribeCallback(typeListeners, fn);
   };
 
@@ -84,11 +81,12 @@ export const createInputHandler = (dom = window) => {
   dom.addEventListener('mousemove', mouseMove);
 
   const destroy = () => {
-    LOG('Destroying input handler');
+    console.log('Destroying input handler');
     dom.removeEventListener('keydown', keydown);
     dom.removeEventListener('keyup', keyup);
     dom.removeEventListener('wheel', mouseWheel);
     dom.removeEventListener('mousemove', mouseMove);
+    Object.keys(listeners).forEach(type => listeners[type] = []);
   };
 
   return {
