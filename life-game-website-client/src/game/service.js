@@ -1,6 +1,9 @@
 import { setLoadGameMessage } from './actions';
 import { createEngine } from './engine';
 import { createInputHandler } from './view/input-handler';
+import { createLogger } from '../utils';
+
+const LOG = createLogger('service.js');
 
 /**
  *
@@ -55,12 +58,12 @@ export const createGameService = (client, dispatch, getState) => {
   };
 
   service.destroy = () => {
+    LOG('Destroying game service');
     dispatch(setLoadGameMessage('RELEASING RESOURCES'));
     engine.stop();
     client.disconnect();
     inputHandler.destroy();
   };
-
 
 
   return service;
