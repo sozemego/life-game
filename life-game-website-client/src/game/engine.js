@@ -54,7 +54,22 @@ export const createEngine = (tileSize) => {
 
   window.addEventListener('resize', resize);
 
-  const inputHandler = createInputHandler();
+
+  const container = document.getElementById('game-container');
+  container.append(renderer.domElement);
+  container.appendChild(stats.dom);
+
+  const box = new BoxGeometry(4, 4, 4);
+  const material = new MeshBasicMaterial({ color: 0xff0000 });
+  const cube = new Mesh(box, material);
+
+  camera.updateProjectionMatrix();
+
+  scene.add(cube);
+
+  const inputHandler = createInputHandler(renderer.domElement);
+
+  const pressedKeys = new Set();
 
   inputHandler.onKeyUp((key) => {
     pressedKeys.delete(key);
@@ -70,7 +85,7 @@ export const createEngine = (tileSize) => {
     } else {
       camera.position.z -= 1;
     }
-  })
+  });
 
   const pressedKeys = new Set();
 
