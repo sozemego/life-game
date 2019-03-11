@@ -107,6 +107,7 @@ export const createEngine = (tileSize) => {
 
   const world = {
     tiles: {},
+    group: new Group(),
   };
 
   const worldGeometry = new Geometry();
@@ -130,6 +131,7 @@ export const createEngine = (tileSize) => {
       // store the mesh so the individual tiles can still be found
       // among the merged geometry.
       tile.mesh = mesh;
+      world.group.add(mesh);
       /**
        * The tile geometries are merged for performance reasons.
        * This is only temporary however, as doing this makes it into 'one' big plane
