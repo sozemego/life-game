@@ -1,20 +1,21 @@
 import {
-  AxesHelper, Box3,
+  AxesHelper,
+  Box3,
   BoxGeometry,
-  CameraHelper, DoubleSide,
-  FrontSide, Geometry, GridHelper,
+  FrontSide,
+  Geometry,
+  GridHelper, Group,
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
-  PlaneGeometry, Raycaster,
-  Scene, Vector3,
+  PlaneGeometry,
+  Raycaster,
+  Scene,
+  Vector3,
   WebGLRenderer,
 } from 'three';
-import { createLogger } from '../utils';
 import { createInputHandler } from './view/input-handler';
 import Stats from 'stats-js';
-
-const LOG = createLogger('engine.js');
 
 /**
  * @param {number} tileSize
@@ -30,8 +31,6 @@ export const createEngine = (tileSize) => {
   camera.up.set(0, 0, 1);
   camera.position.y = -10;
   camera.position.z = 30;
-
-  LOG(camera.rotation);
 
   camera.lookAt(new Vector3(0, 0, 0));
   // const helper = new CameraHelper(camera);
@@ -67,7 +66,7 @@ export const createEngine = (tileSize) => {
 
   scene.add(cube);
 
-  const inputHandler = createInputHandler(renderer.domElement);
+  const inputHandler = createInputHandler();
 
   const pressedKeys = new Set();
 
@@ -88,11 +87,12 @@ export const createEngine = (tileSize) => {
   });
 
   inputHandler.onMouseMove((mouse) => {
-    const raycaster = new Raycaster();
+    const rayCaster = new Raycaster();
 
-    raycaster.setFromCamera( mouse, camera );
-    var intersections = raycaster.intersectObjects( pointclouds );
-    intersection = ( intersections.length ) > 0 ? intersections[ 0 ] : null;
+    rayCaster.setFromCamera(mouse, camera);
+    const intersections = rayCaster.intersectObjects(world.group.children);
+    const intersection = (intersections.length) > 0 ? intersections[0] : null;
+    console.log(intersection);
   });
 
   const engine = {
@@ -100,7 +100,7 @@ export const createEngine = (tileSize) => {
   };
 
   engine.start = () => {
-    LOG('Starting game loop!');
+    console.log('Starting game loop!');
     engine.running = true;
     animate();
   };
@@ -115,7 +115,7 @@ export const createEngine = (tileSize) => {
   engine.setWorld = (newWorld) => {
     worldGeometry.dispose()
 
-    LOG(newWorld);
+    console.log(newWorld);
     const tileGeometry = new PlaneGeometry(tileSize, tileSize, 1);
     const tileMaterial = new MeshBasicMaterial({ color: 0x00ff00, side: FrontSide });
     newWorld.tiles.forEach(tile => {
@@ -150,11 +150,12 @@ export const createEngine = (tileSize) => {
     const height = box.max.y - box.min.y;
     gridHelper.position.add(new Vector3((width / 2) - (tileSize / 2), 0, 0));
     gridHelper.position.add(new Vector3(0, (height / 2) - (tileSize / 2), 0));
-    LOG(box);
+    console.log(box);
     scene.add(gridHelper);
   };
 
   engine.stop = () => {
+    console.log('Stopping engine');
     engine.running = false;
     window.removeEventListener('resize', resize);
     inputHandler.destroy();
@@ -169,7 +170,7 @@ export const createEngine = (tileSize) => {
       return;
     }
     requestAnimationFrame(animate);
-    stats.begin();
+    // stats.begin();
     engine.update();
 
     if (pressedKeys.has('a')) {
@@ -193,8 +194,8 @@ export const createEngine = (tileSize) => {
     }
 
     if (pressedKeys.has('g')) {
-      LOG(camera.position);
-      LOG(cube.position);
+      console.log(camera.position);
+      console.log(cube.position);
     }
 
     camera.updateProjectionMatrix();
@@ -205,7 +206,7 @@ export const createEngine = (tileSize) => {
     cube.rotation.y += 0.01;
     cube.rotation.z += 0.01;
 
-    stats.end();
+    // stats.end();
   };
 
   return engine;
