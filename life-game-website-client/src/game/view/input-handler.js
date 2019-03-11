@@ -74,8 +74,8 @@ export const createInputHandler = (dom = window) => {
     const mouse = {
       rawX: event.clientX,
       rawY: event.clientY,
-      normalX: (event.clientX / (dom.innerWidth || dom.width)) * 2 - 1,
-      normalY: - (event.clientY / (dom.innerHeight || dom.height)) * 2 + 1
+      x: (event.clientX / (dom.innerWidth || dom.width)) * 2 - 1,
+      y: - (event.clientY / (dom.innerHeight || dom.height)) * 2 + 1
     };
     const typeListeners = listeners[MOUSE_MOVE];
     typeListeners.forEach(listener => listener(mouse));

@@ -6,7 +6,7 @@ import {
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
-  PlaneGeometry,
+  PlaneGeometry, Raycaster,
   Scene, Vector3,
   WebGLRenderer,
 } from 'three';
@@ -87,19 +87,13 @@ export const createEngine = (tileSize) => {
     }
   });
 
-  const pressedKeys = new Set();
+  inputHandler.onMouseMove((mouse) => {
+    const raycaster = new Raycaster();
 
-  const container = document.getElementById('game-container');
-  container.append(renderer.domElement);
-  container.appendChild(stats.dom);
-
-  const box = new BoxGeometry(4, 4, 4);
-  const material = new MeshBasicMaterial({ color: 0xff0000 });
-  const cube = new Mesh(box, material);
-
-  camera.updateProjectionMatrix();
-
-  scene.add(cube);
+    raycaster.setFromCamera( mouse, camera );
+    var intersections = raycaster.intersectObjects( pointclouds );
+    intersection = ( intersections.length ) > 0 ? intersections[ 0 ] : null;
+  });
 
   const engine = {
     running: false,
@@ -133,6 +127,9 @@ export const createEngine = (tileSize) => {
       mesh.position.y = tile.y * tileSize;
       mesh.position.z = 0;
       mesh.updateMatrix();
+      // store the mesh so the individual tiles can still be found
+      // among the merged geometry.
+      tile.mesh = mesh;
       /**
        * The tile geometries are merged for performance reasons.
        * This is only temporary however, as doing this makes it into 'one' big plane
