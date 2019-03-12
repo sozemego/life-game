@@ -12,11 +12,13 @@ import { createInputHandler } from './view/input-handler';
 export const createGameService = (client, dispatch, getState) => {
   const service = {};
   const tileSize = 6;
+  const container = document.getElementById('game-container');
+  const inputHandler = createInputHandler(container);
+
   /**
    * @type {Engine}
    */
   let engine = null;
-  let inputHandler = null;
 
   service.start = () => {
     dispatch(setLoadGameMessage('CONNECTING'));
@@ -35,10 +37,8 @@ export const createGameService = (client, dispatch, getState) => {
 
   const createGame = () => {
     dispatch(setLoadGameMessage('CREATING GAME ENGINE'));
-    engine = createEngine(tileSize);
+    engine = createEngine(inputHandler, tileSize);
     engine.start();
-
-    inputHandler = createInputHandler();
 
     dispatch(setLoadGameMessage('REQUESTING GAME WORLD'));
 

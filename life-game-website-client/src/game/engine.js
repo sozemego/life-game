@@ -23,7 +23,7 @@ import Stats from 'stats-js';
  * @param {number} tileSize
  * @returns Engine
  */
-export const createEngine = (tileSize) => {
+export const createEngine = (inputHandler, tileSize) => {
 
   const scene = new Scene();
   const width = window.innerWidth - 17;
@@ -68,7 +68,7 @@ export const createEngine = (tileSize) => {
 
   scene.add(cube);
 
-  const inputHandler = createInputHandler(renderer.domElement);
+  // const inputHandler = createInputHandler(renderer.domElement);
 
   const pressedKeys = new Set();
 
@@ -183,7 +183,6 @@ export const createEngine = (tileSize) => {
     console.log('Stopping engine');
     engine.running = false;
     window.removeEventListener('resize', resize);
-    inputHandler.destroy();
   };
 
   engine.update = () => {
