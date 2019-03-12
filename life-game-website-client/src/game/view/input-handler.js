@@ -68,11 +68,14 @@ export const createInputHandler = (dom = window) => {
   };
 
   const mouseMove = (event) => {
+    const boundingBox = event.target.getBoundingClientRect();
+    const rawX = event.clientX - boundingBox.x;
+    const rawY = event.clientY - Math.ceil(boundingBox.y);
     const mouse = {
-      rawX: event.clientX,
-      rawY: event.clientY,
-      x: (event.clientX / (dom.innerWidth || dom.width)) * 2 - 1,
-      y: - (event.clientY / (dom.innerHeight || dom.height)) * 2 + 1
+      rawX,
+      rawY,
+      x: (rawX / (dom.innerWidth || dom.width)) * 2 - 1,
+      y: - (rawY / (dom.innerHeight || dom.height)) * 2 + 1
     };
     const typeListeners = listeners[MOUSE_MOVE];
     typeListeners.forEach(listener => listener(mouse));
