@@ -5,6 +5,12 @@ const MOUSE_MOVE = 'MOUSE_MOVE';
 
 export const createInputHandler = (dom = window) => {
   console.log(`Creating input handler for ${dom}`);
+  //not all elements can listen to key events. In case window is not passed
+  //we want to use window to capture key events
+  const keyListener = dom !== window ? window : dom;
+  if (dom !== window) {
+    console.log('passed DOM element is not window, window will be used for key capture.')
+  }
 
   const listeners = {
     [KEY_DOWN]: [],
@@ -37,7 +43,7 @@ export const createInputHandler = (dom = window) => {
     typeListeners.forEach(listener => listener(key));
   };
 
-  dom.addEventListener('keyup', keyup);
+  keyListener.addEventListener('keyup', keyup);
 
   const onKeyDown = (fn) => {
     return subscribe(KEY_DOWN, fn);
@@ -49,7 +55,7 @@ export const createInputHandler = (dom = window) => {
     typeListeners.forEach(listener => listener(key));
   };
 
-  dom.addEventListener('keydown', keydown);
+  keyListener.addEventListener('keydown', keydown);
 
   const onMouseWheel = (fn) => {
     return subscribe(MOUSE_WHEEL, fn);
@@ -85,8 +91,8 @@ export const createInputHandler = (dom = window) => {
 
   const destroy = () => {
     console.log('Destroying input handler');
-    dom.removeEventListener('keydown', keydown);
-    dom.removeEventListener('keyup', keyup);
+    keyListener.removeEventListener('keydown', keydown);
+    keyListener.removeEventListener('keyup', keyup);
     dom.removeEventListener('wheel', mouseWheel);
     dom.removeEventListener('mousemove', mouseMove);
     Object.keys(listeners).forEach(type => listeners[type] = []);
