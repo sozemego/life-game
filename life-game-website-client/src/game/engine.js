@@ -27,7 +27,7 @@ export const createEngine = (tileSize) => {
   const width = window.innerWidth - 17;
   const height = window.innerHeight - 36 - 25;
   const aspect = width / height;
-  const camera = new PerspectiveCamera(75, aspect, 1, 1000);
+  const camera = new PerspectiveCamera(70, aspect, 1, 1000);
   camera.up.set(0, 0, 1);
   camera.position.y = -10;
   camera.position.z = 30;
