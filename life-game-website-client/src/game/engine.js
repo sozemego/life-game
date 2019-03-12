@@ -118,20 +118,26 @@ export const createEngine = (tileSize) => {
 
     console.log(newWorld);
     const tileGeometry = new PlaneGeometry(tileSize, tileSize, 1);
-    const tileMaterial = new MeshBasicMaterial({ color: 0x00ff00, side: FrontSide });
+    const worldMaterial = new MeshBasicMaterial({ color: 0x00ff00, side: FrontSide });
+
     newWorld.tiles.forEach(tile => {
       const key = `${tile.x}:${tile.y}`;
       world[key] = tile;
 
+      const tileMaterial = new MeshBasicMaterial({ color: 0x00ff00, side: FrontSide });
       const mesh = new Mesh(tileGeometry, tileMaterial);
       mesh.position.x = tile.x * tileSize;
       mesh.position.y = tile.y * tileSize;
       mesh.position.z = 0;
-      mesh.updateMatrix();
+      mesh.up.set(0, 0, 1);
+      mesh.updateMatrixWorld();
       // store the mesh so the individual tiles can still be found
       // among the merged geometry.
       tile.mesh = mesh;
+      mesh.name = key;
+      // scene.add(mesh);
       world.group.add(mesh);
+      world.group.updateMatrix();
       /**
        * The tile geometries are merged for performance reasons.
        * This is only temporary however, as doing this makes it into 'one' big plane
@@ -140,7 +146,7 @@ export const createEngine = (tileSize) => {
       worldGeometry.merge(tileGeometry, mesh.matrix);
     });
 
-    worldMesh = new Mesh(worldGeometry, tileMaterial);
+    worldMesh = new Mesh(worldGeometry, worldMaterial);
     scene.add(worldMesh);
 
     const gridHelper = new GridHelper(50 * tileSize, 50);
