@@ -2,9 +2,11 @@ import {
   AxesHelper,
   Box3,
   BoxGeometry,
+  Color,
   FrontSide,
   Geometry,
-  GridHelper, Group,
+  GridHelper,
+  Group,
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
@@ -66,7 +68,7 @@ export const createEngine = (tileSize) => {
 
   scene.add(cube);
 
-  const inputHandler = createInputHandler();
+  const inputHandler = createInputHandler(renderer.domElement);
 
   const pressedKeys = new Set();
 
@@ -86,13 +88,29 @@ export const createEngine = (tileSize) => {
     }
   });
 
+  let INTERSECTED = null;
   inputHandler.onMouseMove((mouse) => {
     const rayCaster = new Raycaster();
-
+    camera.updateMatrixWorld();
     rayCaster.setFromCamera(mouse, camera);
     const intersections = rayCaster.intersectObjects(world.group.children);
     const intersection = (intersections.length) > 0 ? intersections[0] : null;
-    console.log(intersection);
+
+    if (intersection) {
+      if (INTERSECTED !== intersections[0].object) {
+        if (INTERSECTED) {
+          INTERSECTED.material.color = INTERSECTED.currentColor;
+        }
+        INTERSECTED = intersections[0].object;
+        INTERSECTED.currentColor = INTERSECTED.material.color;
+        INTERSECTED.material.color = new Color(0xababab);
+      }
+    } else {
+      if (INTERSECTED) {
+        INTERSECTED.material.color = INTERSECTED.currentColor;
+      }
+      INTERSECTED = null;
+    }
   });
 
   const engine = {
@@ -158,8 +176,7 @@ export const createEngine = (tileSize) => {
     const height = box.max.y - box.min.y;
     gridHelper.position.add(new Vector3((width / 2) - (tileSize / 2), 0, 0));
     gridHelper.position.add(new Vector3(0, (height / 2) - (tileSize / 2), 0));
-    console.log(box);
-    scene.add(gridHelper);
+    // scene.add(gridHelper);
   };
 
   engine.stop = () => {
