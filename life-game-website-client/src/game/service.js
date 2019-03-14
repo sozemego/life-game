@@ -57,9 +57,9 @@ export const createGameService = (client, dispatch, getState) => {
   service.destroy = () => {
     console.log('Destroying game service');
     dispatch(setLoadGameMessage('RELEASING RESOURCES'));
-    engine.stop();
-    client.disconnect();
-    inputHandler.destroy();
+    if (engine) engine.stop();
+    if (client) client.disconnect();
+    if (inputHandler) inputHandler.destroy();
   };
 
 
