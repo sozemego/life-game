@@ -97,18 +97,21 @@ export const createEngine = (inputHandler, tileSize) => {
     const intersection = (intersections.length) > 0 ? intersections[0] : null;
 
     if (intersection) {
-      if (INTERSECTED !== intersections[0].object) {
+      const name = (INTERSECTED && INTERSECTED.name) || "";
+      if (name !== intersections[0].object.name) {
         if (INTERSECTED) {
-          INTERSECTED.material.color = INTERSECTED.currentColor;
+          scene.remove(INTERSECTED);
         }
-        INTERSECTED = intersections[0].object;
-        INTERSECTED.currentColor = INTERSECTED.material.color;
-        INTERSECTED.material.color = new Color(0xababab);
+        INTERSECTED = intersections[0].object.clone();
+        INTERSECTED.material.transparent = true;
+        INTERSECTED.material.opacity = 0.75;
+        INTERSECTED.position.z = 0.05;
+        INTERSECTED.userData['highlightPhase'] = 'DOWN';
+        INTERSECTED.material.color = new Color('red');
+        scene.add(INTERSECTED);
       }
     } else {
-      if (INTERSECTED) {
-        INTERSECTED.material.color = INTERSECTED.currentColor;
-      }
+      scene.remove(INTERSECTED);
       INTERSECTED = null;
     }
   });
@@ -220,6 +223,25 @@ export const createEngine = (inputHandler, tileSize) => {
     if (pressedKeys.has('g')) {
       console.log(camera.position);
       console.log(cube.position);
+    }
+
+    if (INTERSECTED) {
+      const highlightPhase = INTERSECTED.userData['highlightPhase'];
+      const opacity = INTERSECTED.material.opacity;
+      let nextOpacity = opacity;
+      let nextPhase = highlightPhase;
+      if (highlightPhase === 'DOWN') {
+        nextOpacity -= 0.01;
+      } else if (highlightPhase === 'UP') {
+        nextOpacity += 0.01;
+      }
+      if (nextOpacity <= 0.4) {
+        nextPhase = 'UP';
+      } else if (nextOpacity >= 0.75) {
+        nextPhase = 'DOWN';
+      }
+      INTERSECTED.material.opacity = nextOpacity;
+      INTERSECTED.userData['highlightPhase'] = nextPhase;
     }
 
     camera.updateProjectionMatrix();
