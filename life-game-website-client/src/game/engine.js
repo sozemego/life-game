@@ -12,7 +12,7 @@ import {
   PerspectiveCamera,
   PlaneGeometry,
   Raycaster,
-  Scene,
+  Scene, TextureLoader,
   Vector3,
   WebGLRenderer,
 } from 'three';
@@ -43,6 +43,8 @@ export const createEngine = (inputHandler, tileSize) => {
 
   const axesHelper = new AxesHelper(5);
   scene.add(axesHelper);
+
+  const textureLoader = new TextureLoader();
 
   const renderer = new WebGLRenderer();
   renderer.setSize(window.innerWidth - 17, window.innerHeight - 36 - 25);
@@ -136,8 +138,9 @@ export const createEngine = (inputHandler, tileSize) => {
     worldGeometry.dispose()
 
     console.log(newWorld);
+    const texture = textureLoader.load('textures/medievalTile_57.png');
     const tileGeometry = new PlaneGeometry(tileSize, tileSize, 1);
-    const worldMaterial = new MeshBasicMaterial({ color: 0x00ff00, side: FrontSide });
+    const worldMaterial = new MeshBasicMaterial({ map: texture, color: 0x00ff00, side: FrontSide });
 
     newWorld.tiles.forEach(tile => {
       const key = `${tile.x}:${tile.y}`;
