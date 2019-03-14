@@ -68,8 +68,6 @@ export const createEngine = (inputHandler, tileSize) => {
 
   scene.add(cube);
 
-  // const inputHandler = createInputHandler(renderer.domElement);
-
   const pressedKeys = new Set();
 
   inputHandler.onKeyUp((key) => {
