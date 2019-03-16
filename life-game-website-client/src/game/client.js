@@ -30,6 +30,7 @@ export const createGameClient = (user) => {
   client.send = webSocketClient.send;
   client.connect = webSocketClient.connect;
   client.onMessage = webSocketClient.onMessage;
+  client.disconnect = webSocketClient.disconnect;
 
   return client;
 };
