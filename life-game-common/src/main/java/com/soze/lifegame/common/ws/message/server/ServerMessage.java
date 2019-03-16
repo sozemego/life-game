@@ -38,7 +38,7 @@ public abstract class ServerMessage {
   }
 
   public enum ServerMessageType {
-    AUTHORIZED, WORLD
+    AUTHORIZED, WORLD, STATISTICS_WORLD
   }
 
 }
