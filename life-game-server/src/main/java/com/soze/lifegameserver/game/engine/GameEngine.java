@@ -3,6 +3,7 @@ package com.soze.lifegameserver.game.engine;
 import com.soze.klecs.engine.Engine;
 import com.soze.lifegameserver.game.world.World;
 
+import java.sql.Timestamp;
 import java.util.Objects;
 
 public class GameEngine {
@@ -21,5 +22,9 @@ public class GameEngine {
   
   public long getUserId() {
     return world.getUserId();
+  }
+  
+  public Timestamp getCreatedAt() {
+    return world.getCreatedAt();
   }
 }

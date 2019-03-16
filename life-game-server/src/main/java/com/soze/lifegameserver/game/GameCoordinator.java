@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -33,6 +34,10 @@ public class GameCoordinator {
     LOG.info("Adding world for user id [{}]", gameEngine.getUserId());
     GameRunner gameRunner = getGameRunner();
     gameRunner.addGameEngine(gameEngine);
+  }
+  
+  public List<GameRunner> getGameRunners() {
+    return new ArrayList<>(gameRunners);
   }
   
   /**
