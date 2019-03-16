@@ -34,9 +34,10 @@ export const createEngine = (inputHandler, tileSize) => {
   const camera = new PerspectiveCamera(70, aspect, 1, 1000);
   camera.up.set(0, 0, 1);
   camera.position.y = -5 * tileSize;
-  camera.position.z = 5 * tileSize;
+  camera.position.z = 10 * tileSize;
 
   camera.lookAt(new Vector3(0, 0, 0));
+  camera.position.z += 25;
 
   const stats = new Stats();
   stats.showPanel(0);
@@ -47,19 +48,14 @@ export const createEngine = (inputHandler, tileSize) => {
   const textureLoader = new TextureLoader();
 
   const light = new DirectionalLight( 0xffffff, 0.5 );
-  light.position.set(25, 0, 50);
+  light.position.set(0, 0, 10);
   light.castShadow = true;
   light.shadow.camera.up.set(0, 0, 1);
-  light.shadow.camera.left = -500;
-  light.shadow.camera.right = 500;
-  light.shadow.camera.bottom = -500;
-  light.shadow.camera.top = 500;
-  light.shadow.camera.near = 0;
-  light.shadow.camera.far = 500;
-  // light.shadow.mapSize.width = 2048 * 10;
-  // light.shadow.mapSize.height = 2048 * 10;
+  light.shadow.mapSize.width = 1024 * 2;
+  light.shadow.mapSize.height = 1024 * 2;
   light.userData['phase'] = 'UP';
   scene.add(light);
+  scene.add(light.target);
 
   const cameraHelper = new CameraHelper(light.shadow.camera);
   scene.add(cameraHelper);
@@ -91,11 +87,11 @@ export const createEngine = (inputHandler, tileSize) => {
 
   const shadowCubes = [];
   for(let i = 0; i < 50; i++) {
-    const shadowBox = new BoxGeometry(Math.random() * tileSize * 2, Math.random() * tileSize * 2, Math.random() * tileSize * 2);
+    const shadowBox = new BoxGeometry(Math.random() * tileSize, Math.random() * tileSize, Math.random() * tileSize);
     const material = new MeshPhongMaterial({color: Math.random() * 255 * 255 * 255});
     const shadowCube = new Mesh(shadowBox, material);
     shadowCube.castShadow = true;
-    shadowCube.position.set(Math.random() * 50, Math.random() * 50, Math.random() * 15 );
+    shadowCube.position.set(Math.random() * 50, Math.random() * 50, Math.random() * 5);
     shadowCube.updateMatrix();
     scene.add(shadowCube);
     shadowCubes.push(shadowCube);
@@ -172,7 +168,7 @@ export const createEngine = (inputHandler, tileSize) => {
 
     console.log(newWorld);
     const texture = textureLoader.load('textures/medievalTile_57.png');
-    const tileGeometry = new PlaneGeometry(tileSize, tileSize, 1);
+    const tileGeometry = new PlaneGeometry(tileSize, tileSize, 12, 12);
     const worldMaterial = new MeshLambertMaterial({ map: texture, color: 0x00ff00, side: FrontSide });
 
     newWorld.tiles.forEach(tile => {
@@ -187,11 +183,11 @@ export const createEngine = (inputHandler, tileSize) => {
       mesh.position.z = 0;
       mesh.up.set(0, 0, 1);
       mesh.updateMatrixWorld();
+      mesh.receiveShadow = true;
       // store the mesh so the individual tiles can still be found
       // among the merged geometry.
       tile.mesh = mesh;
       mesh.name = key;
-      mesh.receiveShadow = true;
       world.group.add(mesh);
       /**
        * The tile geometries are merged for performance reasons.
@@ -215,6 +211,17 @@ export const createEngine = (inputHandler, tileSize) => {
     gridHelper.position.add(new Vector3((width / 2) - (tileSize / 2), 0, 0));
     gridHelper.position.add(new Vector3(0, (height / 2) - (tileSize / 2), 0));
     scene.add(gridHelper);
+
+    light.target.position.set(50 * tileSize / 2, 50 * tileSize / 2, 0);
+    light.target.updateMatrixWorld();
+
+    light.position.set(50 * tileSize / 2, 50 * tileSize / 2, 10);
+    light.shadow.camera.left = -50 * tileSize / 2;
+    light.shadow.camera.right = 50 * tileSize / 2;
+    light.shadow.camera.bottom = -50 * tileSize / 2;
+    light.shadow.camera.top = 50 * tileSize / 2;
+    light.shadow.camera.near = 0;
+    light.shadow.camera.far = 15;
   };
 
   engine.stop = () => {
