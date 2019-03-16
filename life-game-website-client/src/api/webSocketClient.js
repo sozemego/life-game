@@ -18,9 +18,9 @@ export const createWebSocketClient = (options) => {
       return Promise.reject('Already connected or connecting');
     }
 
-    socket = new WebSocket(path);
-
     return new Promise((resolve, reject) => {
+      socket = new WebSocket(path);
+
       socket.onopen = (ws) => {
         console.log('connected to game server');
         resolve();
@@ -40,6 +40,7 @@ export const createWebSocketClient = (options) => {
 
       socket.onerror = (e) => {
         console.log(e);
+        reject(e);
       };
     });
   };
