@@ -33,12 +33,10 @@ export const createEngine = (inputHandler, tileSize) => {
   const aspect = width / height;
   const camera = new PerspectiveCamera(70, aspect, 1, 1000);
   camera.up.set(0, 0, 1);
-  camera.position.y = -10;
-  camera.position.z = 30;
+  camera.position.y = -5 * tileSize;
+  camera.position.z = 5 * tileSize;
 
   camera.lookAt(new Vector3(0, 0, 0));
-  // const helper = new CameraHelper(camera);
-  // scene.add(helper);
 
   const stats = new Stats();
   stats.showPanel(0);
@@ -91,25 +89,19 @@ export const createEngine = (inputHandler, tileSize) => {
   container.append(renderer.domElement);
   container.appendChild(stats.dom);
 
-  const box = new BoxGeometry(4, 4, 4);
-  const material = new MeshBasicMaterial({ color: 0xff0000 });
-  const cube = new Mesh(box, material);
-
   const shadowCubes = [];
   for(let i = 0; i < 50; i++) {
-    const shadowBox = new BoxGeometry(2, 2, 2);
+    const shadowBox = new BoxGeometry(Math.random() * tileSize * 2, Math.random() * tileSize * 2, Math.random() * tileSize * 2);
     const material = new MeshPhongMaterial({color: Math.random() * 255 * 255 * 255});
     const shadowCube = new Mesh(shadowBox, material);
     shadowCube.castShadow = true;
     shadowCube.position.set(Math.random() * 50, Math.random() * 50, Math.random() * 15 );
     shadowCube.updateMatrix();
     scene.add(shadowCube);
-    shadowCubes.push(shadowCube)
+    shadowCubes.push(shadowCube);
   }
 
   camera.updateProjectionMatrix();
-
-  scene.add(cube);
 
   const pressedKeys = new Set();
 
@@ -265,7 +257,6 @@ export const createEngine = (inputHandler, tileSize) => {
 
     if (pressedKeys.has('g')) {
       console.log(camera.position);
-      console.log(cube.position);
     }
 
     if (INTERSECTED) {
@@ -306,10 +297,6 @@ export const createEngine = (inputHandler, tileSize) => {
     helper.update();
     camera.updateProjectionMatrix();
     renderer.render(scene, camera);
-
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-    cube.rotation.z += 0.01;
 
     shadowCubes.forEach(shadowCube => {
       shadowCube.rotation.x += 0.01;
