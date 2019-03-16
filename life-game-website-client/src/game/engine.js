@@ -1,22 +1,24 @@
 import {
-  AxesHelper,
+  AmbientLight,
+  AxesHelper, BasicShadowMap,
   Box3,
-  BoxGeometry,
-  Color,
+  BoxGeometry, CameraHelper,
+  Color, DirectionalLight, DirectionalLightHelper,
   FrontSide,
   Geometry,
   GridHelper,
   Group,
   Mesh,
-  MeshBasicMaterial,
+  MeshBasicMaterial, MeshLambertMaterial, MeshPhongMaterial,
+  MeshStandardMaterial, PCFShadowMap,
   PerspectiveCamera,
   PlaneGeometry,
   Raycaster,
-  Scene, TextureLoader,
+  Scene,
+  TextureLoader,
   Vector3,
   WebGLRenderer,
 } from 'three';
-import { createInputHandler } from './view/input-handler';
 import Stats from 'stats-js';
 
 /**
@@ -46,7 +48,35 @@ export const createEngine = (inputHandler, tileSize) => {
 
   const textureLoader = new TextureLoader();
 
+  const light = new DirectionalLight( 0xffffff, 0.5 );
+  light.position.set(25, 0, 50);
+  light.castShadow = true;
+  light.shadow.camera.up.set(0, 0, 1);
+  light.shadow.camera.left = -500;
+  light.shadow.camera.right = 500;
+  light.shadow.camera.bottom = -500;
+  light.shadow.camera.top = 500;
+  light.shadow.camera.near = 0;
+  light.shadow.camera.far = 500;
+  // light.shadow.mapSize.width = 2048 * 10;
+  // light.shadow.mapSize.height = 2048 * 10;
+  light.userData['phase'] = 'UP';
+  scene.add(light);
+
+  const cameraHelper = new CameraHelper(light.shadow.camera);
+  scene.add(cameraHelper);
+
+  const ambientLight = new AmbientLight(0xffffff, 0.25);
+  scene.add(ambientLight);
+
+  var helper = new DirectionalLightHelper( light, 5 );
+
+  scene.add( helper );
+
   const renderer = new WebGLRenderer();
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = PCFShadowMap;
+
   renderer.setSize(window.innerWidth - 17, window.innerHeight - 36 - 25);
 
   const resize = () => {
@@ -65,6 +95,18 @@ export const createEngine = (inputHandler, tileSize) => {
   const box = new BoxGeometry(4, 4, 4);
   const material = new MeshBasicMaterial({ color: 0xff0000 });
   const cube = new Mesh(box, material);
+
+  const shadowCubes = [];
+  for(let i = 0; i < 50; i++) {
+    const shadowBox = new BoxGeometry(2, 2, 2);
+    const material = new MeshPhongMaterial({color: Math.random() * 255 * 255 * 255});
+    const shadowCube = new Mesh(shadowBox, material);
+    shadowCube.castShadow = true;
+    shadowCube.position.set(Math.random() * 50, Math.random() * 50, Math.random() * 15 );
+    shadowCube.updateMatrix();
+    scene.add(shadowCube);
+    shadowCubes.push(shadowCube)
+  }
 
   camera.updateProjectionMatrix();
 
@@ -98,11 +140,11 @@ export const createEngine = (inputHandler, tileSize) => {
 
     if (intersection) {
       const name = (INTERSECTED && INTERSECTED.name) || "";
-      if (name !== intersections[0].object.name) {
+      if (name !== intersection.object.name) {
         if (INTERSECTED) {
           scene.remove(INTERSECTED);
         }
-        INTERSECTED = intersections[0].object.clone();
+        INTERSECTED = intersection.object.clone();
         INTERSECTED.material.transparent = true;
         INTERSECTED.material.opacity = 0.75;
         INTERSECTED.position.z = 0.05;
@@ -140,13 +182,14 @@ export const createEngine = (inputHandler, tileSize) => {
     console.log(newWorld);
     const texture = textureLoader.load('textures/medievalTile_57.png');
     const tileGeometry = new PlaneGeometry(tileSize, tileSize, 1);
-    const worldMaterial = new MeshBasicMaterial({ map: texture, color: 0x00ff00, side: FrontSide });
+    const worldMaterial = new MeshLambertMaterial({ map: texture, color: 0x00ff00, side: FrontSide });
 
     newWorld.tiles.forEach(tile => {
       const key = `${tile.x}:${tile.y}`;
       world[key] = tile;
 
-      const tileMaterial = new MeshBasicMaterial({ color: 0x00ff00, side: FrontSide });
+      const tileMaterial = new MeshLambertMaterial({ map: texture, color: 0x00ff00, side: FrontSide });
+
       const mesh = new Mesh(tileGeometry, tileMaterial);
       mesh.position.x = tile.x * tileSize;
       mesh.position.y = tile.y * tileSize;
@@ -157,9 +200,8 @@ export const createEngine = (inputHandler, tileSize) => {
       // among the merged geometry.
       tile.mesh = mesh;
       mesh.name = key;
-      // scene.add(mesh);
+      mesh.receiveShadow = true;
       world.group.add(mesh);
-      world.group.updateMatrix();
       /**
        * The tile geometries are merged for performance reasons.
        * This is only temporary however, as doing this makes it into 'one' big plane
@@ -169,6 +211,7 @@ export const createEngine = (inputHandler, tileSize) => {
     });
 
     worldMesh = new Mesh(worldGeometry, worldMaterial);
+    worldMesh.receiveShadow = true;
     scene.add(worldMesh);
 
     const gridHelper = new GridHelper(50 * tileSize, 50);
@@ -180,7 +223,7 @@ export const createEngine = (inputHandler, tileSize) => {
     const height = box.max.y - box.min.y;
     gridHelper.position.add(new Vector3((width / 2) - (tileSize / 2), 0, 0));
     gridHelper.position.add(new Vector3(0, (height / 2) - (tileSize / 2), 0));
-    // scene.add(gridHelper);
+    scene.add(gridHelper);
   };
 
   engine.stop = () => {
@@ -245,13 +288,35 @@ export const createEngine = (inputHandler, tileSize) => {
       INTERSECTED.userData['highlightPhase'] = nextPhase;
     }
 
+    helper.update()
+    const lightPhase = light.userData['phase'];
+    if (lightPhase === 'UP') {
+      light.intensity += 0.01;
+    } else if (lightPhase === 'DOWN') {
+      light.intensity -= 0.01;
+    }
+    if (light.intensity >= 2) {
+      light.userData['phase'] = 'DOWN';
+    } else if (light.intensity <= 1) {
+      light.userData['phase'] = 'UP';
+    }
+
+    light.shadow.camera.updateProjectionMatrix();
+    // and now update the camera helper we're using to show the light's shadow camera
+    cameraHelper.update();
+    helper.update();
     camera.updateProjectionMatrix();
-    // helper.update();
     renderer.render(scene, camera);
 
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
     cube.rotation.z += 0.01;
+
+    shadowCubes.forEach(shadowCube => {
+      shadowCube.rotation.x += 0.01;
+      shadowCube.rotation.y += 0.01;
+      shadowCube.rotation.z += 0.01;
+    })
 
     // stats.end();
   };
