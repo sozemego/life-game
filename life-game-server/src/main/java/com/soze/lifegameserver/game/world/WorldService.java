@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,6 +30,10 @@ public class WorldService {
     Optional<World> worldByUserId = worldRepository.findWorldByUserId(userId);
     LOG.info("World for user [{}] exists [{}]", userId, worldByUserId.isPresent());
     return worldByUserId;
+  }
+  
+  public List<World> getAllWorlds() {
+    return worldRepository.getAllWorlds();
   }
   
   public World generateWorld(User user) {

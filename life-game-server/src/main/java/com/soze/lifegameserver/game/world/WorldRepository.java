@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -38,6 +39,11 @@ public class WorldRepository {
     world.setDeleted(true);
     world.setDeletedAt(new Timestamp(Instant.now().toEpochMilli()));
     em.merge(world);
+  }
+  
+  public List<World> getAllWorlds() {
+    Query query = em.createQuery("SELECT w FROM World w");
+    return query.getResultList();
   }
 
 }
