@@ -4,6 +4,7 @@ import { Route } from 'react-router';
 import Login from '../../user/view/Login';
 import MainPage from '../../main/MainPage';
 import GameComponent from '../../game/view/GameComponent';
+import Statistics from '../../statistics/view/Statistics';
 
 const App = (props) => {
 
@@ -13,6 +14,7 @@ const App = (props) => {
       <Route path={'/'} component={MainPage} exact/>
       <Route path={'/login'} component={Login} exact/>
       <Route path={'/game'} component={GameComponent} exact/>
+      <Route path={'/stats'} component={Statistics} exact/>
     </div>
   );
 };

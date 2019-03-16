@@ -10,6 +10,7 @@ const MainPage = ({ isLoggedIn }) => {
     <div className={styles.container}>
       HELLO TO THE LIFE GAME
       {isLoggedIn && <Link to={"/game"}><button>PLAY</button></Link>}
+      <Link to={"/stats"}><button>Game statistics</button></Link>
     </div>
   );
 };
