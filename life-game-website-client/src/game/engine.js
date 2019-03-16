@@ -69,9 +69,8 @@ export const createEngine = (inputHandler, tileSize) => {
   const ambientLight = new AmbientLight(0xffffff, 0.25);
   scene.add(ambientLight);
 
-  var helper = new DirectionalLightHelper( light, 5 );
-
-  scene.add( helper );
+  const helper = new DirectionalLightHelper(light, 5);
+  scene.add(helper);
 
   const renderer = new WebGLRenderer();
   renderer.shadowMap.enabled = true;
@@ -241,7 +240,7 @@ export const createEngine = (inputHandler, tileSize) => {
       return;
     }
     requestAnimationFrame(animate);
-    // stats.begin();
+    stats.begin();
     engine.update();
 
     if (pressedKeys.has('a')) {
@@ -318,7 +317,7 @@ export const createEngine = (inputHandler, tileSize) => {
       shadowCube.rotation.z += 0.01;
     })
 
-    // stats.end();
+    stats.end();
   };
 
   return engine;
