@@ -58,13 +58,13 @@ export const createEngine = (inputHandler, tileSize) => {
   scene.add(light.target);
 
   const cameraHelper = new CameraHelper(light.shadow.camera);
-  scene.add(cameraHelper);
+  // scene.add(cameraHelper);
 
   const ambientLight = new AmbientLight(0xffffff, 0.25);
   scene.add(ambientLight);
 
   const helper = new DirectionalLightHelper(light, 5);
-  scene.add(helper);
+  // scene.add(helper);
 
   const renderer = new WebGLRenderer();
   renderer.shadowMap.enabled = true;
@@ -93,7 +93,7 @@ export const createEngine = (inputHandler, tileSize) => {
     shadowCube.castShadow = true;
     shadowCube.position.set(Math.random() * 50, Math.random() * 50, Math.random() * 5);
     shadowCube.updateMatrix();
-    scene.add(shadowCube);
+    // scene.add(shadowCube);
     shadowCubes.push(shadowCube);
   }
 
@@ -288,9 +288,9 @@ export const createEngine = (inputHandler, tileSize) => {
     helper.update()
     const lightPhase = light.userData['phase'];
     if (lightPhase === 'UP') {
-      light.intensity += 0.01;
+      // light.intensity += 0.01;
     } else if (lightPhase === 'DOWN') {
-      light.intensity -= 0.01;
+      // light.intensity -= 0.01;
     }
     if (light.intensity >= 2) {
       light.userData['phase'] = 'DOWN';
