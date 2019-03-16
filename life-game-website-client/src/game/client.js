@@ -1,63 +1,13 @@
-import { createLogger } from '../utils';
-
-const uuid = require('uuid/v4');
-
-const LOG = createLogger('client.js');
+import {createWebSocketClient} from '../api/webSocketClient';
+import uuid from 'uuid/v4';
 
 /**
  * @return GameClient
  */
 export const createGameClient = (user) => {
-  /**
-   * @type {WebSocket}
-   */
-  let socket = null;
 
   const client = {};
-  const listeners = {};
-
-  client.connect = () => {
-    if (socket) {
-      return Promise.reject('Already connected or connecting');
-    }
-
-    socket = new WebSocket('ws://localhost:8000/game');
-
-    return new Promise((resolve, reject) => {
-      socket.onopen = (ws) => {
-        LOG('connected to game server');
-        resolve();
-      };
-
-      socket.onmessage = (message) => {
-        const parsed = JSON.parse(message.data);
-        LOG('received message from server');
-        LOG(parsed);
-        const typeListeners = listeners[parsed.type] || [];
-        typeListeners.forEach(listener => listener(parsed));
-      };
-
-      socket.onclose = () => {
-        LOG('connection closed');
-      };
-
-      socket.onerror = (e) => {
-        LOG(e);
-      };
-    });
-  };
-
-  client.disconnect = () => {
-    if (!socket) {
-      throw new Error('Cannot disconnect, socket does not exist!');
-    }
-    LOG('disconnecting socket!');
-    socket.close();
-  };
-
-  client.send = (message) => {
-    socket.send(JSON.stringify(message));
-  };
+  const webSocketClient = createWebSocketClient({path: 'ws://localhost:8000/game'});
 
   client.authorize = () => {
     const authMessage = {
@@ -66,7 +16,7 @@ export const createGameClient = (user) => {
       messageId: uuid(),
       type: 'AUTHORIZE'
     };
-    client.send(authMessage);
+    webSocketClient.send(authMessage);
   };
 
   client.requestGameWorld = () => {
@@ -74,21 +24,12 @@ export const createGameClient = (user) => {
       messageId: uuid(),
       type: 'REQUEST_WORLD'
     };
-    client.send(requestWorldMessage);
-
+    webSocketClient.send(requestWorldMessage);
   };
 
-  client.onMessage = (type, fn) => {
-    const typedListeners = listeners[type] || [];
-    typedListeners.push(fn);
-    listeners[type] = typedListeners;
-    return () => {
-      const index = typedListeners.findIndex(listener => listener === fn);
-      if (index > -1) {
-        typedListeners.splice(0, index);
-      }
-    };
-  };
+  client.send = webSocketClient.send;
+  client.connect = webSocketClient.connect;
+  client.onMessage = webSocketClient.onMessage;
 
   return client;
 };
