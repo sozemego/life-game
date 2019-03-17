@@ -7,18 +7,18 @@ import java.sql.Timestamp;
 
 public class StatisticsWorldDto {
   
-  private final long userId;
+  private final String username;
   private final Timestamp createdAt;
   
   @JsonCreator
-  public StatisticsWorldDto(@JsonProperty("userId") long userId,
+  public StatisticsWorldDto(@JsonProperty("username") String username,
                             @JsonProperty("createdAt") Timestamp createdAt) {
-    this.userId = userId;
+    this.username = username;
     this.createdAt = createdAt;
   }
   
-  public long getUserId() {
-    return userId;
+  public String getUsername() {
+    return username;
   }
   
   public Timestamp getCreatedAt() {
