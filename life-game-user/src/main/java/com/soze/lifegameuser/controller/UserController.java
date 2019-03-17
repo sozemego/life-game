@@ -53,6 +53,20 @@ public class UserController {
     userService.addUser(registerUserForm);
     return ResponseEntity.ok(new SimpleUserDto(registerUserForm.getUsername()));
   }
+  
+  @GetMapping(path = "/single/id/{id}")
+  public ResponseEntity getUserByUserId(@PathVariable("id") long userId) {
+    LOG.info("GET single user by id [{}]", userId);
+    Optional<User> userOptional = userService.getUserById(userId);
+    
+    if (!userOptional.isPresent()) {
+      ErrorResponse errorResponse = new ErrorResponse(404, "User does not exist");
+      errorResponse.addData("userId", userId);
+      return ResponseEntity.status(404).body(errorResponse);
+    }
+  
+    return ResponseEntity.ok(new SimpleUserDto(userOptional.get().getUsername()));
+  }
 
   @GetMapping(path = "/single/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getUserByUsername(@PathVariable("username") String username) {

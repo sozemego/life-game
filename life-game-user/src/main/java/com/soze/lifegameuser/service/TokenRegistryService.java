@@ -17,7 +17,7 @@ public class TokenRegistryService {
 
   private static final Logger LOG = LoggerFactory.getLogger(TokenRegistryService.class);
 
-  @Value("${life.game.server}")
+  @Value("${life.game.server.token}")
   private String registerPath;
 
 
