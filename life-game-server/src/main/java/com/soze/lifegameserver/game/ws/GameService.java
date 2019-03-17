@@ -3,11 +3,14 @@ package com.soze.lifegameserver.game.ws;
 import com.soze.klecs.engine.Engine;
 import com.soze.lifegame.common.dto.world.TileDto;
 import com.soze.lifegame.common.dto.world.WorldDto;
+import com.soze.lifegame.common.json.JsonUtils;
 import com.soze.lifegame.common.ws.message.client.ClientMessage;
 import com.soze.lifegame.common.ws.message.client.RequestWorldMessage;
+import com.soze.lifegame.common.ws.message.server.EntityMessage;
 import com.soze.lifegame.common.ws.message.server.WorldMessage;
 import com.soze.lifegameserver.game.GameCoordinator;
 import com.soze.lifegameserver.game.engine.GameEngine;
+import com.soze.lifegameserver.game.entity.PersistentEntity;
 import com.soze.lifegameserver.game.world.Tile;
 import com.soze.lifegameserver.game.world.World;
 import com.soze.lifegameserver.game.world.WorldService;
@@ -67,6 +70,14 @@ public class GameService {
     
     LOG.info("Sending world data to {}", gameSession.getSession().getId());
     gameSession.send(new WorldMessage(UUID.randomUUID(), dto));
+    
+    Set<PersistentEntity> entities = world.getEntities();
+    LOG.info("Sending entity data about [{}] entities to [{}]", entities.size(), gameSession.getSession().getId());
+    Set<String> entityData = new HashSet<>();
+    for (PersistentEntity entity : entities) {
+      entityData.add(JsonUtils.objectToJson(entity));
+    }
+    gameSession.send(new EntityMessage(UUID.randomUUID(), entityData));
   }
   
   private WorldDto convertToDto(World world) {
