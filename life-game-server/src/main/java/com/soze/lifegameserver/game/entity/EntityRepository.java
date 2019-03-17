@@ -24,7 +24,8 @@ public class EntityRepository {
   @PostConstruct
   public void setup() {
     LOG.info("Loading entity templates");
-    List<PersistentEntity> entityTemplates = em.createQuery("SELECT pe FROM PersistentEntity pe").getResultList();
+    List<PersistentEntity> entityTemplates = em.createQuery("SELECT pe FROM PersistentEntity pe WHERE pe.worldId = -1")
+                                               .getResultList();
     
     for (PersistentEntity template : entityTemplates) {
       LOG.info(template.toString());
