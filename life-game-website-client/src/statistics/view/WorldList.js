@@ -9,7 +9,7 @@ export const WorldList = (props) => {
   return (
     <div>
       {worlds.map((world, index) => {
-        return <World world={world} key={world.userId}/>
+        return <World world={world} key={world.username}/>
       })}
     </div>
   );

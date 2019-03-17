@@ -8,10 +8,10 @@ const initialState = {
 
 const addWorld = (state, action) => {
   const { payload } = action;
-  const { userId, createdAt } = payload.worldDto;
+  const { username, createdAt } = payload.worldDto;
   const nextWorlds = { ...state.worlds };
-  nextWorlds[userId] = {
-    userId,
+  nextWorlds[username] = {
+    username,
     createdAt,
   };
   return {...state, worlds: nextWorlds};
