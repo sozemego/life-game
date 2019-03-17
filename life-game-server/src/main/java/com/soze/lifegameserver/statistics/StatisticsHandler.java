@@ -1,5 +1,6 @@
 package com.soze.lifegameserver.statistics;
 
+import com.soze.lifegame.common.dto.user.SimpleUserDto;
 import com.soze.lifegame.common.dto.world.StatisticsWorldDto;
 import com.soze.lifegame.common.json.JsonUtils;
 import com.soze.lifegame.common.ws.message.server.StatisticsWorldMessage;
@@ -9,25 +10,37 @@ import com.soze.lifegameserver.game.engine.GameEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class StatisticsHandler extends TextWebSocketHandler {
   
   private static final Logger LOG = LoggerFactory.getLogger(StatisticsHandler.class);
   
+  @Value("${life.game.user.getById}")
+  private String getByIdPath;
+  
   private final GameCoordinator gameCoordinator;
+  private final RestTemplate restTemplate = new RestTemplate();
+  
   private final Set<WebSocketSession> sessions = Collections.synchronizedSet(new HashSet<>());
+  private final Map<Long, String> users = new ConcurrentHashMap<>();
   
   @Autowired
   public StatisticsHandler(GameCoordinator gameCoordinator) {
@@ -42,13 +55,20 @@ public class StatisticsHandler extends TextWebSocketHandler {
     LOG.debug("Supplying clients with statistics data");
     for (GameRunner gameRunner : gameCoordinator.getGameRunners()) {
       for (GameEngine engine : gameRunner.getEngines()) {
-        StatisticsWorldDto dto = new StatisticsWorldDto(engine.getUserId(), engine.getCreatedAt());
-        TextMessage textMessage = new TextMessage(JsonUtils.objectToJson(new StatisticsWorldMessage(UUID.randomUUID(),dto)));
+        StatisticsWorldDto dto = new StatisticsWorldDto(getUsername(engine.getUserId()), engine.getCreatedAt());
+        TextMessage textMessage = new TextMessage(JsonUtils.objectToJson(new StatisticsWorldMessage(UUID.randomUUID(), dto)));
         for (WebSocketSession session : sessions) {
           session.sendMessage(textMessage);
         }
       }
     }
+  }
+  
+  private String getUsername(long userId) {
+    return users.computeIfAbsent(userId, k -> {
+      ResponseEntity<SimpleUserDto> response = restTemplate.getForEntity(URI.create(getByIdPath + "/" + k), SimpleUserDto.class);
+      return response.getBody().getUsername();
+    });
   }
   
   @Override
