@@ -48,7 +48,7 @@ public class World {
   
   @Type(type = "jsonb")
   @Column(name = "tiles", columnDefinition = "jsonb")
-  private String tiles;
+  private Set<Tile> tiles;
   
   public long getId() {
     return id;
@@ -91,10 +91,10 @@ public class World {
   }
   
   public Set<Tile> getTiles() {
-    return new HashSet<>(JsonUtils.jsonToList(tiles, Tile.class));
+    return tiles;
   }
   
   public void setTiles(Set<Tile> tiles) {
-    this.tiles = JsonUtils.objectToJson(tiles);
+    this.tiles = tiles;
   }
 }
