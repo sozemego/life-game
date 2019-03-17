@@ -27,6 +27,7 @@ public class EntityRepository {
     List<PersistentEntity> entityTemplates = em.createQuery("SELECT pe FROM PersistentEntity pe").getResultList();
     
     for (PersistentEntity template : entityTemplates) {
+      LOG.info(template.toString());
       templates.put(template.getId(), template);
     }
     
