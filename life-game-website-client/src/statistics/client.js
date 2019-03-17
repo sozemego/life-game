@@ -5,6 +5,7 @@ export const createStatisticsClient = () => {
   const webSocketClient = createWebSocketClient({ path: 'ws://localhost:8000/statistics' });
 
   client.connect = webSocketClient.connect;
+  client.onMessage = webSocketClient.onMessage;
 
   return client;
 };

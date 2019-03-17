@@ -1,10 +1,12 @@
 import React from 'react';
 
-export const World = (props) => {
+
+
+export const World = ({world}) => {
 
   return (
     <div>
-      This is a world!
+      Player [{world.userId}] started playing at [{new Date(world.createdAt).toLocaleString()}]
     </div>
   );
 };

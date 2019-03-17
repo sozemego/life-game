@@ -10,6 +10,7 @@ const Statistics = (props) => {
 
   useEffect(() => {
     props.init();
+    return () => props.disconnect();
   }, []);
 
   const { worlds, message } = props;
