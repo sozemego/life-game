@@ -28,8 +28,8 @@ export const createWebSocketClient = (options) => {
 
       socket.onmessage = (message) => {
         const parsed = JSON.parse(message.data);
-        console.log('received message from server');
-        console.log(parsed);
+        // console.log('received message from server');
+        // console.log(parsed);
         const typeListeners = listeners[parsed.type] || [];
         typeListeners.forEach(listener => listener(parsed));
       };
