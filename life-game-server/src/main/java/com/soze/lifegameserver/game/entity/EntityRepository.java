@@ -29,14 +29,14 @@ public class EntityRepository {
     
     for (PersistentEntity template : entityTemplates) {
       LOG.info(template.toString());
-      templates.put(template.getId(), template);
+      templates.put(template.getName(), template);
     }
     
     LOG.info("Loaded [{}] entity templates", templates.size());
   }
   
-  public PersistentEntity getEntityTemplate(String id) {
-    return templates.get(id).copy();
+  public PersistentEntity getEntityTemplate(String name) {
+    return templates.get(name).copy();
   }
   
 }

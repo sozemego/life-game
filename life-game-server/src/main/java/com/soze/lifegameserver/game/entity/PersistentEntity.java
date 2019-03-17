@@ -93,7 +93,8 @@ public class PersistentEntity implements Serializable {
   @Override
   public String toString() {
     return "PersistentEntity{" +
-             "id='" + id + '\'' +
+             "id=" + id +
+             ", name='" + name + '\'' +
              ", worldId=" + worldId +
              ", physicsComponent=" + physicsComponent +
              ", graphicsComponent=" + graphicsComponent +
