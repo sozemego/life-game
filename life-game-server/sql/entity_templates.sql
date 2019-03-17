@@ -1,10 +1,7 @@
-/*
-CREATE TABLE ENTITY_TEMPLATE (
-  id VARCHAR(32) NOT NULL UNIQUE PRIMARY KEY,
-  data JSONB NOT NULL DEFAULT '{}'
+DELETE FROM ENTITY WHERE world_id = -1;
+
+INSERT INTO ENTITY (id, world_id, physics, graphics) VALUES
+(
+ 'WAREHOUSE_1', -1,
+ '{"type":  "PHYSICS"}', '{"type":  "GRAPHICS"}'
 );
-*/
-
-DELETE FROM ENTITY WHERE template = true;
-
-

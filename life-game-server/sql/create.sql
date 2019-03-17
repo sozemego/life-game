@@ -9,12 +9,21 @@ CREATE TABLE WORLD (
   deleted_at TIMESTAMP
 );
 
+/**
+  Null world for entity templates.
+ */
+INSERT INTO WORLD (id, user_id, deleted)
+ OVERRIDING SYSTEM VALUE
+ VALUES
+(
+ -1, -1, false
+);
+
 DROP TABLE IF EXISTS ENTITY CASCADE;
 
 CREATE TABLE ENTITY (
   id VARCHAR(32) NOT NULL UNIQUE PRIMARY KEY,
   world_id INT NOT NULL REFERENCES WORLD(id),
-  template boolean NOT NULL DEFAULT FALSE,
   physics JSONB,
   graphics JSONB
 );

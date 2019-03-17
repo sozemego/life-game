@@ -26,9 +26,6 @@ public class PersistentEntity implements Serializable {
   @Column(name = "world_id")
   private long worldId;
   
-  @Column(name = "template")
-  private boolean template;
-  
   @Type(type = "jsonb")
   @Column(name = "physics", columnDefinition = "jsonb")
   private PhysicsComponent physicsComponent;
@@ -54,14 +51,6 @@ public class PersistentEntity implements Serializable {
     this.worldId = worldId;
   }
   
-  public boolean isTemplate() {
-    return template;
-  }
-  
-  public void setTemplate(boolean template) {
-    this.template = template;
-  }
-  
   public PhysicsComponent getPhysicsComponent() {
     return physicsComponent;
   }
@@ -84,5 +73,15 @@ public class PersistentEntity implements Serializable {
     copy.setPhysicsComponent(getPhysicsComponent());
     copy.setGraphicsComponent(getGraphicsComponent());
     return copy;
+  }
+  
+  @Override
+  public String toString() {
+    return "PersistentEntity{" +
+             "id='" + id + '\'' +
+             ", worldId=" + worldId +
+             ", physicsComponent=" + physicsComponent +
+             ", graphicsComponent=" + graphicsComponent +
+             '}';
   }
 }
