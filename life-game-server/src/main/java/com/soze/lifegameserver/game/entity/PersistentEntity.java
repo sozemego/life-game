@@ -9,6 +9,8 @@ import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -21,7 +23,12 @@ import java.io.Serializable;
 public class PersistentEntity implements Serializable {
 
   @Id
-  private String id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private long id;
+  
+  @Column(name = "name")
+  private String name;
   
   @Column(name = "world_id")
   private long worldId;
@@ -35,12 +42,20 @@ public class PersistentEntity implements Serializable {
   @Column(name = "graphics", columnDefinition = "jsonb")
   private GraphicsComponent graphicsComponent;
   
-  public String getId() {
+  public long getId() {
     return id;
   }
   
-  public void setId(String id) {
+  public void setId(long id) {
     this.id = id;
+  }
+  
+  public String getName() {
+    return name;
+  }
+  
+  public void setName(String name) {
+    this.name = name;
   }
   
   public long getWorldId() {
