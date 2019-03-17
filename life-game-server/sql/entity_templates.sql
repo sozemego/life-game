@@ -5,4 +5,6 @@ CREATE TABLE ENTITY_TEMPLATE (
 );
 */
 
-DELETE FROM ENTITY WHERE template = false;
+DELETE FROM ENTITY WHERE template = true;
+
+
