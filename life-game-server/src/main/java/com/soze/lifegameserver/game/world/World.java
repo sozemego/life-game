@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.Set;
@@ -43,8 +45,8 @@ public class World {
   @Column(name = "tiles", columnDefinition = "jsonb")
   private Set<Tile> tiles;
   
-  @Type(type = "jsonb")
-  @Column(name = "entities", columnDefinition = "jsonb")
+  @OneToMany
+  @JoinColumn(name = "world_id")
   private Set<PersistentEntity> entities;
   
   public long getId() {
