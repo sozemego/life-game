@@ -41,6 +41,7 @@ public class WorldService {
     World world = new World();
     world.setUserId(user.getId());
     world.setCreatedAt(new Timestamp(Instant.now().toEpochMilli()));
+    world.setEntities(new HashSet<>());
     generateTiles(world);
     worldRepository.addWorld(world);
     return world;

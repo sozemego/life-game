@@ -42,6 +42,10 @@ public class World {
   @Column(name = "tiles", columnDefinition = "jsonb")
   private Set<Tile> tiles;
   
+  @Type(type = "jsonb")
+  @Column(name = "entities", columnDefinition = "jsonb")
+  private Set<PersistentEntity> entities;
+  
   public long getId() {
     return id;
   }
@@ -88,5 +92,13 @@ public class World {
   
   public void setTiles(Set<Tile> tiles) {
     this.tiles = tiles;
+  }
+  
+  public Set<PersistentEntity> getEntities() {
+    return entities;
+  }
+  
+  public void setEntities(Set<PersistentEntity> entities) {
+    this.entities = entities;
   }
 }
