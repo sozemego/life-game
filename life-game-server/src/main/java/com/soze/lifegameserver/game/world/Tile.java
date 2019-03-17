@@ -1,18 +1,11 @@
 package com.soze.lifegameserver.game.world;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Table;
 import java.util.Objects;
 
-@Embeddable
-@Table(name = "tile")
 public class Tile {
   
-  @Column(name = "x", nullable = false)
   private long x;
   
-  @Column(name = "y", nullable = false)
   private long y;
   
   public long getX() {

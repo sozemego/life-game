@@ -1,5 +1,12 @@
 package com.soze.lifegameserver.game.world;
 
+import com.soze.lifegame.common.json.JsonUtils;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
+
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -12,10 +19,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "world")
+@TypeDefs({
+  @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class),
+})
 public class World {
 
   @Id
@@ -35,10 +46,10 @@ public class World {
   @Column(name = "deleted_at")
   private Timestamp deletedAt;
   
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = "tile", joinColumns = @JoinColumn(name = "world_id"))
-  private Set<Tile> tiles;
-
+  @Type(type = "jsonb")
+  @Column(name = "tiles", columnDefinition = "jsonb")
+  private String tiles;
+  
   public long getId() {
     return id;
   }
@@ -80,10 +91,10 @@ public class World {
   }
   
   public Set<Tile> getTiles() {
-    return tiles;
+    return new HashSet<>(JsonUtils.jsonToList(tiles, Tile.class));
   }
   
   public void setTiles(Set<Tile> tiles) {
-    this.tiles = tiles;
+    this.tiles = JsonUtils.objectToJson(tiles);
   }
 }
