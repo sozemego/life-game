@@ -55,4 +55,14 @@ public class PhysicsComponent extends BaseComponent {
   public PhysicsComponent copy() {
     return new PhysicsComponent(x, y, width, height);
   }
+  
+  @Override
+  public String toString() {
+    return "PhysicsComponent{" +
+             "x=" + x +
+             ", y=" + y +
+             ", width=" + width +
+             ", height=" + height +
+             '}';
+  }
 }

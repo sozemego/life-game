@@ -25,4 +25,11 @@ public class GraphicsComponent extends BaseComponent {
   public GraphicsComponent copy() {
     return new GraphicsComponent(texture);
   }
+  
+  @Override
+  public String toString() {
+    return "GraphicsComponent{" +
+             "texture='" + texture + '\'' +
+             '}';
+  }
 }
