@@ -39,7 +39,7 @@ public class StatisticsHandler extends TextWebSocketHandler {
     if (sessions.isEmpty()) {
       return;
     }
-    LOG.info("Supplying clients with statistics data");
+    LOG.debug("Supplying clients with statistics data");
     for (GameRunner gameRunner : gameCoordinator.getGameRunners()) {
       for (GameEngine engine : gameRunner.getEngines()) {
         StatisticsWorldDto dto = new StatisticsWorldDto(engine.getUserId(), engine.getCreatedAt());
