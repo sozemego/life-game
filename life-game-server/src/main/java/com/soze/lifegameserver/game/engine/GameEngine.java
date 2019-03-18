@@ -27,4 +27,8 @@ public class GameEngine {
   public Timestamp getCreatedAt() {
     return world.getCreatedAt();
   }
+  
+  public Engine getEngine() {
+    return engine;
+  }
 }

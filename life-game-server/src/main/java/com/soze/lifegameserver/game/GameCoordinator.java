@@ -55,5 +55,16 @@ public class GameCoordinator {
     LOG.info("Created a new GameRunner");
     return freshRunner;
   }
+  
+  public GameEngine getGameEngineByUserId(long userId) {
+    for (GameRunner gameRunner : gameRunners) {
+      for (GameEngine engine : gameRunner.getEngines()) {
+        if(engine.getUserId() == userId) {
+          return engine;
+        }
+      }
+    }
+    return null;
+  }
 
 }

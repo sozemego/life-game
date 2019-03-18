@@ -2,6 +2,7 @@ package com.soze.lifegameserver.game.ws;
 
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
+import com.soze.lifegame.common.dto.world.EntityDto;
 import com.soze.lifegame.common.dto.world.TileDto;
 import com.soze.lifegame.common.dto.world.WorldDto;
 import com.soze.lifegame.common.json.JsonUtils;
@@ -67,21 +68,22 @@ public class GameService {
     World world = worldExists ? worldOptional.get() : worldService.generateWorld(gameSession.getUser());
     WorldDto dto = convertToDto(world);
     
+    GameEngine gameEngine = null;
     if (!worldExists) {
       LOG.info("World did not exist, adding to GameCoordinator");
-      addGameEngine(world);
+      gameEngine = addGameEngine(world);
+    } else {
+      gameEngine = gameCoordinator.getGameEngineByUserId(world.getUserId());
     }
     
     LOG.info("Sending world data to {}", gameSession.getSession().getId());
     gameSession.send(new WorldMessage(UUID.randomUUID(), dto));
+  
+    Engine engine = gameEngine.getEngine();
+    List<EntityDto> dtos = entityService.convert(engine);
     
-    Set<PersistentEntity> entities = world.getEntities();
-    LOG.info("Sending entity data about [{}] entities to [{}]", entities.size(), gameSession.getSession().getId());
-    Set<String> entityData = new HashSet<>();
-    for (PersistentEntity entity : entities) {
-      entityData.add(JsonUtils.objectToJson(entity));
-    }
-    gameSession.send(new EntityMessage(UUID.randomUUID(), entityData));
+    LOG.info("Sending entity data about [{}] entities to [{}]", dtos.size(), gameSession.getSession().getId());
+    gameSession.send(new EntityMessage(UUID.randomUUID(), dtos));
   }
   
   private WorldDto convertToDto(World world) {
@@ -93,9 +95,10 @@ public class GameService {
     return new WorldDto(world.getId(), world.getCreatedAt(), tiles);
   }
   
-  private void addGameEngine(World world) {
+  private GameEngine addGameEngine(World world) {
     GameEngine gameEngine = createGameEngine(world);
     gameCoordinator.addGameEngine(gameEngine);
+    return gameEngine;
   }
   
   private GameEngine createGameEngine(World world) {

@@ -40,7 +40,7 @@ public abstract class BaseComponent implements Serializable {
   public abstract BaseComponent copy();
   
   public enum ComponentType {
-    PHYSICS, GRAPHICS
+    PHYSICS, GRAPHICS, NAME
   }
   
 }

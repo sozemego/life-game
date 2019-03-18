@@ -1,18 +1,41 @@
 package com.soze.lifegame.common.dto.world;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class EntityDto {
   
-  private final String data;
+  private long id;
+  private String name;
+  private String graphics;
+  private String physics;
   
-  @JsonCreator
-  public EntityDto(@JsonProperty("data") String data) {
-    this.data = data;
+  public long getId() {
+    return id;
   }
   
-  public String getData() {
-    return data;
+  public void setId(long id) {
+    this.id = id;
+  }
+  
+  public String getName() {
+    return name;
+  }
+  
+  public void setName(String name) {
+    this.name = name;
+  }
+  
+  public String getGraphics() {
+    return graphics;
+  }
+  
+  public void setGraphics(String graphics) {
+    this.graphics = graphics;
+  }
+  
+  public String getPhysics() {
+    return physics;
+  }
+  
+  public void setPhysics(String physics) {
+    this.physics = physics;
   }
 }
