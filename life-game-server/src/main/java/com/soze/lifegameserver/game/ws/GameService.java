@@ -1,6 +1,7 @@
 package com.soze.lifegameserver.game.ws;
 
 import com.soze.klecs.engine.Engine;
+import com.soze.klecs.entity.Entity;
 import com.soze.lifegame.common.dto.world.TileDto;
 import com.soze.lifegame.common.dto.world.WorldDto;
 import com.soze.lifegame.common.json.JsonUtils;
@@ -10,6 +11,7 @@ import com.soze.lifegame.common.ws.message.server.EntityMessage;
 import com.soze.lifegame.common.ws.message.server.WorldMessage;
 import com.soze.lifegameserver.game.GameCoordinator;
 import com.soze.lifegameserver.game.engine.GameEngine;
+import com.soze.lifegameserver.game.entity.EntityService;
 import com.soze.lifegameserver.game.entity.PersistentEntity;
 import com.soze.lifegameserver.game.world.Tile;
 import com.soze.lifegameserver.game.world.World;
@@ -33,11 +35,13 @@ public class GameService {
   
   private final WorldService worldService;
   private final GameCoordinator gameCoordinator;
+  private final EntityService entityService;
   
   @Autowired
-  public GameService(WorldService worldService, GameCoordinator gameCoordinator) {
+  public GameService(WorldService worldService, GameCoordinator gameCoordinator, EntityService entityService) {
     this.worldService = worldService;
     this.gameCoordinator = gameCoordinator;
+    this.entityService = entityService;
   }
   
   @PostConstruct
@@ -96,6 +100,11 @@ public class GameService {
   
   private GameEngine createGameEngine(World world) {
     Engine engine = new Engine();
+    LOG.info("Adding [{}] entities to GameEngine for world with userId [{}]", world.getEntities().size(), world.getUserId());
+    for (PersistentEntity persistentEntity : world.getEntities()) {
+      Entity entity = entityService.convert(engine, persistentEntity);
+      engine.addEntity(entity);
+    }
     GameEngine gameEngine = new GameEngine(world, engine);
     return gameEngine;
   }
