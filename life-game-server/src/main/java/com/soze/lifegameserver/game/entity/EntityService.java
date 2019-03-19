@@ -8,23 +8,29 @@ import com.soze.lifegame.common.json.JsonUtils;
 import com.soze.lifegameserver.game.engine.component.GraphicsComponent;
 import com.soze.lifegameserver.game.engine.component.NameComponent;
 import com.soze.lifegameserver.game.engine.component.PhysicsComponent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class EntityService {
-
   
+  private final EntityRepository entityRepository;
+  
+  @Autowired
+  public EntityService(EntityRepository entityRepository) {
+    this.entityRepository = entityRepository;
+  }
   
   public Entity convert(Engine engine, PersistentEntity persistentEntity) {
     EntityFactory entityFactory = engine.getEntityFactory();
     Entity entity = entityFactory.createEntity(persistentEntity.getId());
     
+    entity.addComponent(new NameComponent(persistentEntity.getName()));
     entity.addComponent(persistentEntity.getPhysicsComponent());
-    entity.addComponent(persistentEntity.getPhysicsComponent());
+    entity.addComponent(persistentEntity.getGraphicsComponent());
     
     return entity;
   }
@@ -46,5 +52,8 @@ public class EntityService {
     return entityDtos;
   }
 
+  public PersistentEntity getTemplate(String name) {
+    return entityRepository.getEntityTemplate(name);
+  }
 
 }
