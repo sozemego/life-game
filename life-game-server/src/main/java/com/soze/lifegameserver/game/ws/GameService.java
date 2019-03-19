@@ -12,6 +12,7 @@ import com.soze.lifegame.common.ws.message.server.EntityMessage;
 import com.soze.lifegame.common.ws.message.server.WorldMessage;
 import com.soze.lifegameserver.game.GameCoordinator;
 import com.soze.lifegameserver.game.engine.GameEngine;
+import com.soze.lifegameserver.game.engine.component.PhysicsComponent;
 import com.soze.lifegameserver.game.entity.EntityService;
 import com.soze.lifegameserver.game.entity.PersistentEntity;
 import com.soze.lifegameserver.game.world.Tile;

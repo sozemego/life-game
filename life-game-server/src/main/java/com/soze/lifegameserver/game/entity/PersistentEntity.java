@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -25,7 +26,7 @@ public class PersistentEntity implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  private long id;
+  private Long id;
   
   @Column(name = "name")
   private String name;
@@ -42,11 +43,11 @@ public class PersistentEntity implements Serializable {
   @Column(name = "graphics", columnDefinition = "jsonb")
   private GraphicsComponent graphicsComponent;
   
-  public long getId() {
+  public Long getId() {
     return id;
   }
   
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
   
@@ -84,9 +85,9 @@ public class PersistentEntity implements Serializable {
   
   public PersistentEntity copy() {
     PersistentEntity copy = new PersistentEntity();
-    copy.setId(getId());
     copy.setPhysicsComponent(getPhysicsComponent());
     copy.setGraphicsComponent(getGraphicsComponent());
+    copy.setName(getName());
     return copy;
   }
   
