@@ -124,16 +124,16 @@ export const createEngine = (inputHandler, tileSize) => {
     const rayCaster = new Raycaster();
     camera.updateMatrixWorld();
     rayCaster.setFromCamera(mouse, camera);
-    const intersections = rayCaster.intersectObjects(world.group.children);
-    const intersection = (intersections.length) > 0 ? intersections[0] : null;
+    const tileIntersections = rayCaster.intersectObjects(world.group.children);
+    const tileIntersection = (tileIntersections.length) > 0 ? tileIntersections[0] : null;
 
-    if (intersection) {
+    if (tileIntersection) {
       const name = (intersectedTile && intersectedTile.name) || "";
-      if (name !== intersection.object.name) {
+      if (name !== tileIntersection.object.name) {
         if (intersectedTile) {
           scene.remove(intersectedTile);
         }
-        intersectedTile = intersection.object.clone();
+        intersectedTile = tileIntersection.object.clone();
         intersectedTile.material.transparent = true;
         intersectedTile.material.opacity = 0.75;
         intersectedTile.position.z = 0.05;
@@ -160,6 +160,7 @@ export const createEngine = (inputHandler, tileSize) => {
   const world = {
     tiles: {},
     group: new Group(),
+    entities: new Group()
   };
 
   const worldGeometry = new Geometry();
