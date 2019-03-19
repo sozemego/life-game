@@ -119,7 +119,7 @@ export const createEngine = (inputHandler, tileSize) => {
     }
   });
 
-  let INTERSECTED = null;
+  let intersectedTile = null;
   inputHandler.onMouseMove((mouse) => {
     const rayCaster = new Raycaster();
     camera.updateMatrixWorld();
@@ -128,22 +128,22 @@ export const createEngine = (inputHandler, tileSize) => {
     const intersection = (intersections.length) > 0 ? intersections[0] : null;
 
     if (intersection) {
-      const name = (INTERSECTED && INTERSECTED.name) || "";
+      const name = (intersectedTile && intersectedTile.name) || "";
       if (name !== intersection.object.name) {
-        if (INTERSECTED) {
-          scene.remove(INTERSECTED);
+        if (intersectedTile) {
+          scene.remove(intersectedTile);
         }
-        INTERSECTED = intersection.object.clone();
-        INTERSECTED.material.transparent = true;
-        INTERSECTED.material.opacity = 0.75;
-        INTERSECTED.position.z = 0.05;
-        INTERSECTED.userData['highlightPhase'] = 'DOWN';
-        INTERSECTED.material.color = new Color('red');
-        scene.add(INTERSECTED);
+        intersectedTile = intersection.object.clone();
+        intersectedTile.material.transparent = true;
+        intersectedTile.material.opacity = 0.75;
+        intersectedTile.position.z = 0.05;
+        intersectedTile.userData['highlightPhase'] = 'DOWN';
+        intersectedTile.material.color = new Color('red');
+        scene.add(intersectedTile);
       }
     } else {
-      scene.remove(INTERSECTED);
-      INTERSECTED = null;
+      scene.remove(intersectedTile);
+      intersectedTile = null;
     }
   });
 
@@ -289,9 +289,9 @@ export const createEngine = (inputHandler, tileSize) => {
       console.log(camera.position);
     }
 
-    if (INTERSECTED) {
-      const highlightPhase = INTERSECTED.userData['highlightPhase'];
-      const opacity = INTERSECTED.material.opacity;
+    if (intersectedTile) {
+      const highlightPhase = intersectedTile.userData['highlightPhase'];
+      const opacity = intersectedTile.material.opacity;
       let nextOpacity = opacity;
       let nextPhase = highlightPhase;
       if (highlightPhase === 'DOWN') {
@@ -304,8 +304,8 @@ export const createEngine = (inputHandler, tileSize) => {
       } else if (nextOpacity >= 0.75) {
         nextPhase = 'DOWN';
       }
-      INTERSECTED.material.opacity = nextOpacity;
-      INTERSECTED.userData['highlightPhase'] = nextPhase;
+      intersectedTile.material.opacity = nextOpacity;
+      intersectedTile.userData['highlightPhase'] = nextPhase;
     }
 
     helper.update()
