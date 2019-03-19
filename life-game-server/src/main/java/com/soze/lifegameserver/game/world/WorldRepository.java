@@ -1,19 +1,18 @@
 package com.soze.lifegameserver.game.world;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public class WorldRepository {
 
   @PersistenceContext
@@ -45,5 +44,8 @@ public class WorldRepository {
     Query query = em.createQuery("SELECT w FROM World w");
     return query.getResultList();
   }
-
+  
+  public void updateWorld(World world) {
+    em.merge(world);
+  }
 }
