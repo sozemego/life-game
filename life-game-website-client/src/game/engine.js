@@ -13,8 +13,8 @@ import {
   MeshStandardMaterial, PCFShadowMap,
   PerspectiveCamera,
   PlaneGeometry,
-  Raycaster,
-  Scene,
+  Raycaster, RepeatWrapping,
+  Scene, Sprite, SpriteMaterial,
   TextureLoader,
   Vector3,
   WebGLRenderer,
@@ -37,7 +37,9 @@ export const createEngine = (inputHandler, tileSize) => {
   camera.position.z = 10 * tileSize;
 
   camera.lookAt(new Vector3(0, 0, 0));
-  camera.position.z += 25;
+  camera.position.z -= 5;
+  camera.position.x += 25;
+  camera.position.y += 25;
 
   const stats = new Stats();
   stats.showPanel(0);
@@ -165,7 +167,7 @@ export const createEngine = (inputHandler, tileSize) => {
 
   engine.setWorld = (newWorld) => {
     worldGeometry.dispose()
-
+    // return;
     console.log(newWorld);
     const texture = textureLoader.load('textures/medievalTile_57.png');
     const tileGeometry = new PlaneGeometry(tileSize, tileSize, 12, 12);
@@ -222,6 +224,27 @@ export const createEngine = (inputHandler, tileSize) => {
     light.shadow.camera.top = 50 * tileSize / 2;
     light.shadow.camera.near = 0;
     light.shadow.camera.far = 15;
+  };
+
+  const entities = {};
+
+  engine.addEntity = (entity) => {
+    console.log(entity);
+    entities[entity.id] = entity;
+    const textureName = entity.graphics.texture;
+    const { x, y, width, height } = entity.physics;
+    const texture = textureLoader.load(`textures/${textureName}.png`);
+    texture.wrapS = RepeatWrapping;
+    texture.repeat.x = - 1;
+
+    const entityMaterial = new SpriteMaterial({ map: texture, color: 0xffffff, rotation: Math.PI });
+    const sprite = new Sprite(entityMaterial);
+    sprite.position.x = x * tileSize;
+    sprite.position.y = y * tileSize;
+    sprite.position.z = 0.3;
+
+    entity.graphics['sprite'] = sprite;
+    scene.add(sprite);
   };
 
   engine.stop = () => {

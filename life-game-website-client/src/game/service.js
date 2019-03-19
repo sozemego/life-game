@@ -47,6 +47,23 @@ export const createGameService = (client, dispatch, getState) => {
     client.onMessage('WORLD', (msg) => {
       dispatch(setLoadGameMessage('RENDERING GAME WORLD'));
       engine.setWorld(msg.world);
+      setTimeout(() => {
+        dispatch(setLoadGameMessage(null));
+      }, 0);
+    });
+
+    const parseableComponents = ['graphics', 'physics'];
+
+    client.onMessage('ENTITY', (msg) => {
+      console.log(msg);
+      const { dtos } = msg;
+
+      dtos.forEach(dto => {
+        parseableComponents.forEach(componentName => {
+          if (dto[componentName]) dto[componentName] = JSON.parse(dto[componentName]);
+        });
+        engine.addEntity(dto);
+      });
     });
 
     engine.update = () => {

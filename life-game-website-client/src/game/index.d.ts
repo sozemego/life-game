@@ -18,4 +18,5 @@ export interface Engine {
     stop(): void
     running: boolean
     update(): void
+    addEntity(entity: any): void
 }
