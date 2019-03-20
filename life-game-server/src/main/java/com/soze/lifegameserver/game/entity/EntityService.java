@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -44,9 +45,9 @@ public class EntityService {
     return dto;
   }
   
-  public List<EntityDto> convert(Engine engine) {
+  public List<EntityDto> convert(Collection<Entity> entities) {
     List<EntityDto> entityDtos = new ArrayList<>();
-    for (Entity entity : engine.getAllEntities()) {
+    for (Entity entity : entities) {
       entityDtos.add(convert(entity));
     }
     return entityDtos;

@@ -5,14 +5,13 @@ import com.soze.klecs.entity.Entity;
 import com.soze.lifegame.common.dto.world.EntityDto;
 import com.soze.lifegame.common.dto.world.TileDto;
 import com.soze.lifegame.common.dto.world.WorldDto;
-import com.soze.lifegame.common.json.JsonUtils;
 import com.soze.lifegame.common.ws.message.client.ClientMessage;
 import com.soze.lifegame.common.ws.message.client.RequestWorldMessage;
 import com.soze.lifegame.common.ws.message.server.EntityMessage;
 import com.soze.lifegame.common.ws.message.server.WorldMessage;
 import com.soze.lifegameserver.game.GameCoordinator;
 import com.soze.lifegameserver.game.engine.GameEngine;
-import com.soze.lifegameserver.game.engine.component.PhysicsComponent;
+import com.soze.lifegameserver.game.entity.EntityCache;
 import com.soze.lifegameserver.game.entity.EntityService;
 import com.soze.lifegameserver.game.entity.PersistentEntity;
 import com.soze.lifegameserver.game.world.Tile;
@@ -38,12 +37,15 @@ public class GameService {
   private final WorldService worldService;
   private final GameCoordinator gameCoordinator;
   private final EntityService entityService;
+  private final EntityCache entityCache;
   
   @Autowired
-  public GameService(WorldService worldService, GameCoordinator gameCoordinator, EntityService entityService) {
+  public GameService(WorldService worldService, GameCoordinator gameCoordinator,
+                     EntityService entityService, EntityCache entityCache) {
     this.worldService = worldService;
     this.gameCoordinator = gameCoordinator;
     this.entityService = entityService;
+    this.entityCache = entityCache;
   }
   
   @PostConstruct
@@ -69,19 +71,15 @@ public class GameService {
     World world = worldExists ? worldOptional.get() : worldService.generateWorld(gameSession.getUser());
     WorldDto dto = convertToDto(world);
     
-    GameEngine gameEngine = null;
     if (!worldExists) {
       LOG.info("World did not exist, adding to GameCoordinator");
-      gameEngine = addGameEngine(world);
-    } else {
-      gameEngine = gameCoordinator.getGameEngineByUserId(world.getUserId());
+      addGameEngine(world);
     }
     
     LOG.info("Sending world data to {}", gameSession.getSession().getId());
     gameSession.send(new WorldMessage(UUID.randomUUID(), dto));
   
-    Engine engine = gameEngine.getEngine();
-    List<EntityDto> dtos = entityService.convert(engine);
+    List<EntityDto> dtos = entityService.convert(entityCache.getEntities(world.getId()));
     
     LOG.info("Sending entity data about [{}] entities to [{}]", dtos.size(), gameSession.getSession().getId());
     gameSession.send(new EntityMessage(UUID.randomUUID(), dtos));
@@ -104,6 +102,7 @@ public class GameService {
   
   private GameEngine createGameEngine(World world) {
     Engine engine = new Engine();
+    entityCache.attachToEngine(world, engine);
     LOG.info("Adding [{}] entities to GameEngine for world with userId [{}]", world.getEntities().size(), world.getUserId());
     for (PersistentEntity persistentEntity : world.getEntities()) {
       Entity entity = entityService.convert(engine, persistentEntity);
