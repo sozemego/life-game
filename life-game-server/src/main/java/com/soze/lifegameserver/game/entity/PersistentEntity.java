@@ -2,6 +2,7 @@ package com.soze.lifegameserver.game.entity;
 
 import com.soze.lifegameserver.game.engine.component.GraphicsComponent;
 import com.soze.lifegameserver.game.engine.component.PhysicsComponent;
+import com.soze.lifegameserver.game.engine.component.ResourceProviderComponent;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -12,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -42,6 +42,10 @@ public class PersistentEntity implements Serializable {
   @Type(type = "jsonb")
   @Column(name = "graphics", columnDefinition = "jsonb")
   private GraphicsComponent graphicsComponent;
+  
+  @Type(type = "jsonb")
+  @Column(name = "resource_provider", columnDefinition = "jsonb")
+  private ResourceProviderComponent resourceProviderComponent;
   
   public Long getId() {
     return id;
@@ -83,11 +87,20 @@ public class PersistentEntity implements Serializable {
     this.graphicsComponent = graphicsComponent;
   }
   
+  public ResourceProviderComponent getResourceProviderComponent() {
+    return resourceProviderComponent;
+  }
+  
+  public void setResourceProviderComponent(ResourceProviderComponent resourceProviderComponent) {
+    this.resourceProviderComponent = resourceProviderComponent;
+  }
+  
   public PersistentEntity copy() {
     PersistentEntity copy = new PersistentEntity();
-    copy.setPhysicsComponent(getPhysicsComponent());
-    copy.setGraphicsComponent(getGraphicsComponent());
+    copy.setPhysicsComponent(physicsComponent != null ? physicsComponent.copy() : null);
+    copy.setGraphicsComponent(graphicsComponent != null ? graphicsComponent.copy() : null);
     copy.setName(getName());
+    copy.setResourceProviderComponent(resourceProviderComponent != null ? resourceProviderComponent.copy() : null);
     return copy;
   }
   
@@ -99,6 +112,7 @@ public class PersistentEntity implements Serializable {
              ", worldId=" + worldId +
              ", physicsComponent=" + physicsComponent +
              ", graphicsComponent=" + graphicsComponent +
+             ", resourceProviderComponent=" + resourceProviderComponent +
              '}';
   }
 }

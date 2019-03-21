@@ -26,5 +26,6 @@ CREATE TABLE ENTITY (
   name VARCHAR(32) NOT NULL,
   world_id INT NOT NULL REFERENCES WORLD(id),
   physics JSONB,
-  graphics JSONB
+  graphics JSONB,
+  resource_provider JSONB
 );

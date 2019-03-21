@@ -75,12 +75,33 @@ public class WorldService {
     warehouse.setId(null);
     warehouse.setWorldId(world.getId());
     warehouse.getGraphicsComponent().setTexture("WAREHOUSE_1");
-    PhysicsComponent physics = warehouse.getPhysicsComponent();
-    physics.setX(25);
-    physics.setY(25);
-    physics.setWidth(1);
-    physics.setHeight(1);
+    PhysicsComponent warehousePhysics = warehouse.getPhysicsComponent();
+    warehousePhysics.setX(25);
+    warehousePhysics.setY(25);
+    warehousePhysics.setWidth(1);
+    warehousePhysics.setHeight(1);
     world.getEntities().add(warehouse);
+    
+    LOG.info("Generating few forests for world with userId [{}]", world.getUserId());
+    PersistentEntity forest = entityService.getTemplate("FOREST_1");
+    forest.setId(null);
+    forest.setWorldId(world.getId());
+    PhysicsComponent forestPhysics = forest.getPhysicsComponent();
+    forestPhysics.setX(27);
+    forestPhysics.setY(26);
+    forestPhysics.setWidth(1);
+    forestPhysics.setHeight(1);
+    world.getEntities().add(forest);
+  
+    PersistentEntity forest2 = entityService.getTemplate("FOREST_1");
+    forest2.setId(null);
+    forest2.setWorldId(world.getId());
+    PhysicsComponent forest2Physics = forest2.getPhysicsComponent();
+    forest2Physics.setX(28);
+    forest2Physics.setY(26);
+    forest2Physics.setWidth(1);
+    forest2Physics.setHeight(1);
+    world.getEntities().add(forest2);
   }
   
 }
