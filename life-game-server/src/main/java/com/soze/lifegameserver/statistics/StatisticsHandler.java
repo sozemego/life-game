@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -66,8 +67,12 @@ public class StatisticsHandler extends TextWebSocketHandler {
   
   private String getUsername(long userId) {
     return users.computeIfAbsent(userId, k -> {
-      ResponseEntity<SimpleUserDto> response = restTemplate.getForEntity(URI.create(getByIdPath + "/" + k), SimpleUserDto.class);
-      return response.getBody().getUsername();
+      try {
+        ResponseEntity<SimpleUserDto> response = restTemplate.getForEntity(URI.create(getByIdPath + "/" + k), SimpleUserDto.class);
+        return response.getBody().getUsername();
+      } catch (HttpClientErrorException e) {
+        return String.valueOf(userId);
+      }
     });
   }
   
