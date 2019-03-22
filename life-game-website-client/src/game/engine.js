@@ -274,23 +274,23 @@ export const createEngine = (inputHandler, tileSize) => {
     engine.update();
 
     if (pressedKeys.has('a')) {
-      camera.position.x -= 1;
+      camera.position.x -= 0.5;
     }
     if (pressedKeys.has('d')) {
-      camera.position.x += 1;
+      camera.position.x += 0.5;
     }
     if (pressedKeys.has('s')) {
-      camera.position.y -= 1;
+      camera.position.y -= 0.5;
     }
     if (pressedKeys.has('w')) {
-      camera.position.y += 1;
+      camera.position.y += 0.5;
     }
 
     if (pressedKeys.has('q')) {
-      camera.position.z += 1;
+      camera.position.z += 0.5;
     }
     if (pressedKeys.has('e')) {
-      camera.position.z -= 1;
+      camera.position.z -= 0.5;
     }
 
     if (pressedKeys.has('g')) {
