@@ -1,11 +1,12 @@
 package com.soze.lifegame.common.dto.world;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class EntityDto {
   
   private long id;
-  private String name;
-  private Object graphics;
-  private Object physics;
+  private Map<String, Object> components = new HashMap<>();
   
   public long getId() {
     return id;
@@ -15,27 +16,12 @@ public class EntityDto {
     this.id = id;
   }
   
-  public String getName() {
-    return name;
+  public void addComponent(String type, Object component) {
+    components.put(type, component);
   }
   
-  public void setName(String name) {
-    this.name = name;
+  public Map<String, Object> getComponents() {
+    return components;
   }
   
-  public Object getGraphics() {
-    return graphics;
-  }
-  
-  public void setGraphics(Object graphics) {
-    this.graphics = graphics;
-  }
-  
-  public Object getPhysics() {
-    return physics;
-  }
-  
-  public void setPhysics(Object physics) {
-    this.physics = physics;
-  }
 }

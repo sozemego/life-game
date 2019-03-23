@@ -4,10 +4,8 @@ import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
 import com.soze.klecs.entity.EntityFactory;
 import com.soze.lifegame.common.dto.world.EntityDto;
-import com.soze.lifegame.common.json.JsonUtils;
-import com.soze.lifegameserver.game.engine.component.GraphicsComponent;
+import com.soze.lifegameserver.game.engine.component.BaseComponent;
 import com.soze.lifegameserver.game.engine.component.NameComponent;
-import com.soze.lifegameserver.game.engine.component.PhysicsComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,9 +37,11 @@ public class EntityService {
   public EntityDto convert(Entity entity) {
     EntityDto dto = new EntityDto();
     dto.setId((Long) entity.getId());
-    dto.setName(entity.getComponent(NameComponent.class).getName());
-    dto.setGraphics(entity.getComponent(GraphicsComponent.class));
-    dto.setPhysics(entity.getComponent(PhysicsComponent.class));
+    
+    entity
+      .getAllComponents(BaseComponent.class)
+      .forEach(component -> dto.addComponent(component.getType().name(), component));
+    
     return dto;
   }
   
