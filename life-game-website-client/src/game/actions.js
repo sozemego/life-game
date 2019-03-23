@@ -9,9 +9,6 @@ export const setGameStarted = makePayloadActionCreator(GAME_STARTED);
 export const LOAD_GAME_MESSAGE = 'LOAD_GAME_MESSAGE';
 export const setLoadGameMessage = makePayloadActionCreator(LOAD_GAME_MESSAGE);
 
-/**
- * @type {GameService}
- */
 let gameService = null;
 
 export const startGame = () => {
