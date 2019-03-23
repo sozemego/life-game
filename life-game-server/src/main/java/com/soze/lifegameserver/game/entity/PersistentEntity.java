@@ -1,6 +1,8 @@
 package com.soze.lifegameserver.game.entity;
 
+import com.soze.lifegameserver.game.engine.component.BaseComponent;
 import com.soze.lifegameserver.game.engine.component.GraphicsComponent;
+import com.soze.lifegameserver.game.engine.component.NameComponent;
 import com.soze.lifegameserver.game.engine.component.PhysicsComponent;
 import com.soze.lifegameserver.game.engine.component.ResourceProviderComponent;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
@@ -15,6 +17,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "entity")
@@ -102,6 +106,16 @@ public class PersistentEntity implements Serializable {
     copy.setName(getName());
     copy.setResourceProviderComponent(resourceProviderComponent != null ? resourceProviderComponent.copy() : null);
     return copy;
+  }
+  
+  public List<BaseComponent> getAllComponents() {
+    List<BaseComponent> components = new ArrayList<>();
+    components.add(resourceProviderComponent);
+    components.add(physicsComponent);
+    components.add(graphicsComponent);
+    components.add(new NameComponent(name));
+    components.removeIf(c -> c == null);
+    return components;
   }
   
   @Override

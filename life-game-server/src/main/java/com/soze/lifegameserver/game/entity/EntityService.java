@@ -27,9 +27,9 @@ public class EntityService {
     EntityFactory entityFactory = engine.getEntityFactory();
     Entity entity = entityFactory.createEntity(persistentEntity.getId());
     
-    entity.addComponent(new NameComponent(persistentEntity.getName()));
-    entity.addComponent(persistentEntity.getPhysicsComponent());
-    entity.addComponent(persistentEntity.getGraphicsComponent());
+    persistentEntity
+      .getAllComponents()
+      .forEach(component -> entity.addComponent(component));
     
     return entity;
   }
