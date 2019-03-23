@@ -16,7 +16,7 @@ let gameService = null;
 
 export const startGame = () => {
   return (dispatch, getState) => {
-    console.log('STARTING GAME')
+    console.log('STARTING GAME');
 
     if (gameService != null) {
       gameService.destroy();

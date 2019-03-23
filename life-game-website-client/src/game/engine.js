@@ -24,7 +24,7 @@ import {
   SpriteMaterial,
   TextureLoader,
   Vector3,
-  WebGLRenderer,
+  WebGLRenderer
 } from 'three';
 import Stats from 'stats-js';
 
@@ -33,7 +33,6 @@ import Stats from 'stats-js';
  * @returns Engine
  */
 export const createEngine = (inputHandler, tileSize) => {
-
   const scene = new Scene();
   const width = window.innerWidth - 17;
   const height = window.innerHeight - 36 - 25;
@@ -56,7 +55,7 @@ export const createEngine = (inputHandler, tileSize) => {
 
   const textureLoader = new TextureLoader();
 
-  const light = new DirectionalLight( 0xffffff, 0.5 );
+  const light = new DirectionalLight(0xffffff, 0.5);
   light.position.set(0, 0, 10);
   light.castShadow = true;
   light.shadow.camera.up.set(0, 0, 1);
@@ -89,18 +88,27 @@ export const createEngine = (inputHandler, tileSize) => {
 
   window.addEventListener('resize', resize);
 
-
   const container = document.getElementById('game-container');
   container.append(renderer.domElement);
   container.appendChild(stats.dom);
 
   const shadowCubes = [];
-  for(let i = 0; i < 50; i++) {
-    const shadowBox = new BoxGeometry(Math.random() * tileSize, Math.random() * tileSize, Math.random() * tileSize);
-    const material = new MeshPhongMaterial({color: Math.random() * 255 * 255 * 255});
+  for (let i = 0; i < 50; i++) {
+    const shadowBox = new BoxGeometry(
+      Math.random() * tileSize,
+      Math.random() * tileSize,
+      Math.random() * tileSize
+    );
+    const material = new MeshPhongMaterial({
+      color: Math.random() * 255 * 255 * 255
+    });
     const shadowCube = new Mesh(shadowBox, material);
     shadowCube.castShadow = true;
-    shadowCube.position.set(Math.random() * 50, Math.random() * 50, Math.random() * 5);
+    shadowCube.position.set(
+      Math.random() * 50,
+      Math.random() * 50,
+      Math.random() * 5
+    );
     shadowCube.updateMatrix();
     // scene.add(shadowCube);
     shadowCubes.push(shadowCube);
@@ -110,15 +118,15 @@ export const createEngine = (inputHandler, tileSize) => {
 
   const pressedKeys = new Set();
 
-  inputHandler.onKeyUp((key) => {
+  inputHandler.onKeyUp(key => {
     pressedKeys.delete(key);
   });
 
-  inputHandler.onKeyDown((key) => {
+  inputHandler.onKeyDown(key => {
     pressedKeys.add(key);
   });
 
-  inputHandler.onMouseWheel((delta) => {
+  inputHandler.onMouseWheel(delta => {
     if (delta > 0) {
       camera.position.z += 1;
     } else {
@@ -128,17 +136,20 @@ export const createEngine = (inputHandler, tileSize) => {
 
   let intersectedTile = null;
   let intersectedEntity = null;
-  inputHandler.onMouseMove((mouse) => {
+  inputHandler.onMouseMove(mouse => {
     let rayCaster = new Raycaster();
     camera.updateMatrixWorld();
     rayCaster.setFromCamera(mouse, camera);
     const tileIntersections = rayCaster.intersectObjects(world.group.children);
-    const tileIntersection = (tileIntersections.length) > 0 ? tileIntersections[0] : null;
-    const entityIntersections = rayCaster.intersectObjects(world.entities.children);
+    const tileIntersection =
+      tileIntersections.length > 0 ? tileIntersections[0] : null;
+    const entityIntersections = rayCaster.intersectObjects(
+      world.entities.children
+    );
     const entityIntersection = entityIntersections[0] || null;
 
     if (tileIntersection && !entityIntersection) {
-      const name = (intersectedTile && intersectedTile.name) || "";
+      const name = (intersectedTile && intersectedTile.name) || '';
       if (name !== tileIntersection.object.name) {
         if (intersectedTile) {
           scene.remove(intersectedTile);
@@ -155,11 +166,10 @@ export const createEngine = (inputHandler, tileSize) => {
       scene.remove(intersectedTile);
       intersectedTile = null;
     }
-
   });
 
   const engine = {
-    running: false,
+    running: false
   };
 
   engine.start = () => {
@@ -177,19 +187,27 @@ export const createEngine = (inputHandler, tileSize) => {
   const worldGeometry = new Geometry();
   let worldMesh = null;
 
-  engine.setWorld = (newWorld) => {
-    worldGeometry.dispose()
+  engine.setWorld = newWorld => {
+    worldGeometry.dispose();
     // return;
     console.log(newWorld);
     const texture = textureLoader.load('textures/medievalTile_57.png');
     const tileGeometry = new PlaneGeometry(tileSize, tileSize, 12, 12);
-    const worldMaterial = new MeshLambertMaterial({ map: texture, color: 0x00ff00, side: FrontSide });
+    const worldMaterial = new MeshLambertMaterial({
+      map: texture,
+      color: 0x00ff00,
+      side: FrontSide
+    });
 
     newWorld.tiles.forEach(tile => {
       const key = `${tile.x}:${tile.y}`;
       world[key] = tile;
 
-      const tileMaterial = new MeshLambertMaterial({ map: texture, color: 0x00ff00, side: FrontSide });
+      const tileMaterial = new MeshLambertMaterial({
+        map: texture,
+        color: 0x00ff00,
+        side: FrontSide
+      });
 
       const mesh = new Mesh(tileGeometry, tileMaterial);
       mesh.position.x = tile.x * tileSize;
@@ -222,18 +240,18 @@ export const createEngine = (inputHandler, tileSize) => {
     const box = new Box3().setFromObject(gridHelper);
     const width = box.max.x - box.min.x;
     const height = box.max.y - box.min.y;
-    gridHelper.position.add(new Vector3((width / 2) - (tileSize / 2), 0, 0));
-    gridHelper.position.add(new Vector3(0, (height / 2) - (tileSize / 2), 0));
+    gridHelper.position.add(new Vector3(width / 2 - tileSize / 2, 0, 0));
+    gridHelper.position.add(new Vector3(0, height / 2 - tileSize / 2, 0));
     scene.add(gridHelper);
 
-    light.target.position.set(50 * tileSize / 2, 50 * tileSize / 2, 0);
+    light.target.position.set((50 * tileSize) / 2, (50 * tileSize) / 2, 0);
     light.target.updateMatrixWorld();
 
-    light.position.set(50 * tileSize / 2, 50 * tileSize / 2, 10);
-    light.shadow.camera.left = -50 * tileSize / 2;
-    light.shadow.camera.right = 50 * tileSize / 2;
-    light.shadow.camera.bottom = -50 * tileSize / 2;
-    light.shadow.camera.top = 50 * tileSize / 2;
+    light.position.set((50 * tileSize) / 2, (50 * tileSize) / 2, 10);
+    light.shadow.camera.left = (-50 * tileSize) / 2;
+    light.shadow.camera.right = (50 * tileSize) / 2;
+    light.shadow.camera.bottom = (-50 * tileSize) / 2;
+    light.shadow.camera.top = (50 * tileSize) / 2;
     light.shadow.camera.near = 0;
     light.shadow.camera.far = 15;
   };
@@ -243,9 +261,13 @@ export const createEngine = (inputHandler, tileSize) => {
   engine.createSprite = (textureName, position) => {
     const texture = textureLoader.load(`textures/${textureName}.png`);
     texture.wrapS = RepeatWrapping;
-    texture.repeat.x = - 1;
+    texture.repeat.x = -1;
 
-    const entityMaterial = new SpriteMaterial({ map: texture, color: 0xffffff, rotation: Math.PI });
+    const entityMaterial = new SpriteMaterial({
+      map: texture,
+      color: 0xffffff,
+      rotation: Math.PI
+    });
     const sprite = new Sprite(entityMaterial);
     sprite.position.x = position.x * tileSize;
     sprite.position.y = position.y * tileSize;
@@ -261,9 +283,7 @@ export const createEngine = (inputHandler, tileSize) => {
     window.removeEventListener('resize', resize);
   };
 
-  engine.update = () => {
-
-  };
+  engine.update = () => {};
 
   const animate = () => {
     if (!engine.running) {
@@ -316,7 +336,7 @@ export const createEngine = (inputHandler, tileSize) => {
       intersectedTile.userData['highlightPhase'] = nextPhase;
     }
 
-    helper.update()
+    helper.update();
     const lightPhase = light.userData['phase'];
     if (lightPhase === 'UP') {
       // light.intensity += 0.01;
@@ -340,7 +360,7 @@ export const createEngine = (inputHandler, tileSize) => {
       shadowCube.rotation.x += 0.01;
       shadowCube.rotation.y += 0.01;
       shadowCube.rotation.z += 0.01;
-    })
+    });
 
     stats.end();
   };

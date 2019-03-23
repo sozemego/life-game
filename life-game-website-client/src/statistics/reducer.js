@@ -3,7 +3,7 @@ import { ADD_WORLD, SET_STATISTICS_MESSAGE } from './actions';
 
 const initialState = {
   worlds: {},
-  message: null,
+  message: null
 };
 
 const addWorld = (state, action) => {
@@ -12,12 +12,12 @@ const addWorld = (state, action) => {
   const nextWorlds = { ...state.worlds };
   nextWorlds[username] = {
     username,
-    createdAt,
+    createdAt
   };
-  return {...state, worlds: nextWorlds};
+  return { ...state, worlds: nextWorlds };
 };
 
 export const reducer = createReducer(initialState, {
   [SET_STATISTICS_MESSAGE]: createPayloadSetter('message'),
-  [ADD_WORLD]: addWorld,
+  [ADD_WORLD]: addWorld
 });

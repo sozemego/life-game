@@ -1,13 +1,14 @@
-import {createWebSocketClient} from '../api/webSocketClient';
+import { createWebSocketClient } from '../api/webSocketClient';
 import uuid from 'uuid/v4';
 
 /**
  * @return GameClient
  */
-export const createGameClient = (user) => {
-
+export const createGameClient = user => {
   const client = {};
-  const webSocketClient = createWebSocketClient({path: 'ws://localhost:8000/game'});
+  const webSocketClient = createWebSocketClient({
+    path: 'ws://localhost:8000/game'
+  });
 
   client.authorize = () => {
     const authMessage = {
@@ -34,5 +35,3 @@ export const createGameClient = (user) => {
 
   return client;
 };
-
-

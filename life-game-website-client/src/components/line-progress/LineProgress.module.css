@@ -1,28 +1,28 @@
 .container {
-    height: 2px;
-    width: 100%;
+  height: 2px;
+  width: 100%;
 }
 
 .body {
-    height: 100%;
-    background-color: red;
-    opacity: 0;
+  height: 100%;
+  background-color: red;
+  opacity: 0;
 }
 
 .fetching {
-    animation-duration: 1s;
-    animation-name: fetching-animation;
-    /*animation-direction: normal;*/
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-    animation-timing-function: ease-out;
+  animation-duration: 1s;
+  animation-name: fetching-animation;
+  /*animation-direction: normal;*/
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: ease-out;
 }
 
 @keyframes fetching-animation {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

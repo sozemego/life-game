@@ -21,12 +21,12 @@ const getToken = () => {
 
 const initialState = {
   name: getName(),
-  token: getToken(),
+  token: getToken()
 };
 
 const reducer = createReducer(initialState, {
   [SET_USER_NAME]: setName,
-  [SET_TOKEN]: setToken,
+  [SET_TOKEN]: setToken
 });
 
 export default reducer;

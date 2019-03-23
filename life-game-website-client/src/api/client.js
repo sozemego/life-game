@@ -1,6 +1,9 @@
 import axios from 'axios';
 import store from '../store/store';
-import { decrementFetchingActions, incrementFetchingActions } from '../app/actions';
+import {
+  decrementFetchingActions,
+  incrementFetchingActions
+} from '../app/actions';
 
 const fetch = () => {
   store.dispatch(incrementFetchingActions());
@@ -10,22 +13,22 @@ const stopFetch = () => {
   store.dispatch(decrementFetchingActions());
 };
 
-const responseUnpacker = (response) => {
+const responseUnpacker = response => {
   const data = response.data;
   console.log(data);
-  stopFetch()
+  stopFetch();
   return data;
 };
 
-const errorUnpacker = (error) => {
+const errorUnpacker = error => {
   console.log(error.response);
-  stopFetch()
+  stopFetch();
   throw error.response;
 };
 
 const createClient = (baseUrl = null) => {
   const options = {
-    baseURL: baseUrl,
+    baseURL: baseUrl
   };
 
   const client = axios.create(options);

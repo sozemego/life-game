@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { LineProgress } from '../line-progress/LineProgress';
 
-
 export const Button = ({ children, onClick, disabled = false, ...props }) => {
-
   const [fetching, setFetching] = useState(false);
 
   const onClickDelegate = () => {
@@ -20,18 +18,17 @@ export const Button = ({ children, onClick, disabled = false, ...props }) => {
   return (
     <button {...props} onClick={onClickDelegate} disabled={disabled}>
       {children}
-      <LineProgress isFetching={fetching}/>
+      <LineProgress isFetching={fetching} />
     </button>
   );
 };
 
 Button.propTypes = {
   children: PropTypes.any,
-  onClick: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 Button.defaultProps = {
   content: null,
-  onClick: () => {
-  },
+  onClick: () => {}
 };

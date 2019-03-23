@@ -23,16 +23,15 @@ export const createGameService = (client, dispatch, getState) => {
   service.start = () => {
     dispatch(setLoadGameMessage('CONNECTING'));
 
-    return client.connect()
-      .then(() => {
-        dispatch(setLoadGameMessage('AUTHENTICATING'));
-        client.authorize();
+    return client.connect().then(() => {
+      dispatch(setLoadGameMessage('AUTHENTICATING'));
+      client.authorize();
 
-        client.onMessage('AUTHORIZED', (msg) => {
-          dispatch(setLoadGameMessage('AUTHENTICATED'));
-          createGame(client);
-        });
+      client.onMessage('AUTHORIZED', msg => {
+        dispatch(setLoadGameMessage('AUTHENTICATED'));
+        createGame(client);
       });
+    });
   };
 
   const createGame = () => {
@@ -44,7 +43,7 @@ export const createGameService = (client, dispatch, getState) => {
 
     client.requestGameWorld();
 
-    client.onMessage('WORLD', (msg) => {
+    client.onMessage('WORLD', msg => {
       dispatch(setLoadGameMessage('RENDERING GAME WORLD'));
       engine.setWorld(msg.world);
       setTimeout(() => {
@@ -54,21 +53,20 @@ export const createGameService = (client, dispatch, getState) => {
 
     const parseableComponents = ['graphics', 'physics', 'resourceProvider'];
 
-    client.onMessage('ENTITY', (msg) => {
+    client.onMessage('ENTITY', msg => {
       console.log(msg);
       const { dtos } = msg;
 
       dtos.forEach(dto => {
         parseableComponents.forEach(componentName => {
-          if (dto[componentName]) dto[componentName] = JSON.parse(dto[componentName]);
+          if (dto[componentName])
+            dto[componentName] = JSON.parse(dto[componentName]);
         });
         engine.addEntity(dto);
       });
     });
 
-    engine.update = () => {
-
-    };
+    engine.update = () => {};
   };
 
   service.destroy = () => {
@@ -78,7 +76,6 @@ export const createGameService = (client, dispatch, getState) => {
     if (client) client.disconnect();
     if (inputHandler) inputHandler.destroy();
   };
-
 
   return service;
 };

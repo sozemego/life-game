@@ -1,6 +1,6 @@
 export const makeActionCreator = (type, ...argNames) => (...args) => {
   const action = {
-    type,
+    type
   };
   argNames.forEach((item, index) => {
     action[argNames[index]] = args[index];
@@ -8,10 +8,10 @@ export const makeActionCreator = (type, ...argNames) => (...args) => {
   return action;
 };
 
-export const makePayloadActionCreator = (type) => (arg) => {
+export const makePayloadActionCreator = type => arg => {
   return {
     type,
-    payload: arg,
+    payload: arg
   };
 };
 
@@ -62,4 +62,7 @@ export const rootSelector = rootName => state => {
  * @param property
  * @returns {function(*, *): {[p: string]: *}}
  */
-export const createPayloadSetter = (property) => (state, action) => ({...state, [property]: action.payload});
+export const createPayloadSetter = property => (state, action) => ({
+  ...state,
+  [property]: action.payload
+});

@@ -6,15 +6,11 @@ const mockAxios = {
 
 mockAxios.create = () => mockAxios;
 
-const interceptors = {
+const interceptors = {};
 
-};
+const request = {};
 
-const request = {
-
-};
-
-request.use = (cfg) => cfg;
+request.use = cfg => cfg;
 
 interceptors.request = request;
 
@@ -22,15 +18,14 @@ mockAxios.interceptors = interceptors;
 
 const response = {
   use: (response, error) => {}
-}
+};
 
 mockAxios.interceptors.response = response;
 
-mockAxios.post = jest.fn()
+mockAxios.post = jest.fn();
 
 mockAxios.defaults = {
   headers: {}
 };
-
 
 export default mockAxios;

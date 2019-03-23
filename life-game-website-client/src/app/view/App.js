@@ -6,15 +6,14 @@ import MainPage from '../../main/MainPage';
 import GameComponent from '../../game/view/GameComponent';
 import Statistics from '../../statistics/view/Statistics';
 
-const App = (props) => {
-
+const App = props => {
   return (
     <div style={{ height: '100%' }}>
-      <Header/>
-      <Route path={'/'} component={MainPage} exact/>
-      <Route path={'/login'} component={Login} exact/>
-      <Route path={'/game'} component={GameComponent} exact/>
-      <Route path={'/stats'} component={Statistics} exact/>
+      <Header />
+      <Route path={'/'} component={MainPage} exact />
+      <Route path={'/login'} component={Login} exact />
+      <Route path={'/game'} component={GameComponent} exact />
+      <Route path={'/stats'} component={Statistics} exact />
     </div>
   );
 };

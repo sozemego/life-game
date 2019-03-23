@@ -3,8 +3,7 @@ import * as gameActions from '../actions';
 import { getLoadGameMessage, isGameStarted } from '../selectors';
 import { connect } from 'react-redux';
 
-export const GameComponent = ({startGame, stopGame, loadGameMessage}) => {
-
+export const GameComponent = ({ startGame, stopGame, loadGameMessage }) => {
   useEffect(() => {
     startGame();
     return () => stopGame();
@@ -12,17 +11,22 @@ export const GameComponent = ({startGame, stopGame, loadGameMessage}) => {
 
   return (
     <div>
-      <div style={{width: "100%", textAlign: 'center'}}>{loadGameMessage}</div>
-      <div style={{width: "100%", height: "100%"}} id='game-container'/>
+      <div style={{ width: '100%', textAlign: 'center' }}>
+        {loadGameMessage}
+      </div>
+      <div style={{ width: '100%', height: '100%' }} id="game-container" />
     </div>
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     gameStarted: isGameStarted(state),
-    loadGameMessage: getLoadGameMessage(state),
+    loadGameMessage: getLoadGameMessage(state)
   };
 };
 
-export default connect(mapStateToProps, gameActions)(GameComponent);
+export default connect(
+  mapStateToProps,
+  gameActions
+)(GameComponent);

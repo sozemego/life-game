@@ -10,7 +10,6 @@ export const clearAuthorizationToken = () => {
 };
 
 class NetworkService {
-
   constructor(baseUrl = null) {
     this.client = createClient(baseUrl);
   }
@@ -29,7 +28,6 @@ class NetworkService {
   post(url, body = null) {
     return this.getClient().post(url, body);
   }
-
 }
 
 export default NetworkService;

@@ -2,7 +2,9 @@ import { makePayloadActionCreator } from '../store/utils';
 import { createStatisticsClient } from './client';
 
 export const SET_STATISTICS_MESSAGE = 'SET_STATISTICS_MESSAGE';
-export const setStatisticsMessage = makePayloadActionCreator(SET_STATISTICS_MESSAGE);
+export const setStatisticsMessage = makePayloadActionCreator(
+  SET_STATISTICS_MESSAGE
+);
 
 export const ADD_WORLD = 'ADD_WORLD';
 export const addWorld = makePayloadActionCreator(ADD_WORLD);
@@ -11,7 +13,7 @@ let client = null;
 
 export const init = () => {
   return (dispatch, getState) => {
-    dispatch(setStatisticsMessage("INITIALIZING STATISTICS"));
+    dispatch(setStatisticsMessage('INITIALIZING STATISTICS'));
 
     client = createStatisticsClient();
 
@@ -19,11 +21,12 @@ export const init = () => {
       dispatch(addWorld(msg));
     });
 
-    return client.connect()
+    return client
+      .connect()
       .then(() => {
-        dispatch(setStatisticsMessage("CONNECTED"));
+        dispatch(setStatisticsMessage('CONNECTED'));
       })
-      .catch(e => dispatch(setStatisticsMessage("ERROR WHILE CONNECTING")));
+      .catch(e => dispatch(setStatisticsMessage('ERROR WHILE CONNECTING')));
   };
 };
 

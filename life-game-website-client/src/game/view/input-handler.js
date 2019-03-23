@@ -9,7 +9,9 @@ export const createInputHandler = (dom = window) => {
   //we want to use window to capture key events
   const keyListener = dom !== window ? window : dom;
   if (dom !== window) {
-    console.log('passed DOM element is not window, window will be used for key capture.')
+    console.log(
+      'passed DOM element is not window, window will be used for key capture.'
+    );
   }
 
   const listeners = {
@@ -22,7 +24,7 @@ export const createInputHandler = (dom = window) => {
   const subscribe = (type, fn) => {
     const typeListeners = listeners[type];
     typeListeners.push(fn);
-    console.log(`Subscribed ${type} ${dom}`)
+    console.log(`Subscribed ${type} ${dom}`);
     return unsubscribeCallback(typeListeners, fn);
   };
 
@@ -33,11 +35,11 @@ export const createInputHandler = (dom = window) => {
     }
   };
 
-  const onKeyUp = (fn) => {
+  const onKeyUp = fn => {
     return subscribe(KEY_UP, fn);
   };
 
-  const keyup = (event) => {
+  const keyup = event => {
     const { key } = event;
     const typeListeners = listeners[KEY_UP];
     typeListeners.forEach(listener => listener(key));
@@ -45,11 +47,11 @@ export const createInputHandler = (dom = window) => {
 
   keyListener.addEventListener('keyup', keyup);
 
-  const onKeyDown = (fn) => {
+  const onKeyDown = fn => {
     return subscribe(KEY_DOWN, fn);
   };
 
-  const keydown = (event) => {
+  const keydown = event => {
     const { key } = event;
     const typeListeners = listeners[KEY_DOWN];
     typeListeners.forEach(listener => listener(key));
@@ -57,11 +59,11 @@ export const createInputHandler = (dom = window) => {
 
   keyListener.addEventListener('keydown', keydown);
 
-  const onMouseWheel = (fn) => {
+  const onMouseWheel = fn => {
     return subscribe(MOUSE_WHEEL, fn);
   };
 
-  const mouseWheel = (event) => {
+  const mouseWheel = event => {
     const delta = Math.sign(event.deltaY);
     const typeListeners = listeners[MOUSE_WHEEL];
     typeListeners.forEach(listener => listener(delta));
@@ -69,11 +71,11 @@ export const createInputHandler = (dom = window) => {
 
   dom.addEventListener('wheel', mouseWheel);
 
-  const onMouseMove = (fn) => {
+  const onMouseMove = fn => {
     return subscribe(MOUSE_MOVE, fn);
   };
 
-  const mouseMove = (event) => {
+  const mouseMove = event => {
     const boundingBox = event.target.getBoundingClientRect();
     const rawX = event.clientX - boundingBox.x;
     const rawY = event.clientY - Math.ceil(boundingBox.y);
@@ -81,7 +83,7 @@ export const createInputHandler = (dom = window) => {
       rawX,
       rawY,
       x: (rawX / (dom.innerWidth || Math.ceil(boundingBox.width))) * 2 - 1,
-      y: - (rawY / (dom.innerHeight || Math.ceil(boundingBox.height))) * 2 + 1
+      y: -(rawY / (dom.innerHeight || Math.ceil(boundingBox.height))) * 2 + 1
     };
     const typeListeners = listeners[MOUSE_MOVE];
     typeListeners.forEach(listener => listener(mouse));
@@ -95,7 +97,7 @@ export const createInputHandler = (dom = window) => {
     keyListener.removeEventListener('keyup', keyup);
     dom.removeEventListener('wheel', mouseWheel);
     dom.removeEventListener('mousemove', mouseMove);
-    Object.keys(listeners).forEach(type => listeners[type] = []);
+    Object.keys(listeners).forEach(type => (listeners[type] = []));
   };
 
   return {

@@ -10,15 +10,17 @@ export const setToken = makePayloadActionCreator(SET_TOKEN);
 
 export const register = (username, password) => {
   return (dispatch, getState) => {
-    return loginService.register(username, password)
+    return loginService
+      .register(username, password)
       .then(() => dispatch(login(username, password)));
   };
 };
 
 export const login = (username, password) => {
   return (dispatch, getState) => {
-    return loginService.login(username, password)
-      .then((token) => {
+    return loginService
+      .login(username, password)
+      .then(token => {
         dispatch(setName(username));
         dispatch(setToken(token));
       })
@@ -28,8 +30,9 @@ export const login = (username, password) => {
 
 export const logout = () => {
   return (dispatch, getState) => {
-    return loginService.logout()
+    return loginService
+      .logout()
       .then(() => dispatch(setName(null)))
       .then(() => setImmediate(() => history.push('/login')));
   };
-}
+};

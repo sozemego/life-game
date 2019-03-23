@@ -6,8 +6,7 @@ import { WorldList } from './WorldList';
 import { getMessage, getWorlds } from '../selectors';
 import * as statActions from '../actions';
 
-const Statistics = (props) => {
-
+const Statistics = props => {
   useEffect(() => {
     props.init();
     return () => props.disconnect();
@@ -20,21 +19,24 @@ const Statistics = (props) => {
       <div>Here are some statistics about current servers!</div>
       <div>{message}</div>
       <div>Game worlds [{worlds.length}]:</div>
-      <WorldList worlds={props.worlds}/>
+      <WorldList worlds={props.worlds} />
     </div>
   );
 };
 
 Statistics.propTypes = {
   worlds: PropTypes.array.isRequired,
-  message: PropTypes.string,
+  message: PropTypes.string
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     worlds: getWorlds(state),
-    message: getMessage(state),
+    message: getMessage(state)
   };
 };
 
-export default connect(mapStateToProps, statActions)(Statistics);
+export default connect(
+  mapStateToProps,
+  statActions
+)(Statistics);

@@ -1,5 +1,4 @@
-export const createWebSocketClient = (options) => {
-
+export const createWebSocketClient = options => {
   const client = {};
   const listeners = {};
 
@@ -21,12 +20,12 @@ export const createWebSocketClient = (options) => {
     return new Promise((resolve, reject) => {
       socket = new WebSocket(path);
 
-      socket.onopen = (ws) => {
+      socket.onopen = ws => {
         console.log('connected to game server');
         resolve();
       };
 
-      socket.onmessage = (message) => {
+      socket.onmessage = message => {
         const parsed = JSON.parse(message.data);
         // console.log('received message from server');
         // console.log(parsed);
@@ -38,7 +37,7 @@ export const createWebSocketClient = (options) => {
         console.log('connection closed');
       };
 
-      socket.onerror = (e) => {
+      socket.onerror = e => {
         console.log(e);
         reject(e);
       };
@@ -53,7 +52,7 @@ export const createWebSocketClient = (options) => {
     socket.close();
   };
 
-  client.send = (message) => {
+  client.send = message => {
     socket.send(JSON.stringify(message));
   };
 

@@ -9,45 +9,39 @@ import LineProgress from '../components/line-progress/LineProgress';
 import Divider from '../components/divider/Divider';
 
 const Header = ({ isLoggedIn, logout }) => {
-
   return (
     <div className={styles.container}>
       <div className={styles['header-content']}>
-        <div style={{ flex: 1, visibility: 'hidden' }}>
-          what
-        </div>
+        <div style={{ flex: 1, visibility: 'hidden' }}>what</div>
         <div className={styles['game-name']}>
-          <Link to={'/'}>
-            LIFE GAME
-          </Link>
+          <Link to={'/'}>LIFE GAME</Link>
         </div>
         <div className={styles['login-content']}>
-          {!isLoggedIn &&
-          <Link to={'/login'}>
-            LOGIN
-          </Link>}
-          {isLoggedIn &&
-          <span onClick={logout} className={styles.logout}>
-            LOGOUT
-          </span>
-          }
+          {!isLoggedIn && <Link to={'/login'}>LOGIN</Link>}
+          {isLoggedIn && (
+            <span onClick={logout} className={styles.logout}>
+              LOGOUT
+            </span>
+          )}
         </div>
       </div>
-      <Divider/>
+      <Divider />
       <LineProgress />
     </div>
   );
 };
 
 Header.propTypes = {
-  isLoggedIn: PropTypes.bool,
+  isLoggedIn: PropTypes.bool
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    isLoggedIn: isLoggedIn(state),
+    isLoggedIn: isLoggedIn(state)
   };
 };
 
-
-export default connect(mapStateToProps, userActions)(Header);
+export default connect(
+  mapStateToProps,
+  userActions
+)(Header);

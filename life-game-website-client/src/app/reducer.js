@@ -1,8 +1,11 @@
 import { createReducer } from '../store/utils';
-import { DECREMENT_FETCHING_ACTIONS, INCREMENT_FETCHING_ACTIONS } from './actions';
+import {
+  DECREMENT_FETCHING_ACTIONS,
+  INCREMENT_FETCHING_ACTIONS
+} from './actions';
 
 const initialState = {
-  fetchingActions: 0,
+  fetchingActions: 0
 };
 
 const incrementFetchingActions = (state, action) => {
@@ -17,7 +20,7 @@ const decrementFetchingActions = (state, action) => {
 
 const reducer = createReducer(initialState, {
   [INCREMENT_FETCHING_ACTIONS]: incrementFetchingActions,
-  [DECREMENT_FETCHING_ACTIONS]: decrementFetchingActions,
+  [DECREMENT_FETCHING_ACTIONS]: decrementFetchingActions
 });
 
 export default reducer;
