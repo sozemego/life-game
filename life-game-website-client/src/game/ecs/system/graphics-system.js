@@ -19,7 +19,17 @@ export const createGraphicsSystem = (entityEngine, engine) => {
     });
   };
 
-  const updateEntity = (delta, entity, components) => {};
+  const updateEntity = (delta, entity, components) => {
+    const physics = components[TYPES.PHYSICS];
+    const graphics = components[TYPES.GRAPHICS];
+
+    const { x, y } = physics;
+    const { sprite } = graphics;
+
+    sprite.position.x = x;
+    sprite.position.y = y;
+
+  };
 
   return {
     update
