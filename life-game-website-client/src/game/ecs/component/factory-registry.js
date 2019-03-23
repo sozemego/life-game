@@ -3,7 +3,6 @@ import { TYPES } from "./types";
 const factories = {};
 
 export const getFactories = () => {
-  console.log(factories);
   return factories;
 };
 
