@@ -20,7 +20,9 @@ const createPhysics = (component, context) => {
 factories[TYPES.PHYSICS] = createPhysics;
 
 const createGraphics = (component, context) => {
-  return {...component}
+  const { engine } = context;
+  const sprite = engine.createSprite(component.texture);
+  return {...component, sprite};
 };
 
 factories[TYPES.GRAPHICS] = createGraphics;
