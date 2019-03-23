@@ -131,7 +131,7 @@ export const createEngine = (inputHandler, tileSize) => {
   });
 
   let intersectedTile = null;
-  let intersectedEntity = null;
+  let intersectedSprite = null;
   inputHandler.onMouseMove(mouse => {
     let rayCaster = new Raycaster();
     camera.updateMatrixWorld();
@@ -139,12 +139,12 @@ export const createEngine = (inputHandler, tileSize) => {
     const tileIntersections = rayCaster.intersectObjects(world.group.children);
     const tileIntersection =
       tileIntersections.length > 0 ? tileIntersections[0] : null;
-    const entityIntersections = rayCaster.intersectObjects(
+    const spriteIntersections = rayCaster.intersectObjects(
       world.sprites.children
     );
-    const entityIntersection = entityIntersections[0] || null;
+    const spriteIntersection = spriteIntersections[0] || null;
 
-    if (tileIntersection && !entityIntersection) {
+    if (tileIntersection && !spriteIntersection) {
       const name = (intersectedTile && intersectedTile.name) || '';
       if (name !== tileIntersection.object.name) {
         if (intersectedTile) {
@@ -162,6 +162,16 @@ export const createEngine = (inputHandler, tileSize) => {
       scene.remove(intersectedTile);
       intersectedTile = null;
     }
+
+    if (spriteIntersection) {
+      const name = (intersectedSprite && intersectedSprite.name) || null;
+      if (name !== spriteIntersection.object.name) {
+        intersectedSprite = spriteIntersection.object;
+      }
+    } else {
+      intersectedSprite = null;
+    }
+
   });
 
   const engine = {
@@ -359,6 +369,10 @@ export const createEngine = (inputHandler, tileSize) => {
     });
 
     stats.end();
+  };
+
+  engine.getSpriteUnderMouse = () => {
+    return intersectedSprite;
   };
 
   return engine;
