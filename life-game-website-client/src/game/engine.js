@@ -132,7 +132,7 @@ export const createEngine = (inputHandler, tileSize) => {
     let rayCaster = new Raycaster();
     camera.updateMatrixWorld();
     rayCaster.setFromCamera(mouse, camera);
-    const tileIntersections = rayCaster.intersectObjects(world.group.children);
+    const tileIntersections = rayCaster.intersectObjects(world.tilesGroup.children);
     const tileIntersection = tileIntersections.length > 0 ? tileIntersections[0] : null;
     const spriteIntersections = rayCaster.intersectObjects(world.sprites.children);
     const spriteIntersection = spriteIntersections[0] || null;
@@ -178,7 +178,7 @@ export const createEngine = (inputHandler, tileSize) => {
 
   const world = {
     tiles: {},
-    group: new Group(),
+    tilesGroup: new Group(),
     sprites: new Group(),
   };
 
@@ -218,7 +218,7 @@ export const createEngine = (inputHandler, tileSize) => {
       // among the merged geometry.
       tile.mesh = mesh;
       mesh.name = key;
-      world.group.add(mesh);
+      world.tilesGroup.add(mesh);
       /**
        * The tile geometries are merged for performance reasons.
        * This is only temporary however, as doing this makes it into 'one' big plane
