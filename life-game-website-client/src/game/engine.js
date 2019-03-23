@@ -144,7 +144,7 @@ export const createEngine = (inputHandler, tileSize) => {
     const tileIntersection =
       tileIntersections.length > 0 ? tileIntersections[0] : null;
     const entityIntersections = rayCaster.intersectObjects(
-      world.entities.children
+      world.sprites.children
     );
     const entityIntersection = entityIntersections[0] || null;
 
