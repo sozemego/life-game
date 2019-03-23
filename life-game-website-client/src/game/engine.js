@@ -258,7 +258,7 @@ export const createEngine = (inputHandler, tileSize) => {
 
   scene.add(world.sprites);
 
-  engine.createSprite = (textureName, position) => {
+  engine.createSprite = (textureName, position = { x: 0, y: 0 }) => {
     const texture = textureLoader.load(`textures/${textureName}.png`);
     texture.wrapS = RepeatWrapping;
     texture.repeat.x = -1;
