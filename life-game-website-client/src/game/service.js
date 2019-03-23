@@ -1,24 +1,18 @@
 import { setLoadGameMessage } from './actions';
 import { createEngine } from './engine';
 import { createInputHandler } from './view/input-handler';
+import { createEntityEngine } from './ecs/entity-engine';
+import { getFactories } from './ecs/component/factory-registry';
+import { createEntity } from './ecs/entity';
 
-/**
- *
- * @param {GameClient} client
- * @param dispatch
- * @param getState
- * @return GameService
- */
 export const createGameService = (client, dispatch, getState) => {
   const service = {};
   const tileSize = 1;
   const container = document.getElementById('game-container');
   const inputHandler = createInputHandler(container);
 
-  /**
-   * @type {Engine}
-   */
   let engine = null;
+  let entityEngine = null;
 
   service.start = () => {
     dispatch(setLoadGameMessage('CONNECTING'));
@@ -51,22 +45,28 @@ export const createGameService = (client, dispatch, getState) => {
       }, 0);
     });
 
-    const parseableComponents = ['graphics', 'physics', 'resourceProvider'];
+    entityEngine = createEntityEngine();
 
     client.onMessage('ENTITY', msg => {
       console.log(msg);
-      const { dtos } = msg;
-
-      dtos.forEach(dto => {
-        parseableComponents.forEach(componentName => {
-          if (dto[componentName])
-            dto[componentName] = JSON.parse(dto[componentName]);
-        });
-        engine.addEntity(dto);
-      });
+      msg.dtos.forEach(addEntity);
     });
 
-    engine.update = () => {};
+    engine.update = () => {
+      entityEngine.update(1 / 60);
+    };
+  };
+
+  const addEntity = dto => {
+    const { id, components } = dto;
+    const entity = createEntity(id);
+    const factories = getFactories();
+
+    Object.entries(components)
+      .map(([type, component]) => factories[type](component))
+      .forEach(entity.addComponent);
+
+    entityEngine.addEntity(entity);
   };
 
   service.destroy = () => {
