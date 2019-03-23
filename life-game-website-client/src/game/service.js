@@ -62,8 +62,13 @@ export const createGameService = (client, dispatch, getState) => {
     const entity = createEntity(id);
     const factories = getFactories();
 
+    const context = {
+      entity,
+      engine
+    };
+
     Object.entries(components)
-      .map(([type, component]) => factories[type](component))
+      .map(([type, component]) => factories[type](component, context))
       .forEach(entity.addComponent);
 
     entityEngine.addEntity(entity);
