@@ -20,9 +20,12 @@ export const createEntityEngine = () => {
     }
   };
 
+  const getEntities = () => entities;
+
   return {
     addEntity,
     addSystem,
-    update
+    update,
+    getEntities,
   };
 };

@@ -28,10 +28,6 @@ import {
 } from 'three';
 import Stats from 'stats-js';
 
-/**
- * @param {number} tileSize
- * @returns Engine
- */
 export const createEngine = (inputHandler, tileSize) => {
   const scene = new Scene();
   const width = window.innerWidth - 17;

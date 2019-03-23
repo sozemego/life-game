@@ -12,10 +12,15 @@ export const createEntity = id => {
     }
   };
 
+  const getComponent = type => {
+    return components[type];
+  };
+
   return {
     id,
     components,
     addComponent,
     removeComponent,
+    getComponent
   };
 };

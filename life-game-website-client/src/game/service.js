@@ -4,6 +4,7 @@ import { createInputHandler } from './view/input-handler';
 import { createEntityEngine } from './ecs/entity-engine';
 import { getFactories } from './ecs/component/factory-registry';
 import { createEntity } from './ecs/entity';
+import { createGraphicsSystem } from './ecs/system/graphics-system';
 
 export const createGameService = (client, dispatch, getState) => {
   const service = {};
@@ -46,6 +47,7 @@ export const createGameService = (client, dispatch, getState) => {
     });
 
     entityEngine = createEntityEngine();
+    entityEngine.addSystem(createGraphicsSystem(entityEngine, engine));
 
     client.onMessage('ENTITY', msg => {
       console.log(msg);
@@ -64,7 +66,7 @@ export const createGameService = (client, dispatch, getState) => {
 
     const context = {
       entity,
-      engine
+      engine,
     };
 
     Object.entries(components)
