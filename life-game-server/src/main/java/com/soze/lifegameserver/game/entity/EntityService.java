@@ -40,8 +40,8 @@ public class EntityService {
     EntityDto dto = new EntityDto();
     dto.setId((Long) entity.getId());
     dto.setName(entity.getComponent(NameComponent.class).getName());
-    dto.setGraphics(JsonUtils.objectToJson(entity.getComponent(GraphicsComponent.class)));
-    dto.setPhysics(JsonUtils.objectToJson(entity.getComponent(PhysicsComponent.class)));
+    dto.setGraphics(entity.getComponent(GraphicsComponent.class));
+    dto.setPhysics(entity.getComponent(PhysicsComponent.class));
     return dto;
   }
   

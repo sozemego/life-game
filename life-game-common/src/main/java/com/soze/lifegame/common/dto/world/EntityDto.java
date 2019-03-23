@@ -4,8 +4,8 @@ public class EntityDto {
   
   private long id;
   private String name;
-  private String graphics;
-  private String physics;
+  private Object graphics;
+  private Object physics;
   
   public long getId() {
     return id;
@@ -23,19 +23,19 @@ public class EntityDto {
     this.name = name;
   }
   
-  public String getGraphics() {
+  public Object getGraphics() {
     return graphics;
   }
   
-  public void setGraphics(String graphics) {
+  public void setGraphics(Object graphics) {
     this.graphics = graphics;
   }
   
-  public String getPhysics() {
+  public Object getPhysics() {
     return physics;
   }
   
-  public void setPhysics(String physics) {
+  public void setPhysics(Object physics) {
     this.physics = physics;
   }
 }
