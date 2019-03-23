@@ -52,7 +52,7 @@ export const createGameService = (client, dispatch, getState) => {
       }, 0);
     });
 
-    const parseableComponents = ['graphics', 'physics'];
+    const parseableComponents = ['graphics', 'physics', 'resourceProvider'];
 
     client.onMessage('ENTITY', (msg) => {
       console.log(msg);
