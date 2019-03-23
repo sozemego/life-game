@@ -5,21 +5,49 @@ export const createTooltipSystem = (entityEngine, engine) => {
   const resourceProviderTypes = [TYPES.PHYSICS, TYPES.GRAPHICS];
 
   let intersectedSprite = null;
+  let nextIntersectedSprite = null;
+
+  let cleanup = () => {};
 
   const update = delta => {
-    intersectedSprite = engine.getSpriteUnderMouse();
-    if (!intersectedSprite) {
+    nextIntersectedSprite = engine.getSpriteUnderMouse();
+    if (intersectedSprite && intersectedSprite !== nextIntersectedSprite) {
+      //clean previous intersected sprite
+      cleanup();
+    }
+    if (!nextIntersectedSprite) {
       return;
     }
     const resourceProviders = getEntities(entityEngine, resourceProviderTypes);
-    resourceProviders.forEach(entity => updateEntity(delta, entity));
+    resourceProviders
+      .filter(entity => entity.getComponent(TYPES.GRAPHICS).sprite === nextIntersectedSprite)
+      .forEach(entity => updateEntity(delta, entity));
+    intersectedSprite = nextIntersectedSprite;
   };
 
   const updateEntity = (delta, entity) => {
     const graphics = entity.getComponent(TYPES.GRAPHICS);
-    const { sprite } = graphics;
-    if (sprite === intersectedSprite) {
-      console.log('IM UNDER MOUSE!');
+    const physics = entity.getComponent(TYPES.PHYSICS);
+    const resourceProvider = entity.getComponent(TYPES.RESOURCE_PROVIDER);
+    const { x, y } = physics;
+
+    if (intersectedSprite !== nextIntersectedSprite) {
+      const [group, removeGroup] = engine.createGroup();
+      cleanup = () => {
+        nextIntersectedSprite = null;
+        intersectedSprite = null;
+        removeGroup();
+      };
+      if (resourceProvider) {
+        const { resource } = resourceProvider;
+        const resourceSprite = engine.createSprite(resource, { x, y });
+        resourceSprite.renderOrder = 1;
+        resourceSprite.material.depthTest = false;
+        resourceSprite.scale.set(0.25, 0.25, 1);
+        resourceSprite.position.x += 0.5;
+        resourceSprite.position.y += 0.5;
+        group.add(resourceSprite);
+      }
     }
   };
 

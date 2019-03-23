@@ -180,6 +180,7 @@ export const createEngine = (inputHandler, tileSize) => {
     tiles: {},
     tilesGroup: new Group(),
     sprites: new Group(),
+    groups: [],
   };
 
   const worldGeometry = new Geometry();
@@ -256,7 +257,7 @@ export const createEngine = (inputHandler, tileSize) => {
 
   scene.add(world.sprites);
 
-  engine.createSprite = (textureName, position = { x: 0, y: 0 }) => {
+  engine.createSprite = (textureName, position = { x: 0, y: 0, width: 1, height: 1 }) => {
     const texture = textureLoader.load(`textures/${textureName}.png`);
     texture.wrapS = RepeatWrapping;
     texture.repeat.x = -1;
@@ -365,6 +366,17 @@ export const createEngine = (inputHandler, tileSize) => {
 
   engine.getSpriteUnderMouse = () => {
     return intersectedSprite;
+  };
+
+  engine.createGroup = () => {
+    const newGroup = new Group();
+    scene.add(newGroup);
+
+    const removeGroup = () => {
+      scene.remove(newGroup);
+    };
+
+    return [newGroup, removeGroup];
   };
 
   return engine;
