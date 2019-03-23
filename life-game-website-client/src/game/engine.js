@@ -1,20 +1,27 @@
 import {
   AmbientLight,
-  AxesHelper, BasicShadowMap,
+  AxesHelper,
   Box3,
-  BoxGeometry, CameraHelper,
-  Color, DirectionalLight, DirectionalLightHelper,
+  BoxGeometry,
+  CameraHelper,
+  Color,
+  DirectionalLight,
+  DirectionalLightHelper,
   FrontSide,
   Geometry,
   GridHelper,
   Group,
   Mesh,
-  MeshBasicMaterial, MeshLambertMaterial, MeshPhongMaterial,
-  MeshStandardMaterial, PCFShadowMap,
+  MeshLambertMaterial,
+  MeshPhongMaterial,
+  PCFShadowMap,
   PerspectiveCamera,
   PlaneGeometry,
-  Raycaster, RepeatWrapping,
-  Scene, Sprite, SpriteMaterial,
+  Raycaster,
+  RepeatWrapping,
+  Scene,
+  Sprite,
+  SpriteMaterial,
   TextureLoader,
   Vector3,
   WebGLRenderer,
@@ -164,7 +171,7 @@ export const createEngine = (inputHandler, tileSize) => {
   const world = {
     tiles: {},
     group: new Group(),
-    entities: new Group()
+    sprites: new Group()
   };
 
   const worldGeometry = new Geometry();
@@ -231,28 +238,21 @@ export const createEngine = (inputHandler, tileSize) => {
     light.shadow.camera.far = 15;
   };
 
-  const entities = {};
-  scene.add(world.entities);
+  scene.add(world.sprites);
 
-  engine.addEntity = (entity) => {
-    console.log(entity);
-    entities[entity.id] = entity;
-    const textureName = entity.graphics.texture;
-    const { x, y, width, height } = entity.physics;
+  engine.createSprite = (textureName, position) => {
     const texture = textureLoader.load(`textures/${textureName}.png`);
     texture.wrapS = RepeatWrapping;
     texture.repeat.x = - 1;
 
     const entityMaterial = new SpriteMaterial({ map: texture, color: 0xffffff, rotation: Math.PI });
     const sprite = new Sprite(entityMaterial);
-    sprite.position.x = x * tileSize;
-    sprite.position.y = y * tileSize;
+    sprite.position.x = position.x * tileSize;
+    sprite.position.y = position.y * tileSize;
     sprite.position.z = 0.3;
-    sprite.name = entity.id;
+    world.sprites.add(sprite);
 
-    entity.graphics['sprite'] = sprite;
-    // scene.add(sprite);
-    world.entities.add(sprite);
+    return sprite;
   };
 
   engine.stop = () => {
