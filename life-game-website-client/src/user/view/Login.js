@@ -1,10 +1,7 @@
 import React, { useReducer, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  createHookReducer,
-  makePayloadActionCreators
-} from '../../store/utils';
+import { createHookReducer, makePayloadActionCreators } from '../../store/utils';
 import { isLoggedIn } from '../selectors';
 import * as userActions from '../actions';
 import styles from './Login.module.css';
@@ -14,21 +11,21 @@ const initialState = {
   username: 'asd',
   password: 'asd',
   message: '',
-  error: false
+  error: false,
 };
 
 const [setUsername, setPassword, setMessage] = makePayloadActionCreators(
   'username',
   'password',
-  'message'
+  'message',
 );
 
 const reducer = createHookReducer(initialState, {
   message: (state, action) => ({
     ...state,
     error: action.payload.error,
-    message: action.payload.message
-  })
+    message: action.payload.message,
+  }),
 });
 
 const Login = ({ isLoggedIn, register, login }) => {
@@ -39,12 +36,8 @@ const Login = ({ isLoggedIn, register, login }) => {
   const onRegisterClick = _ => {
     setFetching(true);
     return register(username, password)
-      .then(() =>
-        dispatch(setMessage({ message: 'Registered!', error: false }))
-      )
-      .catch(error =>
-        dispatch(setMessage({ message: error.message, error: true }))
-      )
+      .then(() => dispatch(setMessage({ message: 'Registered!', error: false })))
+      .catch(error => dispatch(setMessage({ message: error.message, error: true })))
       .then(() => setFetching(false));
   };
 
@@ -52,9 +45,7 @@ const Login = ({ isLoggedIn, register, login }) => {
     setFetching(true);
     return login(username, password)
       .then(() => dispatch(setMessage({ message: 'Logged in!', error: false })))
-      .catch(error =>
-        dispatch(setMessage({ message: error.message, error: true }))
-      )
+      .catch(error => dispatch(setMessage({ message: error.message, error: true })))
       .then(() => setFetching(false));
   };
 
@@ -67,25 +58,13 @@ const Login = ({ isLoggedIn, register, login }) => {
       <div className={styles.form}>
         <div className={styles['input-container']}>
           <span>Username</span>
-          <input
-            onChange={event => dispatch(setUsername(event.target.value))}
-            value={username}
-          />
+          <input onChange={event => dispatch(setUsername(event.target.value))} value={username} />
         </div>
         <div className={styles['input-container']}>
           <span>Password</span>
-          <input
-            onChange={event => dispatch(setPassword(event.target.value))}
-            value={password}
-          />
+          <input onChange={event => dispatch(setPassword(event.target.value))} value={password} />
         </div>
-        <div
-          className={
-            error ? styles['error-message'] : styles['success-message']
-          }
-        >
-          {message}
-        </div>
+        <div className={error ? styles['error-message'] : styles['success-message']}>{message}</div>
         <div className={styles['button-container']}>
           <Button
             disabled={!username || !password || isLoggedIn || fetching}
@@ -93,10 +72,7 @@ const Login = ({ isLoggedIn, register, login }) => {
           >
             REGISTER
           </Button>
-          <Button
-            disabled={!username || !password || fetching}
-            onClick={onLoginClick}
-          >
+          <Button disabled={!username || !password || fetching} onClick={onLoginClick}>
             LOGIN
           </Button>
         </div>
@@ -106,16 +82,16 @@ const Login = ({ isLoggedIn, register, login }) => {
 };
 
 Login.propTypes = {
-  loggedIn: PropTypes.bool
+  loggedIn: PropTypes.bool,
 };
 
 const mapStateToProps = state => {
   return {
-    isLoggedIn: isLoggedIn(state)
+    isLoggedIn: isLoggedIn(state),
   };
 };
 
 export default connect(
   mapStateToProps,
-  userActions
+  userActions,
 )(Login);

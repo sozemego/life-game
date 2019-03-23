@@ -25,10 +25,10 @@ export const Button = ({ children, onClick, disabled = false, ...props }) => {
 
 Button.propTypes = {
   children: PropTypes.any,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 Button.defaultProps = {
   content: null,
-  onClick: () => {}
+  onClick: () => {},
 };

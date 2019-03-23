@@ -7,7 +7,7 @@ import uuid from 'uuid/v4';
 export const createGameClient = user => {
   const client = {};
   const webSocketClient = createWebSocketClient({
-    path: 'ws://localhost:8000/game'
+    path: 'ws://localhost:8000/game',
   });
 
   client.authorize = () => {
@@ -15,7 +15,7 @@ export const createGameClient = user => {
       username: user.name,
       token: user.token,
       messageId: uuid(),
-      type: 'AUTHORIZE'
+      type: 'AUTHORIZE',
     };
     webSocketClient.send(authMessage);
   };
@@ -23,7 +23,7 @@ export const createGameClient = user => {
   client.requestGameWorld = () => {
     const requestWorldMessage = {
       messageId: uuid(),
-      type: 'REQUEST_WORLD'
+      type: 'REQUEST_WORLD',
     };
     webSocketClient.send(requestWorldMessage);
   };

@@ -1,4 +1,4 @@
-import { TYPES } from "./types";
+import { TYPES } from './types';
 
 const factories = {};
 
@@ -13,7 +13,7 @@ const createName = (component, context) => {
 factories[TYPES.NAME] = createName;
 
 const createPhysics = (component, context) => {
-  return {...component };
+  return { ...component };
 };
 
 factories[TYPES.PHYSICS] = createPhysics;
@@ -21,7 +21,7 @@ factories[TYPES.PHYSICS] = createPhysics;
 const createGraphics = (component, context) => {
   const { engine } = context;
   const sprite = engine.createSprite(component.texture);
-  return {...component, sprite};
+  return { ...component, sprite };
 };
 
 factories[TYPES.GRAPHICS] = createGraphics;

@@ -2,9 +2,7 @@ import { makePayloadActionCreator } from '../store/utils';
 import { createStatisticsClient } from './client';
 
 export const SET_STATISTICS_MESSAGE = 'SET_STATISTICS_MESSAGE';
-export const setStatisticsMessage = makePayloadActionCreator(
-  SET_STATISTICS_MESSAGE
-);
+export const setStatisticsMessage = makePayloadActionCreator(SET_STATISTICS_MESSAGE);
 
 export const ADD_WORLD = 'ADD_WORLD';
 export const addWorld = makePayloadActionCreator(ADD_WORLD);

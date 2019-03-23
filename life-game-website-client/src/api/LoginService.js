@@ -1,7 +1,4 @@
-import NetworkService, {
-  clearAuthorizationToken,
-  setAuthorizationToken
-} from './NetworkService';
+import NetworkService, { clearAuthorizationToken, setAuthorizationToken } from './NetworkService';
 
 const LOGIN = '/auth/login';
 const REGISTER = '/register';

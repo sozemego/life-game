@@ -15,5 +15,5 @@ export const WorldList = props => {
 };
 
 WorldList.propTypes = {
-  worlds: PropTypes.array.isRequired
+  worlds: PropTypes.array.isRequired,
 };

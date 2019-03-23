@@ -28,10 +28,9 @@ export const createGraphicsSystem = (entityEngine, engine) => {
 
     sprite.position.x = x;
     sprite.position.y = y;
-
   };
 
   return {
-    update
-  }
+    update,
+  };
 };

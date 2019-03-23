@@ -5,7 +5,7 @@ import { createEntityEngine } from './ecs/entity-engine';
 import { getFactories } from './ecs/component/factory-registry';
 import { createEntity } from './ecs/entity';
 import { createGraphicsSystem } from './ecs/system/graphics-system';
-import { createTooltipSystem } from "./ecs/system/tooltip-system";
+import { createTooltipSystem } from './ecs/system/tooltip-system';
 
 export const createGameService = (client, dispatch, getState) => {
   const service = {};

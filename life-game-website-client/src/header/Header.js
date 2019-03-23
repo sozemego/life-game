@@ -32,16 +32,16 @@ const Header = ({ isLoggedIn, logout }) => {
 };
 
 Header.propTypes = {
-  isLoggedIn: PropTypes.bool
+  isLoggedIn: PropTypes.bool,
 };
 
 const mapStateToProps = state => {
   return {
-    isLoggedIn: isLoggedIn(state)
+    isLoggedIn: isLoggedIn(state),
   };
 };
 
 export default connect(
   mapStateToProps,
-  userActions
+  userActions,
 )(Header);

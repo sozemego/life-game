@@ -24,7 +24,7 @@ import {
   SpriteMaterial,
   TextureLoader,
   Vector3,
-  WebGLRenderer
+  WebGLRenderer,
 } from 'three';
 import Stats from 'stats-js';
 
@@ -93,18 +93,14 @@ export const createEngine = (inputHandler, tileSize) => {
     const shadowBox = new BoxGeometry(
       Math.random() * tileSize,
       Math.random() * tileSize,
-      Math.random() * tileSize
+      Math.random() * tileSize,
     );
     const material = new MeshPhongMaterial({
-      color: Math.random() * 255 * 255 * 255
+      color: Math.random() * 255 * 255 * 255,
     });
     const shadowCube = new Mesh(shadowBox, material);
     shadowCube.castShadow = true;
-    shadowCube.position.set(
-      Math.random() * 50,
-      Math.random() * 50,
-      Math.random() * 5
-    );
+    shadowCube.position.set(Math.random() * 50, Math.random() * 50, Math.random() * 5);
     shadowCube.updateMatrix();
     // scene.add(shadowCube);
     shadowCubes.push(shadowCube);
@@ -137,11 +133,8 @@ export const createEngine = (inputHandler, tileSize) => {
     camera.updateMatrixWorld();
     rayCaster.setFromCamera(mouse, camera);
     const tileIntersections = rayCaster.intersectObjects(world.group.children);
-    const tileIntersection =
-      tileIntersections.length > 0 ? tileIntersections[0] : null;
-    const spriteIntersections = rayCaster.intersectObjects(
-      world.sprites.children
-    );
+    const tileIntersection = tileIntersections.length > 0 ? tileIntersections[0] : null;
+    const spriteIntersections = rayCaster.intersectObjects(world.sprites.children);
     const spriteIntersection = spriteIntersections[0] || null;
 
     if (tileIntersection && !spriteIntersection) {
@@ -171,11 +164,10 @@ export const createEngine = (inputHandler, tileSize) => {
     } else {
       intersectedSprite = null;
     }
-
   });
 
   const engine = {
-    running: false
+    running: false,
   };
 
   engine.start = () => {
@@ -187,7 +179,7 @@ export const createEngine = (inputHandler, tileSize) => {
   const world = {
     tiles: {},
     group: new Group(),
-    sprites: new Group()
+    sprites: new Group(),
   };
 
   const worldGeometry = new Geometry();
@@ -202,7 +194,7 @@ export const createEngine = (inputHandler, tileSize) => {
     const worldMaterial = new MeshLambertMaterial({
       map: texture,
       color: 0x00ff00,
-      side: FrontSide
+      side: FrontSide,
     });
 
     newWorld.tiles.forEach(tile => {
@@ -212,7 +204,7 @@ export const createEngine = (inputHandler, tileSize) => {
       const tileMaterial = new MeshLambertMaterial({
         map: texture,
         color: 0x00ff00,
-        side: FrontSide
+        side: FrontSide,
       });
 
       const mesh = new Mesh(tileGeometry, tileMaterial);
@@ -272,7 +264,7 @@ export const createEngine = (inputHandler, tileSize) => {
     const entityMaterial = new SpriteMaterial({
       map: texture,
       color: 0xffffff,
-      rotation: Math.PI
+      rotation: Math.PI,
     });
     const sprite = new Sprite(entityMaterial);
     sprite.position.x = position.x * tileSize;

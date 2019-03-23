@@ -26,17 +26,17 @@ const Statistics = props => {
 
 Statistics.propTypes = {
   worlds: PropTypes.array.isRequired,
-  message: PropTypes.string
+  message: PropTypes.string,
 };
 
 const mapStateToProps = state => {
   return {
     worlds: getWorlds(state),
-    message: getMessage(state)
+    message: getMessage(state),
   };
 };
 
 export default connect(
   mapStateToProps,
-  statActions
+  statActions,
 )(Statistics);

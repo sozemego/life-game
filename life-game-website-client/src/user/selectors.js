@@ -9,6 +9,6 @@ export const getName = state => userRoot(state).name;
 export const getUser = state => {
   return {
     name: getName(state),
-    token: getToken(state)
+    token: getToken(state),
   };
 };

@@ -21,6 +21,6 @@ export const createEntity = id => {
     components,
     addComponent,
     removeComponent,
-    getComponent
+    getComponent,
   };
 };

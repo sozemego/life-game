@@ -9,5 +9,5 @@ export default combineReducers({
   app,
   user,
   game,
-  statistics
+  statistics,
 });

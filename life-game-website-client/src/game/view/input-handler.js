@@ -9,16 +9,14 @@ export const createInputHandler = (dom = window) => {
   //we want to use window to capture key events
   const keyListener = dom !== window ? window : dom;
   if (dom !== window) {
-    console.log(
-      'passed DOM element is not window, window will be used for key capture.'
-    );
+    console.log('passed DOM element is not window, window will be used for key capture.');
   }
 
   const listeners = {
     [KEY_DOWN]: [],
     [KEY_UP]: [],
     [MOUSE_WHEEL]: [],
-    [MOUSE_MOVE]: []
+    [MOUSE_MOVE]: [],
   };
 
   const subscribe = (type, fn) => {
@@ -83,7 +81,7 @@ export const createInputHandler = (dom = window) => {
       rawX,
       rawY,
       x: (rawX / (dom.innerWidth || Math.ceil(boundingBox.width))) * 2 - 1,
-      y: -(rawY / (dom.innerHeight || Math.ceil(boundingBox.height))) * 2 + 1
+      y: -(rawY / (dom.innerHeight || Math.ceil(boundingBox.height))) * 2 + 1,
     };
     const typeListeners = listeners[MOUSE_MOVE];
     typeListeners.forEach(listener => listener(mouse));
@@ -105,6 +103,6 @@ export const createInputHandler = (dom = window) => {
     onKeyDown,
     onMouseWheel,
     destroy,
-    onMouseMove
+    onMouseMove,
   };
 };

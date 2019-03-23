@@ -1,9 +1,6 @@
 import axios from 'axios';
 import store from '../store/store';
-import {
-  decrementFetchingActions,
-  incrementFetchingActions
-} from '../app/actions';
+import { decrementFetchingActions, incrementFetchingActions } from '../app/actions';
 
 const fetch = () => {
   store.dispatch(incrementFetchingActions());
@@ -28,7 +25,7 @@ const errorUnpacker = error => {
 
 const createClient = (baseUrl = null) => {
   const options = {
-    baseURL: baseUrl
+    baseURL: baseUrl,
   };
 
   const client = axios.create(options);

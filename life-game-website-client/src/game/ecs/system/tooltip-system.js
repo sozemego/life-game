@@ -1,9 +1,8 @@
-import { getEntities } from "./utils";
-import { TYPES } from "../component/types";
+import { getEntities } from './utils';
+import { TYPES } from '../component/types';
 
 export const createTooltipSystem = (entityEngine, engine) => {
-
-  const resourceProviderTypes = [TYPES.RESOURCE_PROVIDER, TYPES.PHYSICS, TYPES.GRAPHICS]
+  const resourceProviderTypes = [TYPES.PHYSICS, TYPES.GRAPHICS];
 
   let intersectedSprite = null;
 
@@ -20,7 +19,7 @@ export const createTooltipSystem = (entityEngine, engine) => {
     const graphics = entity.getComponent(TYPES.GRAPHICS);
     const { sprite } = graphics;
     if (sprite === intersectedSprite) {
-      console.log('IM UNDER MOUSE!')
+      console.log('IM UNDER MOUSE!');
     }
   };
 

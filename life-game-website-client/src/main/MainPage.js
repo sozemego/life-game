@@ -22,11 +22,11 @@ const MainPage = ({ isLoggedIn }) => {
 
 const mapStateToProps = state => {
   return {
-    isLoggedIn: isLoggedIn(state)
+    isLoggedIn: isLoggedIn(state),
   };
 };
 
 export default connect(
   mapStateToProps,
-  null
+  null,
 )(MainPage);
