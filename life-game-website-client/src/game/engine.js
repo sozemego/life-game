@@ -143,7 +143,15 @@ export const createEngine = (inputHandler, tileSize) => {
         if (intersectedTile) {
           scene.remove(intersectedTile);
         }
+        const texture = textureLoader.load("textures/medievalTile_57.png");
+        const tileMaterial = new MeshLambertMaterial({
+          map: texture,
+          color: 0x00ff00,
+          side: FrontSide,
+          transparent: true
+        });
         intersectedTile = tileIntersection.object.clone();
+        intersectedTile.material = tileMaterial;
         intersectedTile.material.transparent = true;
         intersectedTile.material.opacity = 0.75;
         intersectedTile.position.z = 0.05;
@@ -187,10 +195,11 @@ export const createEngine = (inputHandler, tileSize) => {
   let worldMesh = null;
 
   engine.setWorld = newWorld => {
+    const t1 = performance.now();
     worldGeometry.dispose();
     // return;
     console.log(newWorld);
-    const texture = textureLoader.load('textures/medievalTile_57.png');
+    const texture = textureLoader.load("textures/medievalTile_57.png");
     const tileGeometry = new PlaneGeometry(tileSize, tileSize, 12, 12);
     const worldMaterial = new MeshLambertMaterial({
       map: texture,
@@ -198,7 +207,7 @@ export const createEngine = (inputHandler, tileSize) => {
       side: FrontSide,
     });
 
-    newWorld.tiles.forEach(tile => {
+    newWorld.tiles.sort(tile => tile.x - tile.x).forEach(tile => {
       const key = `${tile.x}:${tile.y}`;
       world[key] = tile;
 
@@ -206,6 +215,7 @@ export const createEngine = (inputHandler, tileSize) => {
         map: texture,
         color: 0x00ff00,
         side: FrontSide,
+        transparent: true
       });
 
       const mesh = new Mesh(tileGeometry, tileMaterial);
@@ -213,8 +223,8 @@ export const createEngine = (inputHandler, tileSize) => {
       mesh.position.y = tile.y * tileSize;
       mesh.position.z = 0;
       mesh.up.set(0, 0, 1);
-      mesh.updateMatrixWorld();
-      mesh.receiveShadow = true;
+      // mesh.updateMatrixWorld();
+      // mesh.receiveShadow = true;
       // store the mesh so the individual tiles can still be found
       // among the merged geometry.
       tile.mesh = mesh;
@@ -225,12 +235,14 @@ export const createEngine = (inputHandler, tileSize) => {
        * This is only temporary however, as doing this makes it into 'one' big plane
        * which will not be desirable later.
        */
-      worldGeometry.merge(tileGeometry, mesh.matrix);
+      // worldGeometry.merge(tileGeometry, mesh.matrix);
     });
 
-    worldMesh = new Mesh(worldGeometry, worldMaterial);
-    worldMesh.receiveShadow = true;
-    scene.add(worldMesh);
+    // worldMesh = new Mesh(worldGeometry, worldMaterial);
+    // worldMesh.receiveShadow = true;
+    // scene.add(worldMesh);
+    scene.add(world.tilesGroup)
+    console.log(`took ${performance.now() - t1} ms to create the world`)
 
     const gridHelper = new GridHelper(50 * tileSize, 50);
     gridHelper.position.setZ(0.1);
@@ -253,6 +265,7 @@ export const createEngine = (inputHandler, tileSize) => {
     light.shadow.camera.top = (50 * tileSize) / 2;
     light.shadow.camera.near = 0;
     light.shadow.camera.far = 15;
+
   };
 
   scene.add(world.sprites);
