@@ -16,11 +16,16 @@ export const createEntity = id => {
     return components[type];
   };
 
+  const getComponents = types => {
+    return types.map(getComponent);
+  };
+
   return {
     id,
     components,
     addComponent,
     removeComponent,
     getComponent,
+    getComponents
   };
 };
