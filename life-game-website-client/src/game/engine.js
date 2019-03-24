@@ -207,7 +207,7 @@ export const createEngine = (inputHandler, tileSize) => {
       side: FrontSide,
     });
 
-    newWorld.tiles.sort(tile => tile.x - tile.x).forEach(tile => {
+    newWorld.tiles.forEach(tile => {
       const key = `${tile.x}:${tile.y}`;
       world[key] = tile;
 
