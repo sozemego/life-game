@@ -26,9 +26,11 @@ export const createTooltipSystem = (entityEngine, engine) => {
   };
 
   const updateEntity = (delta, entity) => {
-    const graphics = entity.getComponent(TYPES.GRAPHICS);
-    const physics = entity.getComponent(TYPES.PHYSICS);
-    const resourceProvider = entity.getComponent(TYPES.RESOURCE_PROVIDER);
+    const [graphics, physics, resourceProvider] = entity.getComponents([
+      TYPES.GRAPHICS,
+      TYPES.PHYSICS,
+      TYPES.RESOURCE_PROVIDER,
+    ]);
     const { x, y } = physics;
 
     if (intersectedSprite !== nextIntersectedSprite) {
