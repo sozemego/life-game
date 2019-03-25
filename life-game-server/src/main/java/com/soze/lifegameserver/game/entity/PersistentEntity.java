@@ -2,6 +2,7 @@ package com.soze.lifegameserver.game.entity;
 
 import com.soze.lifegameserver.game.engine.component.BaseComponent;
 import com.soze.lifegameserver.game.engine.component.GraphicsComponent;
+import com.soze.lifegameserver.game.engine.component.HarvesterComponent;
 import com.soze.lifegameserver.game.engine.component.NameComponent;
 import com.soze.lifegameserver.game.engine.component.PhysicsComponent;
 import com.soze.lifegameserver.game.engine.component.ResourceProviderComponent;
@@ -51,6 +52,10 @@ public class PersistentEntity implements Serializable {
   @Column(name = "resource_provider", columnDefinition = "jsonb")
   private ResourceProviderComponent resourceProviderComponent;
   
+  @Type(type = "jsonb")
+  @Column(name = "harvester", columnDefinition = "jsonb")
+  private HarvesterComponent harvesterComponent;
+  
   public Long getId() {
     return id;
   }
@@ -99,12 +104,21 @@ public class PersistentEntity implements Serializable {
     this.resourceProviderComponent = resourceProviderComponent;
   }
   
+  public HarvesterComponent getHarvesterComponent() {
+    return harvesterComponent;
+  }
+  
+  public void setHarvesterComponent(HarvesterComponent harvesterComponent) {
+    this.harvesterComponent = harvesterComponent;
+  }
+  
   public PersistentEntity copy() {
     PersistentEntity copy = new PersistentEntity();
     copy.setPhysicsComponent(physicsComponent != null ? physicsComponent.copy() : null);
     copy.setGraphicsComponent(graphicsComponent != null ? graphicsComponent.copy() : null);
     copy.setName(getName());
     copy.setResourceProviderComponent(resourceProviderComponent != null ? resourceProviderComponent.copy() : null);
+    copy.setHarvesterComponent(harvesterComponent != null ? harvesterComponent.copy() : null);
     return copy;
   }
   
@@ -114,6 +128,7 @@ public class PersistentEntity implements Serializable {
     components.add(physicsComponent);
     components.add(graphicsComponent);
     components.add(new NameComponent(name));
+    components.add(harvesterComponent);
     components.removeIf(c -> c == null);
     return components;
   }
@@ -127,6 +142,7 @@ public class PersistentEntity implements Serializable {
              ", physicsComponent=" + physicsComponent +
              ", graphicsComponent=" + graphicsComponent +
              ", resourceProviderComponent=" + resourceProviderComponent +
+             ", harvesterComponent=" + harvesterComponent +
              '}';
   }
 }

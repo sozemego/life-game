@@ -11,3 +11,9 @@ INSERT INTO ENTITY (name, world_id, physics, graphics, resource_provider) VALUES
  'FOREST_1', -1,
  '{"type":  "PHYSICS"}', '{"type":  "GRAPHICS", "texture": "FOREST_1"}', '{"type": "RESOURCE_PROVIDER", "resource": "WOOD"}'
 );
+
+INSERT INTO ENTITY (name, world_id, physics, graphics, harvester) VALUES
+(
+  'WORKER_1', -1,
+  '{"type":  "PHYSICS"}', '{"type": "GRAPHICS", "texture": "WORKER_1"}', '{"type": "HARVESTER"}'
+);

@@ -16,7 +16,8 @@ import java.util.Objects;
 @JsonSubTypes(value = {
   @JsonSubTypes.Type(value = PhysicsComponent.class, name = "PHYSICS"),
   @JsonSubTypes.Type(value = GraphicsComponent.class, name = "GRAPHICS"),
-  @JsonSubTypes.Type(value = ResourceProviderComponent.class, name = "RESOURCE_PROVIDER")
+  @JsonSubTypes.Type(value = ResourceProviderComponent.class, name = "RESOURCE_PROVIDER"),
+  @JsonSubTypes.Type(value = HarvesterComponent.class, name = "HARVESTER")
 })
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class BaseComponent implements Serializable {
@@ -41,7 +42,7 @@ public abstract class BaseComponent implements Serializable {
   public abstract BaseComponent copy();
   
   public enum ComponentType {
-    PHYSICS, GRAPHICS, NAME, RESOURCE_PROVIDER
+    PHYSICS, GRAPHICS, NAME, RESOURCE_PROVIDER, HARVESTER
   }
   
 }
