@@ -88,24 +88,6 @@ export const createEngine = (inputHandler, tileSize) => {
   container.append(renderer.domElement);
   container.appendChild(stats.dom);
 
-  const shadowCubes = [];
-  for (let i = 0; i < 50; i++) {
-    const shadowBox = new BoxGeometry(
-      Math.random() * tileSize,
-      Math.random() * tileSize,
-      Math.random() * tileSize,
-    );
-    const material = new MeshPhongMaterial({
-      color: Math.random() * 255 * 255 * 255,
-    });
-    const shadowCube = new Mesh(shadowBox, material);
-    shadowCube.castShadow = true;
-    shadowCube.position.set(Math.random() * 50, Math.random() * 50, Math.random() * 5);
-    shadowCube.updateMatrix();
-    // scene.add(shadowCube);
-    shadowCubes.push(shadowCube);
-  }
-
   camera.updateProjectionMatrix();
 
   const pressedKeys = new Set();
@@ -367,12 +349,6 @@ export const createEngine = (inputHandler, tileSize) => {
     helper.update();
     camera.updateProjectionMatrix();
     renderer.render(scene, camera);
-
-    shadowCubes.forEach(shadowCube => {
-      shadowCube.rotation.x += 0.01;
-      shadowCube.rotation.y += 0.01;
-      shadowCube.rotation.z += 0.01;
-    });
 
     stats.end();
   };
