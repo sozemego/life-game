@@ -57,8 +57,8 @@ public class WorldService {
   
   private void generateTiles(World world) {
     Set<Tile> tiles = new HashSet<>();
-    for (int i = 0; i < 50; i++) {
-      for (int j = 0; j < 50; j++) {
+    for (int i = 0; i < 250; i++) {
+      for (int j = 0; j < 250; j++) {
         Tile tile = new Tile();
         tile.setX(i);
         tile.setY(j);
