@@ -23,11 +23,13 @@ export const createGraphicsSystem = (entityEngine, engine) => {
     const physics = components[TYPES.PHYSICS];
     const graphics = components[TYPES.GRAPHICS];
 
-    const { x, y } = physics;
+    const { x, y, width, height } = physics;
     const { sprite } = graphics;
 
     sprite.position.x = x;
     sprite.position.y = y;
+    sprite.scale.x = width;
+    sprite.scale.y = height;
   };
 
   return {
