@@ -13,7 +13,7 @@ import {
   Group,
   Mesh,
   MeshLambertMaterial,
-  MeshPhongMaterial,
+  MeshPhongMaterial, OrthographicCamera,
   PCFShadowMap,
   PerspectiveCamera,
   PlaneGeometry,
@@ -30,6 +30,7 @@ import Stats from 'stats-js';
 
 export const createEngine = (inputHandler, tileSize) => {
   const scene = new Scene();
+  const spriteScene = new Scene();
   const width = window.innerWidth - 17;
   const height = window.innerHeight - 36 - 25;
   const aspect = width / height;
@@ -251,7 +252,7 @@ export const createEngine = (inputHandler, tileSize) => {
 
   };
 
-  scene.add(world.sprites);
+  spriteScene.add(world.sprites);
 
   engine.createSprite = (textureName, position = { x: 0, y: 0, width: 1, height: 1 }) => {
     const texture = textureLoader.load(`textures/${textureName}.png`);
@@ -262,11 +263,13 @@ export const createEngine = (inputHandler, tileSize) => {
       map: texture,
       color: 0xffffff,
       rotation: Math.PI,
+      opacity: 1,
+      transparent: true
     });
     const sprite = new Sprite(entityMaterial);
     sprite.position.x = position.x * tileSize;
     sprite.position.y = position.y * tileSize;
-    sprite.position.z = 0.3;
+    // sprite.position.z = position.height;
     world.sprites.add(sprite);
 
     return sprite;
@@ -349,7 +352,12 @@ export const createEngine = (inputHandler, tileSize) => {
     cameraHelper.update();
     helper.update();
     camera.updateProjectionMatrix();
+
+    renderer.autoClear = true;
     renderer.render(scene, camera);
+    renderer.clearDepth();
+    renderer.autoClear = false;
+    renderer.render(spriteScene, camera);
 
     stats.end();
   };
