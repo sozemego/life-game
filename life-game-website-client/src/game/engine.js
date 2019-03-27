@@ -2,7 +2,7 @@ import {
   AmbientLight,
   AxesHelper,
   Box3,
-  BoxGeometry,
+  BoxGeometry, BoxHelper,
   CameraHelper,
   Color,
   DirectionalLight,
@@ -91,6 +91,8 @@ export const createEngine = (inputHandler, tileSize) => {
 
   camera.updateProjectionMatrix();
 
+  const boxHelpers = [];
+
   const pressedKeys = new Set();
 
   inputHandler.onKeyUp(key => {
@@ -118,6 +120,7 @@ export const createEngine = (inputHandler, tileSize) => {
     const tileIntersections = rayCaster.intersectObjects(world.tilesGroup.children);
     const tileIntersection = tileIntersections.length > 0 ? tileIntersections[0] : null;
     const spriteIntersections = rayCaster.intersectObjects(world.sprites.children);
+    // const spriteIntersections = [];
     const spriteIntersection = spriteIntersections[0] || null;
 
     if (tileIntersection && !spriteIntersection) {
@@ -187,6 +190,8 @@ export const createEngine = (inputHandler, tileSize) => {
       map: texture,
       color: 0x00ff00,
       side: FrontSide,
+      opacity: 1,
+      transparent: true
     });
 
     newWorld.tiles
@@ -200,7 +205,8 @@ export const createEngine = (inputHandler, tileSize) => {
           map: texture,
           color: 0x00ff00,
           side: FrontSide,
-          transparent: true
+          transparent: true,
+          opacity: 1,
         });
 
         const mesh = new Mesh(tileGeometry, tileMaterial);
@@ -214,7 +220,7 @@ export const createEngine = (inputHandler, tileSize) => {
         // among the merged geometry.
         tile.mesh = mesh;
         mesh.name = key;
-        // world.tilesGroup.add(mesh);
+        world.tilesGroup.add(mesh);
         /**
          * The tile geometries are merged for performance reasons.
          * This is only temporary however, as doing this makes it into 'one' big plane
@@ -237,7 +243,7 @@ export const createEngine = (inputHandler, tileSize) => {
     const height = box.max.y - box.min.y;
     gridHelper.position.add(new Vector3(width / 2 - tileSize / 2, 0, 0));
     gridHelper.position.add(new Vector3(0, height / 2 - tileSize / 2, 0));
-    scene.add(gridHelper);
+    spriteScene.add(gridHelper);
 
     light.target.position.set((50 * tileSize) / 2, (50 * tileSize) / 2, 0);
     light.target.updateMatrixWorld();
@@ -269,8 +275,11 @@ export const createEngine = (inputHandler, tileSize) => {
     const sprite = new Sprite(entityMaterial);
     sprite.position.x = position.x * tileSize;
     sprite.position.y = position.y * tileSize;
-    // sprite.position.z = position.height;
     world.sprites.add(sprite);
+    const boxHelper = new BoxHelper(sprite);
+    boxHelper.updateMatrix()
+    spriteScene.add(boxHelper)
+    boxHelpers.push(boxHelper)
 
     return sprite;
   };
@@ -352,6 +361,8 @@ export const createEngine = (inputHandler, tileSize) => {
     cameraHelper.update();
     helper.update();
     camera.updateProjectionMatrix();
+
+    boxHelpers.forEach(h => h.update())
 
     renderer.autoClear = true;
     renderer.render(scene, camera);
