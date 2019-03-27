@@ -26,10 +26,26 @@ export const createGraphicsSystem = (entityEngine, engine) => {
     const { x, y, width, height } = physics;
     const { sprite } = graphics;
 
-    sprite.position.x = x;
-    sprite.position.y = y;
+    if (width % 2 === 0) {
+      sprite.position.x = x + (width / 4);
+    } else if (width > 1 ) {
+      sprite.position.x = x + 1;
+    } else {
+      sprite.position.x = x;
+    }
+
+
+    if (height % 2 === 0) {
+      sprite.position.y = y + (height / 4);
+    } else if (height > 1) {
+      sprite.position.y = y + 1;
+    } else {
+      sprite.position.y = y;
+    }
+
     sprite.scale.x = width;
     sprite.scale.y = height;
+
   };
 
   return {
