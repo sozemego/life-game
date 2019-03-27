@@ -9,7 +9,7 @@ INSERT INTO ENTITY (name, world_id, physics, graphics) VALUES
 INSERT INTO ENTITY (name, world_id, physics, graphics, resource_provider) VALUES
 (
   'FOREST_1', -1,
-  '{"type": "PHYSICS", "width":  3, "height":  3}',
+  '{"type": "PHYSICS", "width":  2, "height":  2}',
   '{"type": "GRAPHICS", "texture": "FOREST_1"}',
   '{"type": "RESOURCE_PROVIDER", "resource": "WOOD"}'
 );
