@@ -22,10 +22,10 @@ import {
   Scene,
   Sprite,
   SpriteMaterial,
-  TextureLoader,
+  TextureLoader, Vector2,
   Vector3,
-  WebGLRenderer,
-} from 'three';
+  WebGLRenderer
+} from "three";
 import Stats from 'stats-js';
 
 export const createEngine = (inputHandler, tileSize) => {
@@ -179,51 +179,52 @@ export const createEngine = (inputHandler, tileSize) => {
   engine.setWorld = newWorld => {
     const t1 = performance.now();
     worldGeometry.dispose();
-    // return;
     console.log(newWorld);
     const texture = textureLoader.load("textures/medievalTile_57.png");
-    const tileGeometry = new PlaneGeometry(tileSize, tileSize, 12, 12);
+    const tileGeometry = new PlaneGeometry(tileSize, tileSize, 1, 1);
     const worldMaterial = new MeshLambertMaterial({
       map: texture,
       color: 0x00ff00,
       side: FrontSide,
     });
 
-    newWorld.tiles.forEach(tile => {
-      const key = `${tile.x}:${tile.y}`;
-      world[key] = tile;
+    newWorld.tiles
+      .sort((a, b) => a.x - b.x)
+      .sort((a, b) => a.y - b.y)
+      .forEach((tile, index) => {
+        const key = `${tile.x}:${tile.y}`;
+        world[key] = tile;
 
-      const tileMaterial = new MeshLambertMaterial({
-        map: texture,
-        color: 0x00ff00,
-        side: FrontSide,
-        transparent: true
-      });
+        const tileMaterial = new MeshLambertMaterial({
+          map: texture,
+          color: 0x00ff00,
+          side: FrontSide,
+          transparent: true
+        });
 
-      const mesh = new Mesh(tileGeometry, tileMaterial);
-      mesh.position.x = tile.x * tileSize;
-      mesh.position.y = tile.y * tileSize;
-      mesh.position.z = 0;
-      mesh.up.set(0, 0, 1);
-      // mesh.updateMatrixWorld();
-      // mesh.receiveShadow = true;
-      // store the mesh so the individual tiles can still be found
-      // among the merged geometry.
-      tile.mesh = mesh;
-      mesh.name = key;
-      world.tilesGroup.add(mesh);
-      /**
-       * The tile geometries are merged for performance reasons.
-       * This is only temporary however, as doing this makes it into 'one' big plane
-       * which will not be desirable later.
-       */
-      // worldGeometry.merge(tileGeometry, mesh.matrix);
+        const mesh = new Mesh(tileGeometry, tileMaterial);
+        mesh.position.x = tile.x * tileSize;
+        mesh.position.y = tile.y * tileSize;
+        mesh.position.z = 0;
+        mesh.up.set(0, 0, 1);
+        mesh.updateMatrixWorld();
+        // mesh.receiveShadow = true;
+        // store the mesh so the individual tiles can still be found
+        // among the merged geometry.
+        tile.mesh = mesh;
+        mesh.name = key;
+        // world.tilesGroup.add(mesh);
+        /**
+         * The tile geometries are merged for performance reasons.
+         * This is only temporary however, as doing this makes it into 'one' big plane
+         * which will not be desirable later.
+         */
+        worldGeometry.merge(tileGeometry, mesh.matrix);
     });
 
-    // worldMesh = new Mesh(worldGeometry, worldMaterial);
-    // worldMesh.receiveShadow = true;
-    // scene.add(worldMesh);
-    scene.add(world.tilesGroup)
+    worldMesh = new Mesh(worldGeometry, worldMaterial);
+    scene.add(worldMesh);
+    // scene.add(world.tilesGroup)
     console.log(`took ${performance.now() - t1} ms to create the world`)
 
     const gridHelper = new GridHelper(50 * tileSize, 50);
