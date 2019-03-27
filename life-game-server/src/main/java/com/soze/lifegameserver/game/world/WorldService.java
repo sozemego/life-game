@@ -76,7 +76,7 @@ public class WorldService {
     warehouse.setWorldId(world.getId());
     warehouse.getGraphicsComponent().setTexture("WAREHOUSE_1");
     PhysicsComponent warehousePhysics = warehouse.getPhysicsComponent();
-    warehousePhysics.setX(25);
+    warehousePhysics.setX(20);
     warehousePhysics.setY(25);
     world.getEntities().add(warehouse);
     
@@ -93,7 +93,7 @@ public class WorldService {
     forest2.setId(null);
     forest2.setWorldId(world.getId());
     PhysicsComponent forest2Physics = forest2.getPhysicsComponent();
-    forest2Physics.setX(28);
+    forest2Physics.setX(30);
     forest2Physics.setY(26);
     world.getEntities().add(forest2);
   }
