@@ -96,6 +96,15 @@ public class WorldService {
     forest2Physics.setX(30);
     forest2Physics.setY(26);
     world.getEntities().add(forest2);
+  
+    LOG.info("Generating workers for world with userId [{}]", world.getUserId());
+    PersistentEntity worker1 = entityService.getTemplate("WORKER_1");
+    worker1.setId(null);
+    worker1.setWorldId(world.getId());
+    PhysicsComponent worker1Physics = worker1.getPhysicsComponent();
+    worker1Physics.setX(20);
+    worker1Physics.setY(24);
+    world.getEntities().add(worker1);
   }
   
 }
