@@ -2,7 +2,8 @@ import {
   AmbientLight,
   AxesHelper,
   Box3,
-  BoxGeometry, BoxHelper,
+  BoxGeometry,
+  BoxHelper,
   CameraHelper,
   Color,
   DirectionalLight,
@@ -13,7 +14,8 @@ import {
   Group,
   Mesh,
   MeshLambertMaterial,
-  MeshPhongMaterial, OrthographicCamera,
+  MeshPhongMaterial,
+  OrthographicCamera,
   PCFShadowMap,
   PerspectiveCamera,
   PlaneGeometry,
@@ -22,10 +24,11 @@ import {
   Scene,
   Sprite,
   SpriteMaterial,
-  TextureLoader, Vector2,
+  TextureLoader,
+  Vector2,
   Vector3,
-  WebGLRenderer
-} from "three";
+  WebGLRenderer,
+} from 'three';
 import Stats from 'stats-js';
 
 export const createEngine = (inputHandler, tileSize) => {
@@ -114,10 +117,10 @@ export const createEngine = (inputHandler, tileSize) => {
   let intersectedTile = null;
   let intersectedSprite = null;
   inputHandler.onMouseMove(mouse => {
-    let rayCaster = new Raycaster();
+    const rayCaster = new Raycaster();
     camera.updateMatrixWorld();
     rayCaster.setFromCamera(mouse, camera);
-    const tileIntersections = rayCaster.intersectObjects(world.tilesGroup.children);
+    const tileIntersections = rayCaster.intersectObjects([]);
     const tileIntersection = tileIntersections.length > 0 ? tileIntersections[0] : null;
     const spriteIntersections = rayCaster.intersectObjects(world.sprites.children);
     // const spriteIntersections = [];
@@ -129,12 +132,12 @@ export const createEngine = (inputHandler, tileSize) => {
         if (intersectedTile) {
           scene.remove(intersectedTile);
         }
-        const texture = textureLoader.load("textures/medievalTile_57.png");
+        const texture = textureLoader.load('textures/medievalTile_57.png');
         const tileMaterial = new MeshLambertMaterial({
           map: texture,
           color: 0x00ff00,
           side: FrontSide,
-          transparent: true
+          transparent: true,
         });
         intersectedTile = tileIntersection.object.clone();
         intersectedTile.material = tileMaterial;
@@ -184,14 +187,14 @@ export const createEngine = (inputHandler, tileSize) => {
     const t1 = performance.now();
     worldGeometry.dispose();
     console.log(newWorld);
-    const texture = textureLoader.load("textures/medievalTile_57.png");
+    const texture = textureLoader.load('textures/medievalTile_57.png');
     const tileGeometry = new PlaneGeometry(tileSize, tileSize, 1, 1);
     const worldMaterial = new MeshLambertMaterial({
       map: texture,
       color: 0x00ff00,
       side: FrontSide,
       opacity: 1,
-      transparent: true
+      transparent: true,
     });
 
     newWorld.tiles
@@ -227,12 +230,12 @@ export const createEngine = (inputHandler, tileSize) => {
          * which will not be desirable later.
          */
         worldGeometry.merge(tileGeometry, mesh.matrix);
-    });
+      });
 
     worldMesh = new Mesh(worldGeometry, worldMaterial);
     scene.add(worldMesh);
     // scene.add(world.tilesGroup)
-    console.log(`took ${performance.now() - t1} ms to create the world`)
+    console.log(`took ${performance.now() - t1} ms to create the world`);
 
     const gridHelper = new GridHelper(50 * tileSize, 50);
     gridHelper.position.setZ(0.1);
@@ -255,7 +258,6 @@ export const createEngine = (inputHandler, tileSize) => {
     light.shadow.camera.top = (50 * tileSize) / 2;
     light.shadow.camera.near = 0;
     light.shadow.camera.far = 15;
-
   };
 
   spriteScene.add(world.sprites);
@@ -270,7 +272,7 @@ export const createEngine = (inputHandler, tileSize) => {
       color: 0xffffff,
       rotation: Math.PI,
       opacity: 1,
-      transparent: true
+      transparent: true,
     });
     const sprite = new Sprite(entityMaterial);
     sprite.position.x = position.x * tileSize;
@@ -361,7 +363,7 @@ export const createEngine = (inputHandler, tileSize) => {
     helper.update();
     camera.updateProjectionMatrix();
 
-    boxHelpers.forEach(h => h.update())
+    boxHelpers.forEach(h => h.update());
 
     renderer.autoClear = true;
     renderer.render(scene, camera);
