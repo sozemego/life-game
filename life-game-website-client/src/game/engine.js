@@ -94,7 +94,8 @@ export const createEngine = (inputHandler, tileSize) => {
 
   camera.updateProjectionMatrix();
 
-  const boxHelpers = [];
+  const boxHelpers = new Group();
+  spriteScene.add(boxHelpers);
 
   const pressedKeys = new Set();
 
@@ -276,7 +277,7 @@ export const createEngine = (inputHandler, tileSize) => {
 
   spriteScene.add(world.sprites);
 
-  engine.createSprite = (textureName, position = { x: 0, y: 0, width: 1, height: 1 }) => {
+  engine.createSprite = (textureName, position = { x: 0, y: 0 }, group) => {
     const texture = textureLoader.load(`textures/${textureName}.png`);
     texture.wrapS = RepeatWrapping;
     texture.repeat.x = -1;
@@ -291,10 +292,15 @@ export const createEngine = (inputHandler, tileSize) => {
     const sprite = new Sprite(entityMaterial);
     sprite.position.x = position.x * tileSize;
     sprite.position.y = position.y * tileSize;
-    world.sprites.add(sprite);
+    group = group || world.sprites;
+    group.add(sprite);
     const boxHelper = new BoxHelper(sprite);
-    spriteScene.add(boxHelper);
-    boxHelpers.push(boxHelper);
+    boxHelpers.add(boxHelper);
+
+    sprite.addEventListener('removed', (event) => {
+      console.dir(event);
+      boxHelpers.remove(boxHelper)
+    });
 
     return sprite;
   };
@@ -381,9 +387,9 @@ export const createEngine = (inputHandler, tileSize) => {
     helper.update();
     camera.updateProjectionMatrix();
 
-    boxHelpers.forEach(h => {
-      h.visible = boxHelpersEnabled;
-      h.update();
+    boxHelpers.children.forEach(helper => {
+      helper.visible = boxHelpersEnabled;
+      helper.update();
     });
 
     renderer.autoClear = true;
@@ -415,6 +421,7 @@ export const createEngine = (inputHandler, tileSize) => {
 
     const removeGroup = () => {
       sceneToUse.remove(newGroup);
+      newGroup.children.forEach(child => newGroup.remove(child));
     };
 
     return [newGroup, removeGroup];

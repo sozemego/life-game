@@ -45,13 +45,12 @@ export const createTooltipSystem = (entityEngine, engine) => {
         const resourceSprite = engine.createSprite(resource, {
           x: x + width / 2,
           y: y + height / 2,
-        });
+        }, group);
         resourceSprite.renderOrder = 1;
         resourceSprite.material.depthTest = false;
         resourceSprite.scale.set(0.25, 0.25, 1);
         resourceSprite.position.x += 0.5;
         resourceSprite.position.y += 0.5;
-        group.add(resourceSprite);
       }
     }
   };
