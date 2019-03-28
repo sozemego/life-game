@@ -258,7 +258,7 @@ export const createEngine = (inputHandler, tileSize) => {
     const height = box.max.y - box.min.y;
     gridHelper.position.add(new Vector3(width / 2 - tileSize / 2, 0, 0));
     gridHelper.position.add(new Vector3(0, height / 2 - tileSize / 2, 0));
-    spriteScene.add(gridHelper);
+    scene.add(gridHelper);
 
     light.target.position.set((50 * tileSize) / 2, (50 * tileSize) / 2, 0);
     light.target.updateMatrixWorld();
