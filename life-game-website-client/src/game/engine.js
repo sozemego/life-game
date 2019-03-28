@@ -98,11 +98,23 @@ export const createEngine = (inputHandler, tileSize) => {
 
   const pressedKeys = new Set();
 
+  let boxHelpersEnabled = true;
+  let gridHelperEnabled = true;
+  let gridHelper = null;
+
   inputHandler.onKeyUp(key => {
+    console.log(`Key up      ${key}`);
+    if (key === '0') {
+      boxHelpersEnabled = !boxHelpersEnabled;
+    }
+    if (key === '9') {
+      gridHelperEnabled = !gridHelperEnabled;
+    }
     pressedKeys.delete(key);
   });
 
   inputHandler.onKeyDown(key => {
+    console.log(`Key down    ${key}`);
     pressedKeys.add(key);
   });
 
@@ -237,7 +249,7 @@ export const createEngine = (inputHandler, tileSize) => {
     // scene.add(world.tilesGroup)
     console.log(`took ${performance.now() - t1} ms to create the world`);
 
-    const gridHelper = new GridHelper(50 * tileSize, 50);
+    gridHelper = new GridHelper(50 * tileSize, 50);
     gridHelper.position.setZ(0.1);
     gridHelper.up.set(0, 0, 1);
     gridHelper.rotateX(Math.PI / 2);
@@ -301,6 +313,10 @@ export const createEngine = (inputHandler, tileSize) => {
     stats.begin();
     engine.update();
 
+    if (gridHelper) {
+      gridHelper.visible = gridHelperEnabled;
+    }
+
     if (pressedKeys.has('a')) {
       camera.position.x -= 0.5;
     }
@@ -363,7 +379,10 @@ export const createEngine = (inputHandler, tileSize) => {
     helper.update();
     camera.updateProjectionMatrix();
 
-    boxHelpers.forEach(h => h.update());
+    boxHelpers.forEach(h => {
+      h.visible = boxHelpersEnabled;
+      h.update();
+    });
 
     renderer.autoClear = true;
     renderer.render(scene, camera);
