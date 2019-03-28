@@ -2,16 +2,16 @@ package com.soze.lifegameserver.game.engine.component;
 
 public class PhysicsComponent extends BaseComponent {
 
-  private int x;
-  private int y;
-  private int width;
-  private int height;
+  private float x;
+  private float y;
+  private float width;
+  private float height;
   
   public PhysicsComponent() {
     super(ComponentType.PHYSICS);
   }
   
-  public PhysicsComponent(int x, int y, int width, int height) {
+  public PhysicsComponent(float x, float y, float width, float height) {
     this();
     this.x = x;
     this.y = y;
@@ -19,35 +19,35 @@ public class PhysicsComponent extends BaseComponent {
     this.height = height;
   }
   
-  public int getX() {
+  public float getX() {
     return x;
   }
   
-  public void setX(int x) {
+  public void setX(float x) {
     this.x = x;
   }
   
-  public int getY() {
+  public float getY() {
     return y;
   }
   
-  public void setY(int y) {
+  public void setY(float y) {
     this.y = y;
   }
   
-  public int getWidth() {
+  public float getWidth() {
     return width;
   }
   
-  public void setWidth(int width) {
+  public void setWidth(float width) {
     this.width = width;
   }
   
-  public int getHeight() {
+  public float getHeight() {
     return height;
   }
   
-  public void setHeight(int height) {
+  public void setHeight(float height) {
     this.height = height;
   }
   
