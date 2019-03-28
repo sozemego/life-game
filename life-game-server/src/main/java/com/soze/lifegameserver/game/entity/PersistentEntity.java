@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "entity")
@@ -129,7 +130,7 @@ public class PersistentEntity implements Serializable {
     components.add(graphicsComponent);
     components.add(new NameComponent(name));
     components.add(harvesterComponent);
-    components.removeIf(c -> c == null);
+    components.removeIf(Objects::isNull);
     return components;
   }
   
