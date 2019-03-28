@@ -249,7 +249,9 @@ export const createEngine = (inputHandler, tileSize) => {
     // scene.add(world.tilesGroup)
     console.log(`took ${performance.now() - t1} ms to create the world`);
 
-    gridHelper = new GridHelper(50 * tileSize, 50);
+    const lastTile = newWorld.tiles[newWorld.tiles.length - 1];
+    const { x: maxWidth, y: maxHeight } = lastTile;
+    gridHelper = new GridHelper(maxWidth * tileSize, maxHeight);
     gridHelper.position.setZ(0.1);
     gridHelper.up.set(0, 0, 1);
     gridHelper.rotateX(Math.PI / 2);
