@@ -277,9 +277,8 @@ export const createEngine = (inputHandler, tileSize) => {
     sprite.position.y = position.y * tileSize;
     world.sprites.add(sprite);
     const boxHelper = new BoxHelper(sprite);
-    boxHelper.updateMatrix()
-    spriteScene.add(boxHelper)
-    boxHelpers.push(boxHelper)
+    spriteScene.add(boxHelper);
+    boxHelpers.push(boxHelper);
 
     return sprite;
   };
@@ -377,12 +376,22 @@ export const createEngine = (inputHandler, tileSize) => {
     return intersectedSprite;
   };
 
-  engine.createGroup = () => {
+  engine.createGroup = (layer = 1) => {
     const newGroup = new Group();
-    scene.add(newGroup);
+    let sceneToUse = null;
+    if (layer === 1) {
+      sceneToUse = scene;
+    }
+    if (layer === 2) {
+      sceneToUse = spriteScene;
+    }
+    if (sceneToUse === null) {
+      sceneToUse = scene;
+    }
+    sceneToUse.add(newGroup);
 
     const removeGroup = () => {
-      scene.remove(newGroup);
+      sceneToUse.remove(newGroup);
     };
 
     return [newGroup, removeGroup];

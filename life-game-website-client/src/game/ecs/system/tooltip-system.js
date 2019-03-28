@@ -31,10 +31,10 @@ export const createTooltipSystem = (entityEngine, engine) => {
       TYPES.PHYSICS,
       TYPES.RESOURCE_PROVIDER,
     ]);
-    const { x, y } = physics;
+    const { x, y, width, height } = physics;
 
     if (intersectedSprite !== nextIntersectedSprite) {
-      const [group, removeGroup] = engine.createGroup();
+      const [group, removeGroup] = engine.createGroup(2);
       cleanup = () => {
         nextIntersectedSprite = null;
         intersectedSprite = null;
@@ -42,7 +42,10 @@ export const createTooltipSystem = (entityEngine, engine) => {
       };
       if (resourceProvider) {
         const { resource } = resourceProvider;
-        const resourceSprite = engine.createSprite(resource, { x, y });
+        const resourceSprite = engine.createSprite(resource, {
+          x: x + width / 2,
+          y: y + height / 2,
+        });
         resourceSprite.renderOrder = 1;
         resourceSprite.material.depthTest = false;
         resourceSprite.scale.set(0.25, 0.25, 1);
