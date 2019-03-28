@@ -31,3 +31,9 @@ const createResourceProvider = (component, context) => {
 };
 
 factories[TYPES.RESOURCE_PROVIDER] = createResourceProvider;
+
+const createHarvester = (component, context) => {
+  return { ...component };
+};
+
+factories[TYPES.HARVESTER] = createHarvester;
