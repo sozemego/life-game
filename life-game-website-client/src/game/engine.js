@@ -298,7 +298,6 @@ export const createEngine = (inputHandler, tileSize) => {
     boxHelpers.add(boxHelper);
 
     sprite.addEventListener('removed', (event) => {
-      console.dir(event);
       boxHelpers.remove(boxHelper)
     });
 
