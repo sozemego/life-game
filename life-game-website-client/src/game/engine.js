@@ -127,6 +127,16 @@ export const createEngine = (inputHandler, tileSize) => {
     }
   });
 
+  let clickedSprite = null;
+
+  inputHandler.onMouseUp(mouse => {
+    if (intersectedSprite) {
+      clickedSprite = intersectedSprite;
+    } else {
+      clickedSprite = null;
+    }
+  });
+
   let intersectedTile = null;
   let intersectedSprite = null;
   inputHandler.onMouseMove(mouse => {
@@ -406,6 +416,10 @@ export const createEngine = (inputHandler, tileSize) => {
 
   engine.getSpriteUnderMouse = () => {
     return intersectedSprite;
+  };
+
+  engine.getClickedSprite = () => {
+    return clickedSprite;
   };
 
   engine.createGroup = (layer = 1) => {
