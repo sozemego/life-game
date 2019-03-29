@@ -2,6 +2,7 @@ const KEY_DOWN = 'KEY_DOWN';
 const KEY_UP = 'KEY_UP';
 const MOUSE_WHEEL = 'MOUSE_WHEEL';
 const MOUSE_MOVE = 'MOUSE_MOVE';
+const MOUSE_UP = 'MOUSE_UP';
 
 export const createInputHandler = (dom = window) => {
   console.log(`Creating input handler for ${dom}`);
@@ -17,6 +18,7 @@ export const createInputHandler = (dom = window) => {
     [KEY_UP]: [],
     [MOUSE_WHEEL]: [],
     [MOUSE_MOVE]: [],
+    [MOUSE_UP]: [],
   };
 
   const subscribe = (type, fn) => {
@@ -89,6 +91,26 @@ export const createInputHandler = (dom = window) => {
 
   dom.addEventListener('mousemove', mouseMove);
 
+  const onMouseUp = fn => {
+    return subscribe(MOUSE_UP, fn);
+  };
+
+  const mouseUp = event => {
+    const boundingBox = event.target.getBoundingClientRect();
+    const rawX = event.clientX - boundingBox.x;
+    const rawY = event.clientY - Math.ceil(boundingBox.y);
+    const mouse = {
+      rawX,
+      rawY,
+      x: (rawX / (dom.innerWidth || Math.ceil(boundingBox.width))) * 2 - 1,
+      y: -(rawY / (dom.innerHeight || Math.ceil(boundingBox.height))) * 2 + 1,
+    };
+    const typeListeners = listeners[MOUSE_UP];
+    typeListeners.forEach(listener => listener(mouse));
+  };
+
+  dom.addEventListener('mouseup', mouseUp);
+
   const destroy = () => {
     console.log('Destroying input handler');
     keyListener.removeEventListener('keydown', keydown);
@@ -104,5 +126,6 @@ export const createInputHandler = (dom = window) => {
     onMouseWheel,
     destroy,
     onMouseMove,
+    onMouseUp,
   };
 };
