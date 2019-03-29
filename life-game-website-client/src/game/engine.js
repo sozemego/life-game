@@ -170,8 +170,12 @@ export const createEngine = (inputHandler, tileSize) => {
       const name = (intersectedSprite && intersectedSprite.name) || null;
       if (name !== spriteIntersection.object.name) {
         intersectedSprite = spriteIntersection.object;
+        intersectedSprite['userData']['selected'] = true;
       }
     } else {
+      if (intersectedSprite) {
+        intersectedSprite['userData']['selected'] = false;
+      }
       intersectedSprite = null;
     }
   });
