@@ -263,14 +263,14 @@ export const createEngine = (inputHandler, tileSize) => {
     gridHelper.position.add(new Vector3(0, height / 2 - tileSize / 2, 0));
     scene.add(gridHelper);
 
-    light.target.position.set((50 * tileSize) / 2, (50 * tileSize) / 2, 0);
+    light.target.position.set((maxWidth * tileSize) / 2, (maxHeight * tileSize) / 2, 0);
     light.target.updateMatrixWorld();
 
-    light.position.set((50 * tileSize) / 2, (50 * tileSize) / 2, 10);
-    light.shadow.camera.left = (-50 * tileSize) / 2;
-    light.shadow.camera.right = (50 * tileSize) / 2;
-    light.shadow.camera.bottom = (-50 * tileSize) / 2;
-    light.shadow.camera.top = (50 * tileSize) / 2;
+    light.position.set((maxWidth * tileSize) / 2, (maxHeight * tileSize) / 2, 10);
+    light.shadow.camera.left = (-maxWidth * tileSize) / 2;
+    light.shadow.camera.right = (maxWidth * tileSize) / 2;
+    light.shadow.camera.bottom = (-maxHeight * tileSize) / 2;
+    light.shadow.camera.top = (maxHeight * tileSize) / 2;
     light.shadow.camera.near = 0;
     light.shadow.camera.far = 15;
   };
