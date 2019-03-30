@@ -111,9 +111,9 @@ export const createInputHandler = (dom = window) => {
 
   dom.addEventListener('mouseup', mouseUp);
 
-  dom.addEventListener('contextmenu', (event) => {
-    event.preventDefault();
-  });
+  const contextMenu = event => event.preventDefault();
+
+  dom.addEventListener('contextmenu', contextMenu);
 
   const destroy = () => {
     console.log('Destroying input handler');
@@ -121,6 +121,8 @@ export const createInputHandler = (dom = window) => {
     keyListener.removeEventListener('keyup', keyup);
     dom.removeEventListener('wheel', mouseWheel);
     dom.removeEventListener('mousemove', mouseMove);
+    dom.removeEventListener('mouseup', mouseUp);
+    dom.removeEventListener('contextmenu', contextMenu);
     Object.keys(listeners).forEach(type => (listeners[type] = []));
   };
 
