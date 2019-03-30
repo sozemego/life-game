@@ -31,7 +31,7 @@ import {
 } from 'three/src/Three';
 import Stats from 'stats-js';
 
-export const createEngine = (inputHandler, tileSize) => {
+export const createGfxEngine = (inputHandler, tileSize) => {
   const scene = new Scene();
   const spriteScene = new Scene();
   const width = window.innerWidth - 17;
