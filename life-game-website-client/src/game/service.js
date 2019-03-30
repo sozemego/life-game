@@ -14,7 +14,7 @@ export const createGameService = (client, dispatch, getState) => {
   const container = document.getElementById('game-container');
   const inputHandler = createInputHandler(container);
 
-  let engine = null;
+  let gfxEngine = null;
   let entityEngine = null;
 
   service.start = () => {
@@ -33,8 +33,8 @@ export const createGameService = (client, dispatch, getState) => {
 
   const createGame = () => {
     dispatch(setLoadGameMessage('CREATING GAME ENGINE'));
-    engine = createEngine(inputHandler, tileSize);
-    engine.start();
+    gfxEngine = createEngine(inputHandler, tileSize);
+    gfxEngine.start();
 
     dispatch(setLoadGameMessage('REQUESTING GAME WORLD'));
 
@@ -42,23 +42,23 @@ export const createGameService = (client, dispatch, getState) => {
 
     client.onMessage('WORLD', msg => {
       dispatch(setLoadGameMessage('RENDERING GAME WORLD'));
-      engine.setWorld(msg.world);
+      gfxEngine.setWorld(msg.world);
       setTimeout(() => {
         dispatch(setLoadGameMessage(null));
       }, 0);
     });
 
     entityEngine = createEntityEngine();
-    entityEngine.addSystem(createGraphicsSystem(entityEngine, engine));
-    entityEngine.addSystem(createTooltipSystem(entityEngine, engine));
-    entityEngine.addSystem(createSelectSystem(entityEngine, engine));
+    entityEngine.addSystem(createGraphicsSystem(entityEngine, gfxEngine));
+    entityEngine.addSystem(createTooltipSystem(entityEngine, gfxEngine));
+    entityEngine.addSystem(createSelectSystem(entityEngine, gfxEngine));
 
     client.onMessage('ENTITY', msg => {
       console.log(msg);
       msg.dtos.forEach(addEntity);
     });
 
-    engine.update = () => {
+    gfxEngine.update = () => {
       entityEngine.update(1 / 60);
     };
   };
@@ -70,7 +70,7 @@ export const createGameService = (client, dispatch, getState) => {
 
     const context = {
       entity,
-      engine,
+      engine: gfxEngine,
     };
 
     Object.entries(components)
@@ -83,7 +83,7 @@ export const createGameService = (client, dispatch, getState) => {
   service.destroy = () => {
     console.log('Destroying game service');
     dispatch(setLoadGameMessage('RELEASING RESOURCES'));
-    if (engine) engine.stop();
+    if (gfxEngine) gfxEngine.stop();
     if (client) client.disconnect();
     if (inputHandler) inputHandler.destroy();
   };

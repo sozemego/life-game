@@ -1,7 +1,7 @@
 import { TYPES } from '../component/types';
 import { getEntities } from './utils';
 
-export const createSelectSystem = (entityEngine, engine) => {
+export const createSelectSystem = (entityEngine, gfxEngine) => {
   const types = [TYPES.GRAPHICS, TYPES.PHYSICS];
 
   let selectedSprite = null;
@@ -9,7 +9,7 @@ export const createSelectSystem = (entityEngine, engine) => {
   let cleanup = () => {};
 
   const update = delta => {
-    selectedSprite = engine.getClickedSprite();
+    selectedSprite = gfxEngine.getClickedSprite();
     if (currentSelectedSprite && currentSelectedSprite !== selectedSprite) {
       cleanup();
     }
@@ -36,14 +36,14 @@ export const createSelectSystem = (entityEngine, engine) => {
 
     if (currentSelectedSprite !== selectedSprite) {
       //different selected than the last time!
-      const [group, removeGroup] = engine.createGroup(2);
+      const [group, removeGroup] = gfxEngine.createGroup(2);
 
       cleanup = () => {
         selectedSprite = null;
         currentSelectedSprite = null;
         removeGroup();
       };
-      const panel = engine.createSprite(
+      const panel = gfxEngine.createSprite(
         'panel_blue_empty',
         {
           x: spriteX,

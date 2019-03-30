@@ -1,7 +1,7 @@
 import { getEntities } from './utils';
 import { TYPES } from '../component/types';
 
-export const createTooltipSystem = (entityEngine, engine) => {
+export const createTooltipSystem = (entityEngine, gfxEngine) => {
   const resourceProviderTypes = [TYPES.PHYSICS, TYPES.GRAPHICS];
 
   let intersectedSprite = null;
@@ -10,7 +10,7 @@ export const createTooltipSystem = (entityEngine, engine) => {
   let cleanup = () => {};
 
   const update = delta => {
-    nextIntersectedSprite = engine.getSpriteUnderMouse();
+    nextIntersectedSprite = gfxEngine.getSpriteUnderMouse();
     if (intersectedSprite && intersectedSprite !== nextIntersectedSprite) {
       //clean previous intersected sprite
       cleanup();
@@ -34,7 +34,7 @@ export const createTooltipSystem = (entityEngine, engine) => {
     const { x, y, width, height } = physics;
 
     if (intersectedSprite !== nextIntersectedSprite) {
-      const [group, removeGroup] = engine.createGroup(2);
+      const [group, removeGroup] = gfxEngine.createGroup(2);
       cleanup = () => {
         nextIntersectedSprite = null;
         intersectedSprite = null;
@@ -42,7 +42,7 @@ export const createTooltipSystem = (entityEngine, engine) => {
       };
       if (resourceProvider) {
         const { resource } = resourceProvider;
-        const resourceSprite = engine.createSprite(resource, {
+        const resourceSprite = gfxEngine.createSprite(resource, {
           x: x + width / 2,
           y: y + height / 2,
         }, group);

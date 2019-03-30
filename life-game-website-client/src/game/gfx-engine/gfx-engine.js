@@ -28,7 +28,7 @@ import {
   Vector2,
   Vector3,
   WebGLRenderer,
-} from 'three';
+} from 'three/src/Three';
 import Stats from 'stats-js';
 
 export const createEngine = (inputHandler, tileSize) => {
