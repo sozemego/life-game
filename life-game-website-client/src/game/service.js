@@ -1,6 +1,6 @@
 import { setLoadGameMessage } from './actions';
 import { createEngine } from './engine';
-import { createInputHandler } from './view/input-handler';
+import { createInputHandler } from './input-handler';
 import { createEntityEngine } from './ecs/entity-engine';
 import { getFactories } from './ecs/component/factory-registry';
 import { createEntity } from './ecs/entity';
