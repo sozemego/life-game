@@ -111,6 +111,10 @@ export const createInputHandler = (dom = window) => {
 
   dom.addEventListener('mouseup', mouseUp);
 
+  dom.addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+  });
+
   const destroy = () => {
     console.log('Destroying input handler');
     keyListener.removeEventListener('keydown', keydown);
