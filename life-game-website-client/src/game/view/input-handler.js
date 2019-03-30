@@ -104,6 +104,7 @@ export const createInputHandler = (dom = window) => {
       rawY,
       x: (rawX / (dom.innerWidth || Math.ceil(boundingBox.width))) * 2 - 1,
       y: -(rawY / (dom.innerHeight || Math.ceil(boundingBox.height))) * 2 + 1,
+      button: event.button,
     };
     const typeListeners = listeners[MOUSE_UP];
     typeListeners.forEach(listener => listener(mouse));

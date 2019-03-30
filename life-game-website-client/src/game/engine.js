@@ -130,11 +130,14 @@ export const createEngine = (inputHandler, tileSize) => {
   let clickedSprite = null;
 
   inputHandler.onMouseUp(mouse => {
-    if (intersectedSprite) {
-      clickedSprite = intersectedSprite;
-    } else {
-      clickedSprite = null;
+    if (mouse.button === 0) {
+      if (intersectedSprite) {
+        clickedSprite = intersectedSprite;
+      } else {
+        clickedSprite = null;
+      }
     }
+
   });
 
   let intersectedTile = null;
