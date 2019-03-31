@@ -41,8 +41,7 @@ export const createInputHandler = (dom = window) => {
 
   const keyup = event => {
     const { key } = event;
-    const typeListeners = listeners[KEY_UP];
-    typeListeners.forEach(listener => listener(key));
+    handle(KEY_UP, key);
   };
 
   keyListener.addEventListener('keyup', keyup);
@@ -53,8 +52,7 @@ export const createInputHandler = (dom = window) => {
 
   const keydown = event => {
     const { key } = event;
-    const typeListeners = listeners[KEY_DOWN];
-    typeListeners.forEach(listener => listener(key));
+    handle(KEY_DOWN, key);
   };
 
   keyListener.addEventListener('keydown', keydown);
@@ -65,8 +63,7 @@ export const createInputHandler = (dom = window) => {
 
   const mouseWheel = event => {
     const delta = Math.sign(event.deltaY);
-    const typeListeners = listeners[MOUSE_WHEEL];
-    typeListeners.forEach(listener => listener(delta));
+    handle(MOUSE_WHEEL, delta);
   };
 
   dom.addEventListener('wheel', mouseWheel);
@@ -85,8 +82,7 @@ export const createInputHandler = (dom = window) => {
       x: (rawX / (dom.innerWidth || Math.ceil(boundingBox.width))) * 2 - 1,
       y: -(rawY / (dom.innerHeight || Math.ceil(boundingBox.height))) * 2 + 1,
     };
-    const typeListeners = listeners[MOUSE_MOVE];
-    typeListeners.forEach(listener => listener(mouse));
+    handle(MOUSE_MOVE, mouse);
   };
 
   dom.addEventListener('mousemove', mouseMove);
@@ -106,8 +102,7 @@ export const createInputHandler = (dom = window) => {
       y: -(rawY / (dom.innerHeight || Math.ceil(boundingBox.height))) * 2 + 1,
       button: event.button,
     };
-    const typeListeners = listeners[MOUSE_UP];
-    typeListeners.forEach(listener => listener(mouse));
+    handle(MOUSE_UP, mouse);
   };
 
   dom.addEventListener('mouseup', mouseUp);
@@ -125,6 +120,17 @@ export const createInputHandler = (dom = window) => {
     dom.removeEventListener('mouseup', mouseUp);
     dom.removeEventListener('contextmenu', contextMenu);
     Object.keys(listeners).forEach(type => (listeners[type] = []));
+  };
+
+  const handle = (eventType, event) => {
+    const typeListeners = listeners[eventType];
+    for (let i = 0; i < typeListeners.length; i++) {
+      const listener = typeListeners[i];
+      const handled = listener(event);
+      if (handled) {
+        return;
+      }
+    }
   };
 
   return {
