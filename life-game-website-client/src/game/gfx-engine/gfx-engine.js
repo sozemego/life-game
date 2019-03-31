@@ -247,7 +247,8 @@ export const createGfxEngine = (inputHandler, tileSize) => {
         mesh.position.y = tile.y * tileSize;
         mesh.position.z = 0;
         mesh.up.set(0, 0, 1);
-        mesh.updateMatrixWorld();
+        mesh.matrixAutoUpdate = false;
+        mesh.updateMatrix();
         // mesh.receiveShadow = true;
         // store the mesh so the individual tiles can still be found
         // among the merged geometry.
