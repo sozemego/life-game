@@ -1,7 +1,7 @@
 import { TYPES } from '../component/types';
 import { getEntities } from './utils';
 
-export const createGraphicsSystem = (entityEngine, gfxEngine) => {
+export const createGraphicsSystem = (gameEngine, entityEngine, gfxEngine) => {
   const types = [TYPES.GRAPHICS, TYPES.PHYSICS];
 
   const update = delta => {

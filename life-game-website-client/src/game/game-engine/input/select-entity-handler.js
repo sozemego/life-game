@@ -11,6 +11,11 @@ export const createSelectEntityHandler = gameEngine => {
       return false;
     }
 
+    if (clickedSprite && mouse.button === 2) {
+      gameEngine.selectedEntity = null;
+      return true;
+    }
+
     const [selectedEntity] = getEntities(entityEngine, [TYPES.GRAPHICS]).filter(
       entity => entity.getComponent(TYPES.GRAPHICS).sprite === clickedSprite,
     );

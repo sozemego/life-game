@@ -1,47 +1,38 @@
 import { TYPES } from '../component/types';
-import { getEntities } from './utils';
 
-export const createSelectSystem = (entityEngine, gfxEngine) => {
+export const createSelectSystem = (gameEngine, entityEngine, gfxEngine) => {
   const types = [TYPES.GRAPHICS, TYPES.PHYSICS];
 
-  let selectedSprite = null;
-  let currentSelectedSprite = null;
+  let previousSelectedEntity = null;
   let cleanup = () => {};
 
   const update = delta => {
-    selectedSprite = gfxEngine.getClickedSprite();
-    if (currentSelectedSprite && currentSelectedSprite !== selectedSprite) {
+
+    const { selectedEntity } = gameEngine;
+
+    if (previousSelectedEntity && previousSelectedEntity !== selectedEntity) {
       cleanup();
     }
 
-    if (!selectedSprite) {
+    if (!selectedEntity) {
       return;
     }
 
-    const selectableEntities = getEntities(entityEngine, types);
-    selectableEntities
-      .filter(entity => {
-        return entity.getComponent(TYPES.GRAPHICS).sprite === selectedSprite;
-      })
-      .forEach(updateEntity);
-    currentSelectedSprite = selectedSprite;
-  };
-
-  const updateEntity = entity => {
-    const [graphics, physics] = entity.getComponents([TYPES.GRAPHICS, TYPES.PHYSICS]);
+    const [graphics, physics] = selectedEntity.getComponents([TYPES.GRAPHICS, TYPES.PHYSICS]);
+    const selectedSprite = graphics.sprite;
 
     const { x, y, width, height } = physics;
     const spriteX = selectedSprite.position.x;
     const spriteY = selectedSprite.position.y;
 
-    if (currentSelectedSprite !== selectedSprite) {
+    if (previousSelectedEntity !== selectedEntity) {
       //different selected than the last time!
       const [group, removeGroup] = gfxEngine.createGroup(2);
 
       cleanup = () => {
-        selectedSprite = null;
-        currentSelectedSprite = null;
+        previousSelectedEntity = null;
         removeGroup();
+        cleanup = () => {};
       };
       const panel = gfxEngine.createSprite(
         'panel_blue_empty',
@@ -64,6 +55,8 @@ export const createSelectSystem = (entityEngine, gfxEngine) => {
       panel.position.x = spriteX;
       panel.position.y = spriteY;
     }
+
+    previousSelectedEntity = selectedEntity;
   };
 
   return {

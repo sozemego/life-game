@@ -22,9 +22,9 @@ export const createGameEngine = (inputHandler) => {
     gameEngine.gfxEngine = gfxEngine;
 
     const entityEngine = createEntityEngine();
-    entityEngine.addSystem(createGraphicsSystem(entityEngine, gfxEngine));
-    entityEngine.addSystem(createTooltipSystem(entityEngine, gfxEngine));
-    entityEngine.addSystem(createSelectSystem(entityEngine, gfxEngine));
+    entityEngine.addSystem(createGraphicsSystem(gameEngine, entityEngine, gfxEngine));
+    entityEngine.addSystem(createTooltipSystem(gameEngine, entityEngine, gfxEngine));
+    entityEngine.addSystem(createSelectSystem(gameEngine, entityEngine, gfxEngine));
 
     gameEngine.entityEngine = entityEngine;
 

@@ -1,7 +1,7 @@
 import { getEntities } from './utils';
 import { TYPES } from '../component/types';
 
-export const createTooltipSystem = (entityEngine, gfxEngine) => {
+export const createTooltipSystem = (gameEngine, entityEngine, gfxEngine) => {
   const resourceProviderTypes = [TYPES.PHYSICS, TYPES.GRAPHICS];
 
   let intersectedSprite = null;
