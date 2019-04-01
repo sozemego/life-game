@@ -6,10 +6,11 @@ import { createEntity } from '../ecs/entity';
 import { getFactories } from '../ecs/component/factory-registry';
 import { createGfxEngine } from '../gfx-engine/gfx-engine';
 import { createSelectEntityHandler } from './input/select-entity-handler';
+import { InputHandler } from "../InputHandler";
 
 const TILE_SIZE = 1;
 
-export const createGameEngine = (inputHandler: any): GameEngine => {
+export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
 
   const gameEngine: GameEngine = {
     selectedEntity: null,
