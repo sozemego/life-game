@@ -1,12 +1,13 @@
-import { createEntityEngine } from '../ecs/entity-engine';
+import { createEntityEngine, EntityEngine } from "../ecs/EntityEngine";
 import { createGraphicsSystem } from '../ecs/system/graphics-system';
 import { createTooltipSystem } from '../ecs/system/tooltip-system';
 import { createSelectSystem } from '../ecs/system/select-system';
-import { createEntity, Entity } from "../ecs/Entity";
 import { getFactories } from '../ecs/component/factory-registry';
 import { createGfxEngine } from '../gfx-engine/gfx-engine';
 import { createSelectEntityHandler } from './input/select-entity-handler';
 import { InputHandler } from "../InputHandler";
+// @ts-ignore
+import { createEntity, Entity } from "../ecs/Entity";
 
 const TILE_SIZE = 1;
 
@@ -62,6 +63,7 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
       .map(([type, component]) => factories[type](component, context))
       .forEach(entity.addComponent);
 
+    // @ts-ignore
     gameEngine.entityEngine.addEntity(entity);
   };
 
@@ -71,7 +73,7 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
 export interface GameEngine {
   selectedEntity: Entity | null;
   gfxEngine: any;
-  entityEngine: any;
+  entityEngine: EntityEngine | null;
   start: () => void;
   setWorld: (world: any) => void;
   addEntity: (entity: any) => void;
