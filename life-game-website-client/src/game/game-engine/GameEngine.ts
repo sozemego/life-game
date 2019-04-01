@@ -2,7 +2,7 @@ import { createEntityEngine } from '../ecs/entity-engine';
 import { createGraphicsSystem } from '../ecs/system/graphics-system';
 import { createTooltipSystem } from '../ecs/system/tooltip-system';
 import { createSelectSystem } from '../ecs/system/select-system';
-import { createEntity } from '../ecs/entity';
+import { createEntity, Entity } from "../ecs/Entity";
 import { getFactories } from '../ecs/component/factory-registry';
 import { createGfxEngine } from '../gfx-engine/gfx-engine';
 import { createSelectEntityHandler } from './input/select-entity-handler';
@@ -69,7 +69,7 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
 };
 
 export interface GameEngine {
-  selectedEntity: any;
+  selectedEntity: Entity | null;
   gfxEngine: any;
   entityEngine: any;
   start: () => void;
