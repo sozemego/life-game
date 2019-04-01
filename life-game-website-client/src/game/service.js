@@ -1,5 +1,5 @@
 import { setLoadGameMessage } from './actions';
-import { createInputHandler } from './input-handler';
+import { createInputHandler } from './InputHandler';
 import { createGameEngine } from "./game-engine/GameEngine";
 
 export const createGameService = (client, dispatch, getState) => {
