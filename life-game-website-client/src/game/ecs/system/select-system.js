@@ -1,7 +1,6 @@
 import { TYPES } from '../component/types';
 
 export const createSelectSystem = (gameEngine, entityEngine, gfxEngine) => {
-  const types = [TYPES.GRAPHICS, TYPES.PHYSICS];
 
   let previousSelectedEntity = null;
   let cleanup = () => {};
