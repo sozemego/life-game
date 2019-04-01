@@ -12,7 +12,7 @@ export const createSelectEntityHandler = gameEngine => {
     }
 
     if (clickedSprite && mouse.button === 2) {
-      gameEngine.selectedEntity = null;
+      // gameEngine.selectedEntity = null;
       return true;
     }
 
