@@ -144,11 +144,11 @@ export const createInputHandler = (dom = window): InputHandler => {
 };
 
 export interface InputHandler {
-  onKeyUp: (fn: Function) => UnsubscribeCallback;
-  onKeyDown: (fn: Function) => UnsubscribeCallback;
-  onMouseWheel: (fn: Function) => UnsubscribeCallback;
-  onMouseMove: (fn: Function) => UnsubscribeCallback;
-  onMouseUp: (fn: Function) => UnsubscribeCallback;
+  onKeyUp: (fn: (key: string) => boolean) => UnsubscribeCallback;
+  onKeyDown: (fn: (key: string) => boolean) => UnsubscribeCallback;
+  onMouseWheel: (fn: (delta: number) => boolean) => UnsubscribeCallback;
+  onMouseMove: (fn: (mouse: Mouse) => boolean) => UnsubscribeCallback;
+  onMouseUp: (fn: (mouse: Mouse) => boolean) => UnsubscribeCallback;
   destroy: () => void;
 }
 
@@ -156,4 +156,12 @@ export interface UnsubscribeCallback extends Function {}
 
 interface ListenerContainer {
   [eventType: string]: Function[];
+}
+
+interface Mouse {
+  rawX: number;
+  rawY: number;
+  x: number;
+  y: number;
+  button: number;
 }

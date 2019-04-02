@@ -3,7 +3,7 @@ import { createGraphicsSystem } from '../ecs/system/graphics-system';
 import { createTooltipSystem } from '../ecs/system/tooltip-system';
 import { createSelectSystem } from '../ecs/system/select-system';
 import { getFactories } from '../ecs/component/factory-registry';
-import { createGfxEngine } from '../gfx-engine/gfx-engine';
+import { createGfxEngine } from '../gfx-engine/GfxEngine';
 import { createSelectEntityHandler } from './input/select-entity-handler';
 import { InputHandler } from "../InputHandler";
 // @ts-ignore
@@ -34,9 +34,9 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
     gameEngine.entityEngine = entityEngine;
 
     // @ts-ignore
-    gfxEngine.update = () => {
-      entityEngine.update(1 / 60);
-    };
+    gfxEngine.setUpdate((delta) => {
+      entityEngine.update(delta);
+    });
 
     // @ts-ignore
     gfxEngine.start();

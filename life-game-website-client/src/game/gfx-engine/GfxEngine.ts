@@ -15,6 +15,7 @@ import {
   Mesh,
   MeshLambertMaterial,
   MeshPhongMaterial,
+  Object3D,
   OrthographicCamera,
   PCFShadowMap,
   PerspectiveCamera,
@@ -30,8 +31,10 @@ import {
   WebGLRenderer,
 } from 'three/src/Three';
 import Stats from 'stats-js';
+import { InputHandler } from '../InputHandler';
+import { World } from "../dto";
 
-export const createGfxEngine = (inputHandler, tileSize) => {
+export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): GfxEngine => {
   const scene = new Scene();
   const spriteScene = new Scene();
   const width = window.innerWidth - 17;
@@ -89,8 +92,12 @@ export const createGfxEngine = (inputHandler, tileSize) => {
   window.addEventListener('resize', resize);
 
   const container = document.getElementById('game-container');
-  container.append(renderer.domElement);
-  container.appendChild(stats.dom);
+  if (container) {
+    container.append(renderer.domElement);
+    container.appendChild(stats.dom);
+  } else {
+    throw new Error('Game container does not exist');
+  }
 
   camera.updateProjectionMatrix();
 
@@ -101,7 +108,7 @@ export const createGfxEngine = (inputHandler, tileSize) => {
 
   let boxHelpersEnabled = true;
   let gridHelperEnabled = true;
-  let gridHelper = null;
+  let gridHelper: GridHelper | null = null;
 
   inputHandler.onKeyUp(key => {
     console.log(`Key up      ${key}`);
@@ -112,11 +119,13 @@ export const createGfxEngine = (inputHandler, tileSize) => {
       gridHelperEnabled = !gridHelperEnabled;
     }
     pressedKeys.delete(key);
+    return true;
   });
 
   inputHandler.onKeyDown(key => {
     console.log(`Key down    ${key}`);
     pressedKeys.add(key);
+    return true;
   });
 
   inputHandler.onMouseWheel(delta => {
@@ -125,9 +134,10 @@ export const createGfxEngine = (inputHandler, tileSize) => {
     } else {
       camera.position.z -= 1;
     }
+    return true;
   });
 
-  let clickedSprite = null;
+  let clickedSprite: Sprite | null = null;
 
   inputHandler.onMouseUp(mouse => {
     if (mouse.button === 0) {
@@ -137,14 +147,15 @@ export const createGfxEngine = (inputHandler, tileSize) => {
         clickedSprite = null;
       }
     }
-
+    return true;
   });
 
-  let intersectedTile = null;
-  let intersectedSprite = null;
+  let intersectedTile: Mesh | null = null;
+  let intersectedSprite: Sprite | null = null;
+
   inputHandler.onMouseMove(mouse => {
     const rayCaster = new Raycaster();
-    camera.updateMatrixWorld();
+    camera.updateMatrixWorld(true);
     rayCaster.setFromCamera(mouse, camera);
     const tileIntersections = rayCaster.intersectObjects([]);
     const tileIntersection = tileIntersections.length > 0 ? tileIntersections[0] : null;
@@ -165,24 +176,25 @@ export const createGfxEngine = (inputHandler, tileSize) => {
           side: FrontSide,
           transparent: true,
         });
-        intersectedTile = tileIntersection.object.clone();
+        intersectedTile = tileIntersection.object.clone() as Mesh;
         intersectedTile.material = tileMaterial;
         intersectedTile.material.transparent = true;
         intersectedTile.material.opacity = 0.75;
         intersectedTile.position.z = 0.05;
         intersectedTile.userData['highlightPhase'] = 'DOWN';
-        intersectedTile.material.color = new Color('red');
         scene.add(intersectedTile);
       }
     } else {
-      scene.remove(intersectedTile);
+      if (intersectedTile) {
+        scene.remove(intersectedTile);
+      }
       intersectedTile = null;
     }
 
     if (spriteIntersection) {
       const name = (intersectedSprite && intersectedSprite.name) || null;
       if (name !== spriteIntersection.object.name) {
-        intersectedSprite = spriteIntersection.object;
+        intersectedSprite = spriteIntersection.object as Sprite;
         intersectedSprite['userData']['selected'] = true;
       }
     } else {
@@ -191,15 +203,14 @@ export const createGfxEngine = (inputHandler, tileSize) => {
       }
       intersectedSprite = null;
     }
+    return true;
   });
 
-  const engine = {
-    running: false,
-  };
+  let running = false;
 
-  engine.start = () => {
+  const start = () => {
     console.log('Starting game loop!');
-    engine.running = true;
+    running = true;
     animate();
   };
 
@@ -213,7 +224,7 @@ export const createGfxEngine = (inputHandler, tileSize) => {
   const worldGeometry = new Geometry();
   let worldMesh = null;
 
-  engine.setWorld = newWorld => {
+  const setWorld = (newWorld: World) => {
     const t1 = performance.now();
     worldGeometry.dispose();
     console.log(newWorld);
@@ -232,6 +243,7 @@ export const createGfxEngine = (inputHandler, tileSize) => {
       .sort((a, b) => a.y - b.y)
       .forEach((tile, index) => {
         const key = `${tile.x}:${tile.y}`;
+        // @ts-ignore
         world[key] = tile;
 
         const tileMaterial = new MeshLambertMaterial({
@@ -295,7 +307,7 @@ export const createGfxEngine = (inputHandler, tileSize) => {
 
   spriteScene.add(world.sprites);
 
-  engine.createSprite = (textureName, position = { x: 0, y: 0 }, group) => {
+  const createSprite = (textureName: string, position = { x: 0, y: 0 }, group: Group | null) => {
     const texture = textureLoader.load(`textures/${textureName}.png`);
     texture.wrapS = RepeatWrapping;
     texture.repeat.x = -1;
@@ -315,28 +327,28 @@ export const createGfxEngine = (inputHandler, tileSize) => {
     const boxHelper = new BoxHelper(sprite);
     boxHelpers.add(boxHelper);
 
-    sprite.addEventListener('removed', (event) => {
-      boxHelpers.remove(boxHelper)
+    sprite.addEventListener('removed', event => {
+      boxHelpers.remove(boxHelper);
     });
 
     return sprite;
   };
 
-  engine.stop = () => {
+  const stop = () => {
     console.log('Stopping engine');
-    engine.running = false;
+    running = false;
     window.removeEventListener('resize', resize);
   };
 
-  engine.update = () => {};
+  let update = (delta: number) => {};
 
   const animate = () => {
-    if (!engine.running) {
+    requestAnimationFrame(animate);
+    if (!running) {
       return;
     }
-    requestAnimationFrame(animate);
     stats.begin();
-    engine.update();
+    update(1 / 60);
 
     if (gridHelper) {
       gridHelper.visible = gridHelperEnabled;
@@ -368,6 +380,7 @@ export const createGfxEngine = (inputHandler, tileSize) => {
 
     if (intersectedTile) {
       const highlightPhase = intersectedTile.userData['highlightPhase'];
+      // @ts-ignore
       const opacity = intersectedTile.material.opacity;
       let nextOpacity = opacity;
       let nextPhase = highlightPhase;
@@ -381,6 +394,7 @@ export const createGfxEngine = (inputHandler, tileSize) => {
       } else if (nextOpacity >= 0.75) {
         nextPhase = 'DOWN';
       }
+      // @ts-ignore
       intersectedTile.material.opacity = nextOpacity;
       intersectedTile.userData['highlightPhase'] = nextPhase;
     }
@@ -404,9 +418,9 @@ export const createGfxEngine = (inputHandler, tileSize) => {
     helper.update();
     camera.updateProjectionMatrix();
 
-    boxHelpers.children.forEach(helper => {
+    boxHelpers.children.forEach((helper) => {
       helper.visible = boxHelpersEnabled;
-      helper.update();
+      (helper as BoxHelper).update();
     });
 
     renderer.autoClear = true;
@@ -418,17 +432,17 @@ export const createGfxEngine = (inputHandler, tileSize) => {
     stats.end();
   };
 
-  engine.getSpriteUnderMouse = () => {
+  const getSpriteUnderMouse = () => {
     return intersectedSprite;
   };
 
-  engine.getClickedSprite = () => {
+  const getClickedSprite = () => {
     return clickedSprite;
   };
 
-  engine.createGroup = (layer = 1) => {
+  const createGroup = (layer: number | null) => {
     const newGroup = new Group();
-    let sceneToUse = null;
+    let sceneToUse: Scene | null = null;
     if (layer === 1) {
       sceneToUse = scene;
     }
@@ -441,12 +455,36 @@ export const createGfxEngine = (inputHandler, tileSize) => {
     sceneToUse.add(newGroup);
 
     const removeGroup = () => {
-      sceneToUse.remove(newGroup);
+      if (sceneToUse) {
+        sceneToUse.remove(newGroup);
+      }
       newGroup.children.forEach(child => newGroup.remove(child));
     };
 
-    return [newGroup, removeGroup];
+    return [newGroup, removeGroup] as [Group, Function];
   };
 
-  return engine;
+  const setUpdate = (updateFn: (delta: number) => void) => {
+    update = updateFn;
+  };
+
+  return {
+    start,
+    setWorld,
+    createSprite,
+    getSpriteUnderMouse,
+    getClickedSprite,
+    createGroup,
+    setUpdate
+  };
 };
+
+export interface GfxEngine {
+  start: Function;
+  setWorld: (world: World) => void;
+  createSprite: (name: string, options: any, group: Group | null) => Sprite,
+  getSpriteUnderMouse: () => Sprite | null,
+  getClickedSprite: () => Sprite | null,
+  createGroup: (layer: number | null) => [Group, Function],
+  setUpdate: (updateFn: (delta: number) => void) => void;
+}
