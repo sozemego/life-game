@@ -18,6 +18,7 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
     gfxEngine: null,
     entityEngine: null,
     start: () => {},
+    stop: () => {},
     setWorld: () => {},
     addEntity: () => {},
   };
@@ -75,6 +76,7 @@ export interface GameEngine {
   gfxEngine: any;
   entityEngine: EntityEngine | null;
   start: () => void;
+  stop: () => void;
   setWorld: (world: any) => void;
   addEntity: (entity: any) => void;
 }

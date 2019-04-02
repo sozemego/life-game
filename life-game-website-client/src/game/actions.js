@@ -1,7 +1,7 @@
 import { makePayloadActionCreator } from '../store/utils';
 import { createGameClient } from './GameClient';
 import { getUser } from '../user/selectors';
-import { createGameService } from './service';
+import { createGameService } from './GameService';
 
 export const GAME_STARTED = 'GAME_STARTED';
 export const setGameStarted = makePayloadActionCreator(GAME_STARTED);

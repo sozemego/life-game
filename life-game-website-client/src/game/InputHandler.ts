@@ -4,7 +4,7 @@ const MOUSE_WHEEL = 'MOUSE_WHEEL';
 const MOUSE_MOVE = 'MOUSE_MOVE';
 const MOUSE_UP = 'MOUSE_UP';
 
-export const createInputHandler = (dom = window): InputHandler => {
+export const createInputHandler = (dom : HTMLElement | Window = window): InputHandler => {
   console.log(`Creating input handler for ${dom}`);
   //not all elements can listen to key events. In case window is not passed
   //we want to use window to capture key events
@@ -79,8 +79,8 @@ export const createInputHandler = (dom = window): InputHandler => {
     const mouse = {
       rawX,
       rawY,
-      x: (rawX / (dom.innerWidth || Math.ceil(boundingBox.width))) * 2 - 1,
-      y: -(rawY / (dom.innerHeight || Math.ceil(boundingBox.height))) * 2 + 1,
+      x: (rawX / (Math.ceil(boundingBox.width))) * 2 - 1,
+      y: -(rawY / (Math.ceil(boundingBox.height))) * 2 + 1,
     };
     handle(MOUSE_MOVE, mouse);
   };
@@ -98,8 +98,8 @@ export const createInputHandler = (dom = window): InputHandler => {
     const mouse = {
       rawX,
       rawY,
-      x: (rawX / (dom.innerWidth || Math.ceil(boundingBox.width))) * 2 - 1,
-      y: -(rawY / (dom.innerHeight || Math.ceil(boundingBox.height))) * 2 + 1,
+      x: (rawX / (Math.ceil(boundingBox.width))) * 2 - 1,
+      y: -(rawY / (Math.ceil(boundingBox.height))) * 2 + 1,
       button: event.button,
     };
     handle(MOUSE_UP, mouse);
