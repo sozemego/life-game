@@ -42,3 +42,7 @@ export interface EntityEngine {
 interface EntityContainer {
   [id: string]: Entity;
 }
+
+export interface EntitySystem {
+  update: (delta: number) => void;
+}

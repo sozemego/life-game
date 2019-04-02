@@ -307,7 +307,18 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
 
   spriteScene.add(world.sprites);
 
-  const createSprite = (textureName: string, position = { x: 0, y: 0 }, group: Group | null) => {
+  const createSpriteOptions: CreateSpriteOptions = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  };
+
+  const createSprite = (
+    textureName: string,
+    options: CreateSpriteOptions = createSpriteOptions,
+    group: Group | null,
+  ): Sprite => {
     const texture = textureLoader.load(`textures/${textureName}.png`);
     texture.wrapS = RepeatWrapping;
     texture.repeat.x = -1;
@@ -320,8 +331,8 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
       transparent: true,
     });
     const sprite = new Sprite(entityMaterial);
-    sprite.position.x = position.x * tileSize;
-    sprite.position.y = position.y * tileSize;
+    sprite.position.x = options.x * tileSize;
+    sprite.position.y = options.y * tileSize;
     group = group || world.sprites;
     group.add(sprite);
     const boxHelper = new BoxHelper(sprite);
@@ -482,9 +493,16 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
 export interface GfxEngine {
   start: Function;
   setWorld: (world: World) => void;
-  createSprite: (name: string, options: any, group: Group | null) => Sprite;
+  createSprite: (name: string, options: CreateSpriteOptions, group: Group | null) => Sprite;
   getSpriteUnderMouse: () => Sprite | null;
   getClickedSprite: () => Sprite | null;
   createGroup: (layer: number | null) => [Group, Function];
   setUpdate: (updateFn: (delta: number) => void) => void;
+}
+
+export interface CreateSpriteOptions {
+  x: number;
+  y: number;
+  width?: number;
+  height?: number;
 }

@@ -1,13 +1,13 @@
 import { createEntityEngine, EntityEngine } from '../ecs/EntityEngine';
-import { createGraphicsSystem } from '../ecs/system/graphics-system';
-import { createTooltipSystem } from '../ecs/system/tooltip-system';
-import { createSelectSystem } from '../ecs/system/select-system';
-import { getFactories } from '../ecs/component/factory-registry';
+import { getFactories } from '../ecs/component/FactoryRegistry';
 import { createGfxEngine } from '../gfx-engine/GfxEngine';
 import { createSelectEntityHandler } from './input/select-entity-handler';
 import { InputHandler } from '../InputHandler';
 // @ts-ignore
 import { createEntity, Entity } from '../ecs/Entity';
+import { createGraphicsSystem } from "../ecs/system/GraphicsSystem";
+import { createTooltipSystem } from "../ecs/system/TooltipSystem";
+import { createSelectSystem } from "../ecs/system/SelectSystem";
 
 const TILE_SIZE = 1;
 

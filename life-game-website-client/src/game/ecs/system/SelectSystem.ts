@@ -1,10 +1,19 @@
 import { TYPES } from '../component/types';
+import { EntityEngine, EntitySystem } from '../EntityEngine';
+import { GameEngine } from '../../game-engine/GameEngine';
+import { GfxEngine } from '../../gfx-engine/GfxEngine';
+import { Entity } from '../Entity';
+import { GraphicsComponent, PhysicsComponent } from '../component/FactoryRegistry';
 
-export const createSelectSystem = (gameEngine, entityEngine, gfxEngine) => {
-  let previousSelectedEntity = null;
+export const createSelectSystem = (
+  gameEngine: GameEngine,
+  entityEngine: EntityEngine,
+  gfxEngine: GfxEngine,
+): EntitySystem => {
+  let previousSelectedEntity: Entity | null = null;
   let cleanup = () => {};
 
-  const update = delta => {
+  const update = (delta: number) => {
     const { selectedEntity } = gameEngine;
 
     if (previousSelectedEntity && previousSelectedEntity !== selectedEntity) {
@@ -16,9 +25,12 @@ export const createSelectSystem = (gameEngine, entityEngine, gfxEngine) => {
     }
 
     const [graphics, physics] = selectedEntity.getComponents([TYPES.GRAPHICS, TYPES.PHYSICS]);
-    const selectedSprite = graphics.sprite;
+    const { sprite: selectedSprite } = graphics as GraphicsComponent;
+    if (!selectedSprite) {
+      return;
+    }
 
-    const { x, y, width, height } = physics;
+    const { x, y, width, height } = physics as PhysicsComponent;
     const spriteX = selectedSprite.position.x;
     const spriteY = selectedSprite.position.y;
 
