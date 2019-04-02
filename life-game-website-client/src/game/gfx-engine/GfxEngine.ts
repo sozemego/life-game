@@ -119,13 +119,13 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
       gridHelperEnabled = !gridHelperEnabled;
     }
     pressedKeys.delete(key);
-    return true;
+    return false;
   });
 
   inputHandler.onKeyDown(key => {
     console.log(`Key down    ${key}`);
     pressedKeys.add(key);
-    return true;
+    return false;
   });
 
   inputHandler.onMouseWheel(delta => {
@@ -134,7 +134,7 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     } else {
       camera.position.z -= 1;
     }
-    return true;
+    return false;
   });
 
   let clickedSprite: Sprite | null = null;
@@ -147,7 +147,7 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
         clickedSprite = null;
       }
     }
-    return true;
+    return false;
   });
 
   let intersectedTile: Mesh | null = null;
@@ -203,7 +203,7 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
       }
       intersectedSprite = null;
     }
-    return true;
+    return false;
   });
 
   let running = false;
