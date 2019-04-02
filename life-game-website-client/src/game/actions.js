@@ -1,5 +1,5 @@
 import { makePayloadActionCreator } from '../store/utils';
-import { createGameClient } from './client';
+import { createGameClient } from './GameClient';
 import { getUser } from '../user/selectors';
 import { createGameService } from './service';
 

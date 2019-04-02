@@ -1,4 +1,4 @@
-import { createWebSocketClient } from '../api/webSocketClient';
+import { createWebSocketClient } from "../api/WebSocketClient";
 
 export const createStatisticsClient = () => {
   const client = {};
