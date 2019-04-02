@@ -40,5 +40,5 @@ export interface EntityEngine {
 }
 
 interface EntityContainer {
-  [id: string]: Entity
+  [id: string]: Entity;
 }

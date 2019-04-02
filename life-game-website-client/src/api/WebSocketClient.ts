@@ -27,7 +27,7 @@ export const createWebSocketClient = (options: any): WebSocketClient => {
         // console.log(parsed);
         // @ts-ignore
         const typeListeners = listeners[parsed.type] || [];
-        typeListeners.forEach((listener) => listener(parsed));
+        typeListeners.forEach(listener => listener(parsed));
       };
 
       socket.onclose = () => {
@@ -77,7 +77,7 @@ export const createWebSocketClient = (options: any): WebSocketClient => {
 };
 
 export interface WebSocketClient {
-  connect: () => Promise<any>,
+  connect: () => Promise<any>;
   disconnect: () => void;
   send: (message: object) => void;
   onMessage: (type: string, fn: (message: any) => void) => void;

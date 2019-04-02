@@ -1,18 +1,17 @@
-import { createEntityEngine, EntityEngine } from "../ecs/EntityEngine";
+import { createEntityEngine, EntityEngine } from '../ecs/EntityEngine';
 import { createGraphicsSystem } from '../ecs/system/graphics-system';
 import { createTooltipSystem } from '../ecs/system/tooltip-system';
 import { createSelectSystem } from '../ecs/system/select-system';
 import { getFactories } from '../ecs/component/factory-registry';
 import { createGfxEngine } from '../gfx-engine/GfxEngine';
 import { createSelectEntityHandler } from './input/select-entity-handler';
-import { InputHandler } from "../InputHandler";
+import { InputHandler } from '../InputHandler';
 // @ts-ignore
-import { createEntity, Entity } from "../ecs/Entity";
+import { createEntity, Entity } from '../ecs/Entity';
 
 const TILE_SIZE = 1;
 
 export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
-
   const gameEngine: GameEngine = {
     selectedEntity: null,
     gfxEngine: null,
@@ -35,7 +34,7 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
     gameEngine.entityEngine = entityEngine;
 
     // @ts-ignore
-    gfxEngine.setUpdate((delta) => {
+    gfxEngine.setUpdate(delta => {
       entityEngine.update(delta);
     });
 

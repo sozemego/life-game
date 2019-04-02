@@ -32,7 +32,7 @@ import {
 } from 'three/src/Three';
 import Stats from 'stats-js';
 import { InputHandler } from '../InputHandler';
-import { World } from "../dto";
+import { World } from '../dto';
 
 export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): GfxEngine => {
   const scene = new Scene();
@@ -418,7 +418,7 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     helper.update();
     camera.updateProjectionMatrix();
 
-    boxHelpers.children.forEach((helper) => {
+    boxHelpers.children.forEach(helper => {
       helper.visible = boxHelpersEnabled;
       (helper as BoxHelper).update();
     });
@@ -475,16 +475,16 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     getSpriteUnderMouse,
     getClickedSprite,
     createGroup,
-    setUpdate
+    setUpdate,
   };
 };
 
 export interface GfxEngine {
   start: Function;
   setWorld: (world: World) => void;
-  createSprite: (name: string, options: any, group: Group | null) => Sprite,
-  getSpriteUnderMouse: () => Sprite | null,
-  getClickedSprite: () => Sprite | null,
-  createGroup: (layer: number | null) => [Group, Function],
+  createSprite: (name: string, options: any, group: Group | null) => Sprite;
+  getSpriteUnderMouse: () => Sprite | null;
+  getClickedSprite: () => Sprite | null;
+  createGroup: (layer: number | null) => [Group, Function];
   setUpdate: (updateFn: (delta: number) => void) => void;
 }

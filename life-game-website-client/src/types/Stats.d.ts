@@ -11,6 +11,6 @@ declare class Stats {
   update(): void;
 }
 
-declare module "stats-js" {
+declare module 'stats-js' {
   export = Stats;
 }

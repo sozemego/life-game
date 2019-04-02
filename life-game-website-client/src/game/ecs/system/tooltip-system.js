@@ -42,10 +42,14 @@ export const createTooltipSystem = (gameEngine, entityEngine, gfxEngine) => {
       };
       if (resourceProvider) {
         const { resource } = resourceProvider;
-        const resourceSprite = gfxEngine.createSprite(resource, {
-          x: x + width / 2,
-          y: y + height / 2,
-        }, group);
+        const resourceSprite = gfxEngine.createSprite(
+          resource,
+          {
+            x: x + width / 2,
+            y: y + height / 2,
+          },
+          group,
+        );
         resourceSprite.renderOrder = 1;
         resourceSprite.material.depthTest = false;
         resourceSprite.scale.set(0.25, 0.25, 1);

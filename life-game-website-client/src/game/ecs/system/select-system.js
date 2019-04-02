@@ -1,12 +1,10 @@
 import { TYPES } from '../component/types';
 
 export const createSelectSystem = (gameEngine, entityEngine, gfxEngine) => {
-
   let previousSelectedEntity = null;
   let cleanup = () => {};
 
   const update = delta => {
-
     const { selectedEntity } = gameEngine;
 
     if (previousSelectedEntity && previousSelectedEntity !== selectedEntity) {

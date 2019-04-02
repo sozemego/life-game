@@ -1,9 +1,13 @@
 import { setLoadGameMessage } from './actions';
 import { createInputHandler } from './InputHandler';
-import { createGameEngine, GameEngine } from "./game-engine/GameEngine";
-import { GameClient } from "./GameClient";
+import { createGameEngine, GameEngine } from './game-engine/GameEngine';
+import { GameClient } from './GameClient';
 
-export const createGameService = (client: GameClient, dispatch: Function, getState: Function): GameService => {
+export const createGameService = (
+  client: GameClient,
+  dispatch: Function,
+  getState: Function,
+): GameService => {
   const container = document.getElementById('game-container');
   if (!container) {
     throw new Error('Game container needs to exist!');
@@ -49,7 +53,6 @@ export const createGameService = (client: GameClient, dispatch: Function, getSta
       // @ts-ignore
       msg.dtos.forEach(gameEngine.addEntity);
     });
-
   };
 
   const destroy = () => {
@@ -62,11 +65,11 @@ export const createGameService = (client: GameClient, dispatch: Function, getSta
 
   return {
     start,
-    destroy
+    destroy,
   };
 };
 
 export interface GameService {
-  start: Function,
-  destroy: Function
+  start: Function;
+  destroy: Function;
 }
