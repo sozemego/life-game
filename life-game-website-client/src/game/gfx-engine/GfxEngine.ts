@@ -33,6 +33,7 @@ import {
 import Stats from 'stats-js';
 import { InputHandler } from '../InputHandler';
 import { World } from '../dto';
+import { Cursor } from './cursor';
 
 export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): GfxEngine => {
   const scene = new Scene();
@@ -479,6 +480,10 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     update = updateFn;
   };
 
+  const setCursor = (type: Cursor) => {
+
+  };
+
   return {
     start,
     setWorld,
@@ -487,6 +492,7 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     getClickedSprite,
     createGroup,
     setUpdate,
+    setCursor,
   };
 };
 
@@ -498,6 +504,7 @@ export interface GfxEngine {
   getClickedSprite: () => Sprite | null;
   createGroup: (layer: number | null) => [Group, Function];
   setUpdate: (updateFn: (delta: number) => void) => void;
+  setCursor: (type: Cursor) => void;
 }
 
 export interface CreateSpriteOptions {

@@ -158,7 +158,7 @@ interface ListenerContainer {
   [eventType: string]: Function[];
 }
 
-interface Mouse {
+export interface Mouse {
   rawX: number;
   rawY: number;
   x: number;

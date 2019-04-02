@@ -1,13 +1,14 @@
 import { createEntityEngine, EntityEngine } from '../ecs/EntityEngine';
 import { getFactories } from '../ecs/component/FactoryRegistry';
-import { createGfxEngine } from '../gfx-engine/GfxEngine';
-import { createSelectEntityHandler } from './input/select-entity-handler';
+import { createGfxEngine, GfxEngine } from "../gfx-engine/GfxEngine";
+import { createSelectEntityHandler } from './input/SelectEntityHandler';
 import { InputHandler } from '../InputHandler';
 // @ts-ignore
 import { createEntity, Entity } from '../ecs/Entity';
 import { createGraphicsSystem } from "../ecs/system/GraphicsSystem";
 import { createTooltipSystem } from "../ecs/system/TooltipSystem";
 import { createSelectSystem } from "../ecs/system/SelectSystem";
+import { createCursorHandler } from "./input/CursorHandler";
 
 const TILE_SIZE = 1;
 
@@ -42,10 +43,14 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
     gfxEngine.start();
 
     inputHandler.onMouseUp(createSelectEntityHandler(gameEngine));
+
+    inputHandler.onMouseMove(createCursorHandler(gameEngine));
   };
 
   gameEngine.setWorld = world => {
-    gameEngine.gfxEngine.setWorld(world);
+    if (gameEngine.gfxEngine) {
+      gameEngine.gfxEngine.setWorld(world);
+    }
   };
 
   gameEngine.addEntity = dto => {
@@ -72,7 +77,7 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
 
 export interface GameEngine {
   selectedEntity: Entity | null;
-  gfxEngine: any;
+  gfxEngine: GfxEngine | null;
   entityEngine: EntityEngine | null;
   start: () => void;
   stop: () => void;

@@ -1,9 +1,17 @@
 import { TYPES } from '../../ecs/component/types';
 import { getEntities } from '../../ecs/system/utils';
+import { GameEngine } from '../GameEngine';
+import { Mouse } from '../../InputHandler';
+import { Entity } from '../../ecs/Entity';
+import { GraphicsComponent } from '../../ecs/component/FactoryRegistry';
 
-export const createSelectEntityHandler = gameEngine => {
-  return mouse => {
+export const createSelectEntityHandler = (gameEngine: GameEngine) => {
+  return (mouse: Mouse) => {
     const { gfxEngine, entityEngine } = gameEngine;
+
+    if (!gfxEngine) {
+      return false;
+    }
 
     const clickedSprite = gfxEngine.getClickedSprite();
 
@@ -16,8 +24,12 @@ export const createSelectEntityHandler = gameEngine => {
       return true;
     }
 
+    // @ts-ignore
     const [selectedEntity] = getEntities(entityEngine, [TYPES.GRAPHICS]).filter(
-      entity => entity.getComponent(TYPES.GRAPHICS).sprite === clickedSprite,
+      (entity: Entity) => {
+        const graphics = entity.getComponent(TYPES.GRAPHICS) as GraphicsComponent;
+        return graphics.sprite === clickedSprite;
+      },
     );
 
     if (!selectedEntity) {
