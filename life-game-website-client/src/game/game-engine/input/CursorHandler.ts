@@ -1,5 +1,7 @@
 import { GameEngine } from '../GameEngine';
-import { Mouse } from "../../InputHandler";
+import { Mouse } from '../../InputHandler';
+// @ts-ignore
+import { Cursor } from "../../gfx-engine/Cursor";
 
 /**
  * Used to determine the cursor art on mouse move.
@@ -15,16 +17,20 @@ export const createCursorHandler = (gameEngine: GameEngine) => {
     const hoveredSprite = gfxEngine.getSpriteUnderMouse();
 
     if (!hoveredSprite) {
-      return false;
+      // return false;
     }
 
     //many possibilities to chose a cursor
-    //1. if no entity is selected, means we might want to select it
+    //1. Nothing is selected and mouse hovers over nothing
     const selectedEntity = gameEngine.selectedEntity;
-    if (!selectedEntity) {
-
+    if (!selectedEntity && !hoveredSprite) {
+      gfxEngine.setCursor(Cursor.DEFAULT);
+    } else if (!selectedEntity && hoveredSprite) {
+      gfxEngine.setCursor(Cursor.SELECT);
+    } else if (selectedEntity) {
+      gfxEngine.setCursor(Cursor.TARGET);
     }
 
-    return true;
+    return false;
   };
 };

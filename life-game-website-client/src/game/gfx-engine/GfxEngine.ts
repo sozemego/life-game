@@ -2,10 +2,8 @@ import {
   AmbientLight,
   AxesHelper,
   Box3,
-  BoxGeometry,
   BoxHelper,
   CameraHelper,
-  Color,
   DirectionalLight,
   DirectionalLightHelper,
   FrontSide,
@@ -14,9 +12,6 @@ import {
   Group,
   Mesh,
   MeshLambertMaterial,
-  MeshPhongMaterial,
-  Object3D,
-  OrthographicCamera,
   PCFShadowMap,
   PerspectiveCamera,
   PlaneGeometry,
@@ -26,14 +21,13 @@ import {
   Sprite,
   SpriteMaterial,
   TextureLoader,
-  Vector2,
   Vector3,
   WebGLRenderer,
 } from 'three/src/Three';
 import Stats from 'stats-js';
 import { InputHandler } from '../InputHandler';
 import { World } from '../dto';
-import { Cursor } from './cursor';
+import { Cursor } from './Cursor';
 
 export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): GfxEngine => {
   const scene = new Scene();
@@ -480,8 +474,16 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     update = updateFn;
   };
 
-  const setCursor = (type: Cursor) => {
+  const cursors = {
+    [Cursor.DEFAULT]: 'textures/default_cursor.png',
+    [Cursor.TARGET]: 'textures/target_cursor.png',
+    [Cursor.SELECT]: 'textures/select_cursor.png',
+  };
 
+  const setCursor = (type: Cursor) => {
+    const cursor = cursors[type];
+    container.style.cursor = `url(${cursor}), auto`;
+    console.log('setting cursor', type);
   };
 
   return {
