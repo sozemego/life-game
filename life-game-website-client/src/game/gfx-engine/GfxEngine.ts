@@ -483,7 +483,6 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
   const setCursor = (type: Cursor) => {
     const cursor = cursors[type];
     container.style.cursor = `url(${cursor}), auto`;
-    console.log('setting cursor', type);
   };
 
   return {
