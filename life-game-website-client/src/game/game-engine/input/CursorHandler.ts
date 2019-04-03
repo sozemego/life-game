@@ -15,14 +15,10 @@ export const createCursorHandler = (gameEngine: GameEngine) => {
     }
 
     const hoveredSprite = gfxEngine.getSpriteUnderMouse();
-
-    if (!hoveredSprite) {
-      // return false;
-    }
+    const selectedEntity = gameEngine.selectedEntity;
 
     //many possibilities to chose a cursor
     //1. Nothing is selected and mouse hovers over nothing
-    const selectedEntity = gameEngine.selectedEntity;
     if (!selectedEntity && !hoveredSprite) {
       gfxEngine.setCursor(Cursor.DEFAULT);
     } else if (!selectedEntity && hoveredSprite) {
