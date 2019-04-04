@@ -9,6 +9,7 @@ import { createGraphicsSystem } from "../ecs/system/GraphicsSystem";
 import { createTooltipSystem } from "../ecs/system/TooltipSystem";
 import { createSelectSystem } from "../ecs/system/SelectSystem";
 import { createCursorHandler } from "./input/CursorHandler";
+import { createTargetEntityHandler } from "./input/TargetEntityHandler";
 
 const TILE_SIZE = 1;
 
@@ -46,6 +47,7 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
     gfxEngine.start();
 
     inputHandler.onMouseUp(createSelectEntityHandler(gameEngine));
+    inputHandler.onMouseUp(createTargetEntityHandler(gameEngine));
 
     // inputHandler.onMouseMove(createCursorHandler(gameEngine));
   };

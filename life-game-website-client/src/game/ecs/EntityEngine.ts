@@ -24,11 +24,14 @@ export const createEntityEngine = () => {
 
   const getEntities = () => entities;
 
+  const getEntity = (id: string) => getEntities()[id];
+
   return {
     addEntity,
     addSystem,
     update,
     getEntities,
+    getEntity,
   };
 };
 
@@ -37,6 +40,7 @@ export interface EntityEngine {
   addSystem: (system: any) => void;
   update: (delta: number) => void;
   getEntities: () => EntityContainer;
+  getEntity: (id: string) => Entity | null;
 }
 
 interface EntityContainer {
