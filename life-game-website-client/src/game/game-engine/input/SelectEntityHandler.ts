@@ -15,13 +15,14 @@ export const createSelectEntityHandler = (gameEngine: GameEngine) => {
     }
 
     const clickedSprite = gfxEngine.getClickedSprite();
+    const spriteUnderMouse = gfxEngine.getSpriteUnderMouse();
     const currentSelectedEntity = gameEngine.selectedEntity;
 
     if (!clickedSprite && !currentSelectedEntity) {
       return false;
     }
 
-    if (currentSelectedEntity && button === 2) {
+    if (currentSelectedEntity && !spriteUnderMouse && button === 2) {
       gameEngine.selectedEntity = null;
       return true;
     }
