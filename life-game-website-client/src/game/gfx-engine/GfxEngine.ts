@@ -25,7 +25,7 @@ import {
   WebGLRenderer,
 } from 'three/src/Three';
 import Stats from 'stats-js';
-import { InputHandler } from '../InputHandler';
+import { InputHandler, Mouse } from "../InputHandler";
 import { World } from '../dto';
 import { Cursor, defaultCursor, selectCursor, targetCursor } from "./Cursor";
 
@@ -101,6 +101,8 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
 
   const pressedKeys = new Set();
 
+  let mouse: Mouse = { x: 0, y: 0, rawX: 0, rawY: 0, button: 0 };
+
   let boxHelpersEnabled = true;
   let gridHelperEnabled = true;
   let gridHelper: GridHelper | null = null;
@@ -151,7 +153,8 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
   let intersectedTile: Mesh | null = null;
   let intersectedSprite: Sprite | null = null;
 
-  inputHandler.onMouseMove(mouse => {
+  inputHandler.onMouseMove(nextMouse => {
+    mouse = nextMouse;
     const rayCaster = new Raycaster();
     camera.updateMatrixWorld(true);
     rayCaster.setFromCamera(mouse, camera);
@@ -486,7 +489,10 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
   const setCursor = (type: Cursor) => {
     const cursor = cursors[type];
     container.style.cursor = `url(${cursor}), auto`;
+    container.getBoundingClientRect();
   };
+
+  const getMouse = () => mouse;
 
   return {
     start,
@@ -497,6 +503,7 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     createGroup,
     setUpdate,
     setCursor,
+    getMouse,
   };
 };
 
@@ -509,6 +516,7 @@ export interface GfxEngine {
   createGroup: (layer: number | null) => [Group, Function];
   setUpdate: (updateFn: (delta: number) => void) => void;
   setCursor: (type: Cursor) => void;
+  getMouse: () => Mouse;
 }
 
 export interface CreateSpriteOptions {

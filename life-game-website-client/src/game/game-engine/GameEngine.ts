@@ -23,6 +23,8 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
     addEntity: () => {},
   };
 
+  const updateCursor = createCursorHandler(gameEngine);
+
   gameEngine.start = () => {
     const gfxEngine = createGfxEngine(inputHandler, TILE_SIZE);
     gameEngine.gfxEngine = gfxEngine;
@@ -37,6 +39,7 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
     // @ts-ignore
     gfxEngine.setUpdate(delta => {
       entityEngine.update(delta);
+      updateCursor(gfxEngine.getMouse());
     });
 
     // @ts-ignore
@@ -44,7 +47,7 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
 
     inputHandler.onMouseUp(createSelectEntityHandler(gameEngine));
 
-    inputHandler.onMouseMove(createCursorHandler(gameEngine));
+    // inputHandler.onMouseMove(createCursorHandler(gameEngine));
   };
 
   gameEngine.setWorld = world => {
