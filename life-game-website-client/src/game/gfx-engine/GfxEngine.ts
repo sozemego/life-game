@@ -142,6 +142,9 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
         clickedSprite = null;
       }
     }
+    if (mouse.button === 2) {
+      clickedSprite = null;
+    }
     return false;
   });
 

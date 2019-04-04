@@ -8,6 +8,7 @@ import { GraphicsComponent } from '../../ecs/component/FactoryRegistry';
 export const createSelectEntityHandler = (gameEngine: GameEngine) => {
   return (mouse: Mouse) => {
     const { gfxEngine, entityEngine } = gameEngine;
+    const { button } = mouse;
 
     if (!gfxEngine) {
       return false;
@@ -20,7 +21,7 @@ export const createSelectEntityHandler = (gameEngine: GameEngine) => {
       return false;
     }
 
-    if (currentSelectedEntity && mouse.button === 2) {
+    if (currentSelectedEntity && button === 2) {
       gameEngine.selectedEntity = null;
       return true;
     }
