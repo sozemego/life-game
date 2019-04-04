@@ -27,7 +27,7 @@ import {
 import Stats from 'stats-js';
 import { InputHandler } from '../InputHandler';
 import { World } from '../dto';
-import { Cursor } from './Cursor';
+import { Cursor, defaultCursor, selectCursor, targetCursor } from "./Cursor";
 
 export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): GfxEngine => {
   const scene = new Scene();
@@ -478,9 +478,9 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
   };
 
   const cursors = {
-    [Cursor.DEFAULT]: 'textures/default_cursor.png',
-    [Cursor.TARGET]: 'textures/target_cursor.png',
-    [Cursor.SELECT]: 'textures/select_cursor.png',
+    [Cursor.DEFAULT]: defaultCursor,
+    [Cursor.SELECT]: selectCursor,
+    [Cursor.TARGET]: targetCursor,
   };
 
   const setCursor = (type: Cursor) => {
