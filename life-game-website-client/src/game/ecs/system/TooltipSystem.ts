@@ -36,7 +36,7 @@ export const createTooltipSystem = (
     resourceProviders
       .filter(entity => {
         const graphics = entity.getComponent(TYPES.GRAPHICS) as GraphicsComponent;
-        return graphics.sprite === intersectedSprite;
+        return graphics.sprite === nextIntersectedSprite;
       })
       .forEach(entity => updateEntity(delta, entity));
     intersectedSprite = nextIntersectedSprite;
@@ -73,6 +73,8 @@ export const createTooltipSystem = (
         resourceSprite.position.x += 0.5;
         resourceSprite.position.y += 0.5;
       }
+    } else {
+
     }
   };
 
