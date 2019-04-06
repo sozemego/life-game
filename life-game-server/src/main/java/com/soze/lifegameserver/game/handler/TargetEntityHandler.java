@@ -22,9 +22,10 @@ public class TargetEntityHandler {
   }
   
   private void handleTargetEntity(GameSession session, TargetEntity message) {
-    LOG.info("User with session [{}] wants entity [{}] to target entity [{}]",
-             session.getSession().getId(), message.getSourceEntityId(), message.getTargetEntityId()
+    LOG.info("User with session [{}] wants entity [{}] to target entity [{}] with action [{}]",
+             session.getSession().getId(), message.getSourceEntityId(), message.getTargetEntityId(), message.getAction()
     );
+    
     
     
   }
