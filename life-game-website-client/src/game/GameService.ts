@@ -53,6 +53,12 @@ export const createGameService = (
       // @ts-ignore
       msg.dtos.forEach(gameEngine.addEntity);
     });
+
+    client.onMessage('ENTITY_POSITION', (msg: any) => {
+      if (gameEngine) {
+        gameEngine.setEntityPosition(msg.entityId, msg.x, msg.y);
+      }
+    });
   };
 
   const destroy = () => {

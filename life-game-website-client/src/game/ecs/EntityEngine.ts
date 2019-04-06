@@ -24,7 +24,7 @@ export const createEntityEngine = () => {
 
   const getEntities = () => entities;
 
-  const getEntity = (id: string) => getEntities()[id];
+  const getEntity = (id: number) => getEntities()[id];
 
   return {
     addEntity,
@@ -40,11 +40,11 @@ export interface EntityEngine {
   addSystem: (system: any) => void;
   update: (delta: number) => void;
   getEntities: () => EntityContainer;
-  getEntity: (id: string) => Entity | null;
+  getEntity: (id: number) => Entity | null;
 }
 
 interface EntityContainer {
-  [id: string]: Entity;
+  [id: number]: Entity;
 }
 
 export interface EntitySystem {
