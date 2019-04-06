@@ -1,5 +1,5 @@
 import { createEntityEngine, EntityEngine } from '../ecs/EntityEngine';
-import { getFactories, PhysicsComponent } from "../ecs/component/FactoryRegistry";
+import { getFactories, PhysicsComponent } from '../ecs/component/FactoryRegistry';
 import { createGfxEngine, GfxEngine } from '../gfx-engine/GfxEngine';
 import { createSelectEntityHandler } from './input/SelectEntityHandler';
 import { InputHandler } from '../InputHandler';
@@ -12,7 +12,7 @@ import { createCursorHandler } from './input/CursorHandler';
 import { createTargetEntityHandler } from './input/TargetEntityHandler';
 import { GameClient } from '../GameClient';
 import { EntityAction } from './EntityAction';
-import { TYPES } from "../ecs/component/types";
+import { TYPES } from '../ecs/component/types';
 
 const TILE_SIZE = 1;
 
@@ -87,12 +87,12 @@ export const createGameEngine = (inputHandler: InputHandler, client: GameClient)
   };
 
   gameEngine.setEntityPosition = (entityId, x, y) => {
-    const {entityEngine} = gameEngine;
+    const { entityEngine } = gameEngine;
     if (!entityEngine) {
       return;
     }
     const entity = entityEngine.getEntity(entityId);
-    if(!entity) {
+    if (!entity) {
       return;
     }
     const physics = entity.getComponent(TYPES.PHYSICS) as PhysicsComponent;
