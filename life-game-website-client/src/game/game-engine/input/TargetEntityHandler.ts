@@ -38,7 +38,7 @@ export const createTargetEntityHandler = (gameEngine: GameEngine) => {
       //1a. check if targeted entity is a resource provider
       const targetResourceProvider = clickedEntity.getComponent(TYPES.RESOURCE_PROVIDER);
       if (targetResourceProvider) {
-        console.log('CAN HARVEST')
+        gameEngine.targetEntity(currentSelectedEntity, clickedEntity);
       }
 
     }

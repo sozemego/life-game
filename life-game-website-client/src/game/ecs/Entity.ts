@@ -1,4 +1,4 @@
-export const createEntity = (id: any): Entity => {
+export const createEntity = (id: number): Entity => {
   const components: Components = {};
 
   const addComponent = (component: Component) => {
@@ -31,7 +31,7 @@ export const createEntity = (id: any): Entity => {
 };
 
 export interface Entity {
-  id: any;
+  readonly id: number;
   components: object;
   addComponent: (component: Component) => void;
   removeComponent: (type: string) => void;

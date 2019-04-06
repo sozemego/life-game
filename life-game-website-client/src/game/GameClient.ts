@@ -25,9 +25,21 @@ export const createGameClient = (user: User): GameClient => {
     webSocketClient.send(requestWorldMessage);
   };
 
+  const targetEntity = (source: number, target: number) => {
+    const targetEntityMessage = {
+      messageId: uuid(),
+      type: 'TARGET_ENTITY',
+      sourceEntityId: source,
+      targetEntityId: target,
+    };
+    console.log(targetEntityMessage);
+    webSocketClient.send(targetEntityMessage);
+  };
+
   return {
     authorize,
     requestGameWorld,
+    targetEntity,
     send: webSocketClient.send,
     connect: webSocketClient.connect,
     onMessage: webSocketClient.onMessage,
@@ -38,6 +50,7 @@ export const createGameClient = (user: User): GameClient => {
 export interface GameClient {
   authorize: Function;
   requestGameWorld: Function;
+  targetEntity: (source: number, target: number) => void;
   send: (data: object) => void;
   connect: Function;
   onMessage: (type: string, message: any) => void;

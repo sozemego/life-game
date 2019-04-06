@@ -1,19 +1,20 @@
 import { createEntityEngine, EntityEngine } from '../ecs/EntityEngine';
 import { getFactories } from '../ecs/component/FactoryRegistry';
-import { createGfxEngine, GfxEngine } from "../gfx-engine/GfxEngine";
+import { createGfxEngine, GfxEngine } from '../gfx-engine/GfxEngine';
 import { createSelectEntityHandler } from './input/SelectEntityHandler';
 import { InputHandler } from '../InputHandler';
 // @ts-ignore
 import { createEntity, Entity } from '../ecs/Entity';
-import { createGraphicsSystem } from "../ecs/system/GraphicsSystem";
-import { createTooltipSystem } from "../ecs/system/TooltipSystem";
-import { createSelectSystem } from "../ecs/system/SelectSystem";
-import { createCursorHandler } from "./input/CursorHandler";
-import { createTargetEntityHandler } from "./input/TargetEntityHandler";
+import { createGraphicsSystem } from '../ecs/system/GraphicsSystem';
+import { createTooltipSystem } from '../ecs/system/TooltipSystem';
+import { createSelectSystem } from '../ecs/system/SelectSystem';
+import { createCursorHandler } from './input/CursorHandler';
+import { createTargetEntityHandler } from './input/TargetEntityHandler';
+import { GameClient } from '../GameClient';
 
 const TILE_SIZE = 1;
 
-export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
+export const createGameEngine = (inputHandler: InputHandler, client: GameClient): GameEngine => {
   const gameEngine: GameEngine = {
     selectedEntity: null,
     gfxEngine: null,
@@ -22,6 +23,7 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
     stop: () => {},
     setWorld: () => {},
     addEntity: () => {},
+    targetEntity: () => {},
   };
 
   const updateCursor = createCursorHandler(gameEngine);
@@ -77,6 +79,10 @@ export const createGameEngine = (inputHandler: InputHandler): GameEngine => {
     gameEngine.entityEngine.addEntity(entity);
   };
 
+  gameEngine.targetEntity = (sourceEntity: Entity, targetEntity: Entity) => {
+    client.targetEntity(sourceEntity.id, targetEntity.id)
+  };
+
   return gameEngine;
 };
 
@@ -88,4 +94,5 @@ export interface GameEngine {
   stop: () => void;
   setWorld: (world: any) => void;
   addEntity: (entity: any) => void;
+  targetEntity: (sourceEntity: Entity, targetEntity: Entity) => void;
 }

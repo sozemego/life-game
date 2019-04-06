@@ -32,7 +32,7 @@ export const createGameService = (
 
   const createGame = () => {
     dispatch(setLoadGameMessage('CREATING GAME ENGINE'));
-    gameEngine = createGameEngine(inputHandler);
+    gameEngine = createGameEngine(inputHandler, client);
     gameEngine.start();
 
     dispatch(setLoadGameMessage('REQUESTING GAME WORLD'));
