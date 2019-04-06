@@ -66,5 +66,16 @@ public class GameCoordinator {
     }
     return null;
   }
+  
+  public GameEngine getGameEngineByWorldId(long worldId) {
+    for (GameRunner gameRunner : gameRunners) {
+      for (GameEngine engine : gameRunner.getEngines()) {
+        if (engine.getWorldId() == worldId) {
+          return engine;
+        }
+      }
+    }
+    return null;
+  }
 
 }
