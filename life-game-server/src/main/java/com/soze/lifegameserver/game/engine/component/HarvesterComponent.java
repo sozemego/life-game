@@ -2,17 +2,17 @@ package com.soze.lifegameserver.game.engine.component;
 
 public class HarvesterComponent extends BaseComponent {
   
-  private long targetId;
+  private Long targetId;
   
   public HarvesterComponent() {
     super(ComponentType.HARVESTER);
   }
   
-  public long getTargetId() {
+  public Long getTargetId() {
     return targetId;
   }
   
-  public void setTargetId(long targetId) {
+  public void setTargetId(Long targetId) {
     this.targetId = targetId;
   }
   

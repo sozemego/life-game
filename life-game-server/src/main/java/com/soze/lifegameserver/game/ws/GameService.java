@@ -5,6 +5,8 @@ import com.soze.klecs.entity.Entity;
 import com.soze.lifegame.common.ws.message.client.ClientMessage;
 import com.soze.lifegameserver.game.GameCoordinator;
 import com.soze.lifegameserver.game.engine.GameEngine;
+import com.soze.lifegameserver.game.engine.system.MovementSystem;
+import com.soze.lifegameserver.game.engine.system.ResourceHarvesterSystem;
 import com.soze.lifegameserver.game.entity.EntityCache;
 import com.soze.lifegameserver.game.entity.EntityService;
 import com.soze.lifegameserver.game.entity.PersistentEntity;
@@ -51,7 +53,9 @@ public class GameService {
     List<World> worlds = worldService.getAllWorlds();
     LOG.info("Retrieved [{}] worlds", worlds.size());
     for (World world : worlds) {
-      addGameEngine(world);
+      if (world.getId() > 0) {
+        addGameEngine(world);
+      }
     }
   }
   
@@ -66,6 +70,8 @@ public class GameService {
   
   private GameEngine createGameEngine(World world) {
     Engine engine = new Engine();
+    engine.addSystem(new MovementSystem(engine));
+    engine.addSystem(new ResourceHarvesterSystem(engine));
     entityCache.attachToEngine(world, engine);
     LOG.info("Adding [{}] entities to GameEngine for world with userId [{}]", world.getEntities().size(), world.getUserId());
     for (PersistentEntity persistentEntity : world.getEntities()) {
