@@ -2,18 +2,25 @@ package com.soze.lifegameserver.game.engine.system;
 
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
+import com.soze.lifegame.common.ws.message.server.EntityPositionMessage;
 import com.soze.lifegameserver.game.engine.EntityUtils;
 import com.soze.lifegameserver.game.engine.Nodes;
 import com.soze.lifegameserver.game.engine.component.MovementComponent;
 import com.soze.lifegameserver.game.engine.component.PhysicsComponent;
+import com.soze.lifegameserver.game.ws.GameSession;
+import org.glassfish.jersey.internal.util.Producer;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class MovementSystem extends BaseEntitySystem {
   
-  public MovementSystem(Engine engine) {
+  private final Producer<Optional<GameSession>> gameSessionProducer;
+  
+  public MovementSystem(Engine engine, Producer<Optional<GameSession>> gameSessionProducer) {
     super(engine);
+    this.gameSessionProducer = gameSessionProducer;
   }
   
   @Override
@@ -28,7 +35,7 @@ public class MovementSystem extends BaseEntitySystem {
     if (targetId == null) {
       return;
     }
-  
+    
     Optional<Entity> targetOptional = getEngine().getEntityById(targetId);
     if (!targetOptional.isPresent()) {
       movement.setTargetEntityId(null);
@@ -47,5 +54,14 @@ public class MovementSystem extends BaseEntitySystem {
     
     physics.setX(x + (cos * speed * delta));
     physics.setY(y + (sin * speed * delta));
+    getSession().ifPresent(
+      session -> session.send(
+        new EntityPositionMessage(UUID.randomUUID(), (Long) entity.getId(), physics.getX(), physics.getY()))
+    );
   }
+  
+  public Optional<GameSession> getSession() {
+    return gameSessionProducer.call();
+  }
+  
 }

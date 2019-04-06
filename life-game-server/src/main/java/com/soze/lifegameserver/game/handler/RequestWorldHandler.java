@@ -1,18 +1,14 @@
 package com.soze.lifegameserver.game.handler;
 
-import com.soze.klecs.engine.Engine;
-import com.soze.klecs.entity.Entity;
 import com.soze.lifegame.common.dto.world.EntityDto;
 import com.soze.lifegame.common.dto.world.TileDto;
 import com.soze.lifegame.common.dto.world.WorldDto;
 import com.soze.lifegame.common.ws.message.client.RequestWorldMessage;
 import com.soze.lifegame.common.ws.message.server.EntityMessage;
 import com.soze.lifegame.common.ws.message.server.WorldMessage;
-import com.soze.lifegameserver.game.GameCoordinator;
-import com.soze.lifegameserver.game.engine.GameEngine;
+import com.soze.lifegameserver.game.SessionCache;
 import com.soze.lifegameserver.game.entity.EntityCache;
 import com.soze.lifegameserver.game.entity.EntityService;
-import com.soze.lifegameserver.game.entity.PersistentEntity;
 import com.soze.lifegameserver.game.world.Tile;
 import com.soze.lifegameserver.game.world.World;
 import com.soze.lifegameserver.game.world.WorldService;
@@ -39,16 +35,19 @@ public class RequestWorldHandler {
   private final EntityService entityService;
   private final EntityCache entityCache;
   private final GameService gameService;
+  private final SessionCache sessionCache;
   
   @Autowired
   public RequestWorldHandler(WorldService worldService,
                              EntityService entityService,
                              EntityCache entityCache,
-                             GameService gameService) {
+                             GameService gameService,
+                             SessionCache sessionCache) {
     this.worldService = worldService;
     this.entityService = entityService;
     this.entityCache = entityCache;
     this.gameService = gameService;
+    this.sessionCache = sessionCache;
   }
   
   @EventListener(condition = "#event.clientMessageType.equals('REQUEST_WORLD')")
@@ -69,6 +68,7 @@ public class RequestWorldHandler {
     }
     
     gameSession.setWorldId(world.getId());
+    sessionCache.addGameSession(world.getId(), gameSession);
     
     LOG.info("Sending world data to {}", gameSession.getSession().getId());
     gameSession.send(new WorldMessage(UUID.randomUUID(), dto));

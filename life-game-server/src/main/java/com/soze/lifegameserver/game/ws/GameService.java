@@ -4,6 +4,7 @@ import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
 import com.soze.lifegame.common.ws.message.client.ClientMessage;
 import com.soze.lifegameserver.game.GameCoordinator;
+import com.soze.lifegameserver.game.SessionCache;
 import com.soze.lifegameserver.game.engine.GameEngine;
 import com.soze.lifegameserver.game.engine.system.MovementSystem;
 import com.soze.lifegameserver.game.engine.system.ResourceHarvesterSystem;
@@ -13,6 +14,7 @@ import com.soze.lifegameserver.game.entity.PersistentEntity;
 import com.soze.lifegameserver.game.handler.ClientMessageEvent;
 import com.soze.lifegameserver.game.world.World;
 import com.soze.lifegameserver.game.world.WorldService;
+import org.glassfish.jersey.internal.util.Producer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GameService {
@@ -33,18 +36,21 @@ public class GameService {
   private final GameCoordinator gameCoordinator;
   private final EntityService entityService;
   private final EntityCache entityCache;
+  private final SessionCache sessionCache;
   
   @Autowired
   public GameService(ApplicationEventPublisher applicationEventPublisher,
                      WorldService worldService,
                      GameCoordinator gameCoordinator,
                      EntityService entityService,
-                     EntityCache entityCache) {
+                     EntityCache entityCache,
+                     SessionCache sessionCache) {
     this.applicationEventPublisher = applicationEventPublisher;
     this.worldService = worldService;
     this.gameCoordinator = gameCoordinator;
     this.entityService = entityService;
     this.entityCache = entityCache;
+    this.sessionCache = sessionCache;
   }
   
   @PostConstruct
@@ -70,10 +76,12 @@ public class GameService {
   
   private GameEngine createGameEngine(World world) {
     Engine engine = new Engine();
-    engine.addSystem(new MovementSystem(engine));
+    Producer<Optional<GameSession>> sessionProducer = () -> sessionCache.getSession(world.getId());
+    engine.addSystem(new MovementSystem(engine, sessionProducer));
     engine.addSystem(new ResourceHarvesterSystem(engine));
     entityCache.attachToEngine(world, engine);
-    LOG.info("Adding [{}] entities to GameEngine for world with userId [{}]", world.getEntities().size(), world.getUserId());
+    LOG.info("Adding [{}] entities to GameEngine for world with userId [{}]", world.getEntities().size(),
+             world.getUserId());
     for (PersistentEntity persistentEntity : world.getEntities()) {
       Entity entity = entityService.convert(engine, persistentEntity);
       engine.addEntity(entity);

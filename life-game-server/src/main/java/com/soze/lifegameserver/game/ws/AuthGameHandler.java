@@ -6,6 +6,7 @@ import com.soze.lifegame.common.ws.message.client.AuthorizeMessage;
 import com.soze.lifegame.common.ws.message.client.ClientMessage;
 import com.soze.lifegame.common.ws.message.server.AuthorizedMessage;
 import com.soze.lifegameserver.dto.User;
+import com.soze.lifegameserver.game.SessionCache;
 import com.soze.lifegameserver.tokenregistry.service.TokenRegistryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,21 +27,23 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class AuthGameHandler extends TextWebSocketHandler {
-
+  
   private static final Logger LOG = LoggerFactory.getLogger(AuthGameHandler.class);
-
+  
   private final GameService gameService;
   private final TokenRegistryService tokenRegistryService;
-
+  private final SessionCache sessionCache;
+  
   private final Set<WebSocketSession> unauthorizedSessions = new HashSet<WebSocketSession>();
   private final Map<WebSocketSession, GameSession> authorizedSessions = new ConcurrentHashMap<>();
-
+  
   @Autowired
-  public AuthGameHandler(GameService gameService, TokenRegistryService tokenRegistryService) {
+  public AuthGameHandler(GameService gameService, TokenRegistryService tokenRegistryService, SessionCache sessionCache) {
     this.gameService = gameService;
     this.tokenRegistryService = tokenRegistryService;
+    this.sessionCache = sessionCache;
   }
-
+  
   @Override
   //TODO write test for this method
   public void handleTextMessage(WebSocketSession session, TextMessage textMessage) {
@@ -72,25 +75,28 @@ public class AuthGameHandler extends TextWebSocketHandler {
       }
     }
   }
-
+  
   @Override
   public void afterConnectionEstablished(WebSocketSession session) throws Exception {
     //TODO unauthorized sessions need to be cleared after a short time
     LOG.info("{} connected, adding to unauthorized sessions", session.getId());
     unauthorizedSessions.add(session);
   }
-
+  
   @Override
   public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
     LOG.info("Session [{}] disconnected. Status [{}]", session.getId(), status);
     unauthorizedSessions.remove(session);
-    authorizedSessions.remove(session);
+    GameSession gameSession = authorizedSessions.remove(session);
+    if (gameSession != null) {
+      sessionCache.removeGameSession(gameSession);
+    }
   }
-
+  
   private GameSession createSession(WebSocketSession session, String token) {
     return new GameSession(session, new User(JWT.decode(token)), Instant.now());
   }
-
+  
   private void closeSession(WebSocketSession session, String reason) {
     try {
       session.close(new CloseStatus(CloseStatus.NORMAL.getCode(), reason));

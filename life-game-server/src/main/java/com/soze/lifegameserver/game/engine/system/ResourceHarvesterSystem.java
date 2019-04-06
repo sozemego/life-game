@@ -43,14 +43,14 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     Entity target = targetOptional.get();
     //2. if so, check if we arrived at the target
     float distance = EntityUtils.distance(entity, target);
-    System.out.println(distance);
+    MovementComponent movement = entity.getComponent(MovementComponent.class);
     if (distance > 0.1) {
-      MovementComponent movement = entity.getComponent(MovementComponent.class);
       movement.setTargetEntityId(targetId);
       //3. if we did not arrive yet, continue moving towards target
       return;
     }
     
+    movement.setTargetEntityId(null);
     //3. if we arrived, start harvesting
     //4. when harvesting is done, clear target.
     
