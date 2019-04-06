@@ -1,6 +1,7 @@
 import { Mouse } from "../../InputHandler";
 import { GameEngine } from "../GameEngine";
 import { TYPES } from "../../ecs/component/types";
+import { EntityAction } from "../EntityAction";
 
 export const createTargetEntityHandler = (gameEngine: GameEngine) => {
   return (mouse: Mouse) => {
@@ -38,7 +39,7 @@ export const createTargetEntityHandler = (gameEngine: GameEngine) => {
       //1a. check if targeted entity is a resource provider
       const targetResourceProvider = clickedEntity.getComponent(TYPES.RESOURCE_PROVIDER);
       if (targetResourceProvider) {
-        gameEngine.targetEntity(currentSelectedEntity, clickedEntity);
+        gameEngine.targetEntity(currentSelectedEntity, clickedEntity, EntityAction.HARVEST);
       }
 
     }

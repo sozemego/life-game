@@ -1,6 +1,7 @@
 import { createWebSocketClient } from '../api/WebSocketClient';
 import uuid from 'uuid/v4';
 import { User } from '../user/dto';
+import { EntityAction } from "./game-engine/EntityAction";
 
 export const createGameClient = (user: User): GameClient => {
   const webSocketClient = createWebSocketClient({
@@ -25,14 +26,14 @@ export const createGameClient = (user: User): GameClient => {
     webSocketClient.send(requestWorldMessage);
   };
 
-  const targetEntity = (source: number, target: number) => {
+  const targetEntity = (source: number, target: number, action: EntityAction) => {
     const targetEntityMessage = {
       messageId: uuid(),
       type: 'TARGET_ENTITY',
       sourceEntityId: source,
       targetEntityId: target,
+      action
     };
-    console.log(targetEntityMessage);
     webSocketClient.send(targetEntityMessage);
   };
 
@@ -50,7 +51,7 @@ export const createGameClient = (user: User): GameClient => {
 export interface GameClient {
   authorize: Function;
   requestGameWorld: Function;
-  targetEntity: (source: number, target: number) => void;
+  targetEntity: (source: number, target: number, action: EntityAction) => void;
   send: (data: object) => void;
   connect: Function;
   onMessage: (type: string, message: any) => void;

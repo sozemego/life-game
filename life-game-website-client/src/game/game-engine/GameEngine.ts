@@ -11,6 +11,7 @@ import { createSelectSystem } from '../ecs/system/SelectSystem';
 import { createCursorHandler } from './input/CursorHandler';
 import { createTargetEntityHandler } from './input/TargetEntityHandler';
 import { GameClient } from '../GameClient';
+import { EntityAction } from './EntityAction';
 
 const TILE_SIZE = 1;
 
@@ -79,8 +80,8 @@ export const createGameEngine = (inputHandler: InputHandler, client: GameClient)
     gameEngine.entityEngine.addEntity(entity);
   };
 
-  gameEngine.targetEntity = (sourceEntity: Entity, targetEntity: Entity) => {
-    client.targetEntity(sourceEntity.id, targetEntity.id)
+  gameEngine.targetEntity = (sourceEntity, targetEntity, action) => {
+    client.targetEntity(sourceEntity.id, targetEntity.id, action);
   };
 
   return gameEngine;
@@ -94,5 +95,5 @@ export interface GameEngine {
   stop: () => void;
   setWorld: (world: any) => void;
   addEntity: (entity: any) => void;
-  targetEntity: (sourceEntity: Entity, targetEntity: Entity) => void;
+  targetEntity: (sourceEntity: Entity, targetEntity: Entity, action: EntityAction) => void;
 }
