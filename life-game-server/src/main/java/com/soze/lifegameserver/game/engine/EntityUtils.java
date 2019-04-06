@@ -12,10 +12,10 @@ public class EntityUtils {
   }
   
   public static float distance(PhysicsComponent physics1, PhysicsComponent physics2) {
-    float x1 = physics1.getX();
-    float y1 = physics1.getY();
-    float x2 = physics2.getX();
-    float y2 = physics2.getY();
+    float x1 = physics1.getX() + (physics1.getWidth() / 2);
+    float y1 = physics1.getY() + (physics1.getHeight() / 2);
+    float x2 = physics2.getX() + (physics2.getWidth() / 2);
+    float y2 = physics2.getY() + (physics2.getHeight() / 2);
     double ac = Math.abs(y2 - y1);
     double cb = Math.abs(x2 - x1);
     return (float) Math.hypot(ac, cb);
@@ -28,10 +28,10 @@ public class EntityUtils {
   }
   
   public static float angle(PhysicsComponent physics1, PhysicsComponent physics2) {
-    float x1 = physics1.getX();
-    float y1 = physics1.getY();
-    float x2 = physics2.getX();
-    float y2 = physics2.getY();
+    float x1 = physics1.getX() + (physics1.getWidth() / 2);
+    float y1 = physics1.getY() + (physics1.getHeight() / 2);
+    float x2 = physics2.getX() + (physics2.getWidth() / 2);
+    float y2 = physics2.getY() + (physics2.getHeight() / 2);
     float degrees = (float) Math.atan2(
       y2 - y1, x2 - x1
     );
