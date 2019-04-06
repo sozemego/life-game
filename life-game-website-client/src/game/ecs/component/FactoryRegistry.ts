@@ -16,7 +16,7 @@ const createName = (component: any, context: FactoryRegistryContext): NameCompon
 factories[TYPES.NAME] = createName;
 
 const createPhysics = (component: any, context: FactoryRegistryContext): PhysicsComponent => {
-  return {...component};
+  return { ...component };
 };
 
 factories[TYPES.PHYSICS] = createPhysics;
@@ -39,14 +39,17 @@ const createResourceProvider = (
 
 factories[TYPES.RESOURCE_PROVIDER] = createResourceProvider;
 
-const createHarvester = (component: any, context: FactoryRegistryContext): ResourceHarvesterComponent => {
+const createHarvester = (
+  component: any,
+  context: FactoryRegistryContext,
+): ResourceHarvesterComponent => {
   return { ...component };
 };
 
 factories[TYPES.HARVESTER] = createHarvester;
 
 const createMovement = (component: any, context: FactoryRegistryContext): MovementComponent => {
-  return {...component};
+  return { ...component };
 };
 
 factories[TYPES.MOVEMENT] = createMovement;
@@ -74,11 +77,13 @@ export interface ResourceProviderComponent extends Component {
   resource: string;
 }
 
-export interface ResourceHarvesterComponent extends Component {}
+export interface ResourceHarvesterComponent extends Component {
+  targetEntityId?: number;
+}
 
 export interface MovementComponent extends Component {
-  speed: number,
-  targetEntityId?: number
+  speed: number;
+  targetEntityId?: number;
 }
 
 export interface FactoryRegistryContext {
