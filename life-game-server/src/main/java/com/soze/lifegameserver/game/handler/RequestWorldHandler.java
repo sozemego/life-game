@@ -68,10 +68,12 @@ public class RequestWorldHandler {
       addGameEngine(world);
     }
     
+    gameSession.setWorldId(world.getId());
+    
     LOG.info("Sending world data to {}", gameSession.getSession().getId());
     gameSession.send(new WorldMessage(UUID.randomUUID(), dto));
     
-    List<EntityDto> dtos = entityService.convert(entityCache.getEntities(world.getId()));
+    List<EntityDto> dtos = entityService.convert(entityCache.getEntities(world.getId()).values());
     
     LOG.info("Sending entity data about [{}] entities to [{}]", dtos.size(), gameSession.getSession().getId());
     gameSession.send(new EntityMessage(UUID.randomUUID(), dtos));

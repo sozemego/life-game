@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +22,7 @@ public class EntityCache {
 
   private static final Logger LOG = LoggerFactory.getLogger(EntityCache.class);
   
-  private final Map<Long, Set<Entity>> entities = new ConcurrentHashMap<>();
+  private final Map<Long, Map<Long, Entity>> entities = new ConcurrentHashMap<>();
   
   public void attachToEngine(World world, Engine engine) {
     final long worldId = world.getId();
@@ -30,16 +31,16 @@ public class EntityCache {
       if (event instanceof AddedEntityEvent) {
         entities.compute(worldId, (key, value) -> {
           if (value == null) {
-            value = new HashSet<>();
+            value = new HashMap<>();
           }
-          value.add(event.getEntity());
+          value.put((Long) event.getEntity().getId(), event.getEntity());
           return value;
         });
       }
       if (event instanceof RemovedEntityEvent) {
         entities.computeIfPresent(worldId, (key, value) -> {
           if (value != null) {
-            value.remove(event.getEntity());
+            value.remove(event.getEntity().getId());
           }
           return value;
         });
@@ -47,8 +48,8 @@ public class EntityCache {
     });
   }
   
-  public Set<Entity> getEntities(long worldId) {
-    return entities.getOrDefault(worldId, Collections.emptySet());
+  public Map<Long, Entity> getEntities(long worldId) {
+    return entities.getOrDefault(worldId, Collections.emptyMap());
   }
 
 }
