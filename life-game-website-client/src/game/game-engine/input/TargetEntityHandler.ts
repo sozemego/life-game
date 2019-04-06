@@ -18,7 +18,6 @@ export const createTargetEntityHandler = (gameEngine: GameEngine) => {
     if (button !== 2) {
       return false;
     }
-    console.log('target entity handler !');
 
     const clickedSprite = gfxEngine.getSpriteUnderMouse();
     if (!clickedSprite) {
