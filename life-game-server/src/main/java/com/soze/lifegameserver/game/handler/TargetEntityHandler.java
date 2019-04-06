@@ -2,6 +2,8 @@ package com.soze.lifegameserver.game.handler;
 
 import com.soze.klecs.entity.Entity;
 import com.soze.lifegame.common.ws.message.client.TargetEntity;
+import com.soze.lifegameserver.game.GameCoordinator;
+import com.soze.lifegameserver.game.engine.GameEngine;
 import com.soze.lifegameserver.game.engine.component.HarvesterComponent;
 import com.soze.lifegameserver.game.engine.component.ResourceProviderComponent;
 import com.soze.lifegameserver.game.entity.EntityCache;
@@ -24,10 +26,13 @@ public class TargetEntityHandler {
   private static final Logger LOG = LoggerFactory.getLogger(TargetEntityHandler.class);
   
   private final EntityCache entityCache;
+  private final GameCoordinator gameCoordinator;
   
   @Autowired
-  public TargetEntityHandler(EntityCache entityCache) {
+  public TargetEntityHandler(EntityCache entityCache,
+                             GameCoordinator gameCoordinator) {
     this.entityCache = entityCache;
+    this.gameCoordinator = gameCoordinator;
   }
   
   @EventListener(condition = "#event.clientMessageType.equals('TARGET_ENTITY')")
@@ -66,11 +71,21 @@ public class TargetEntityHandler {
       throw new RuntimeException("Target entity is not a resource provider");
     }
     
-    LOG.info("Checks passed");
+    GameEngine gameEngine = getGameEngine(session.getWorldId());
+    LOG.info("Adding harvest task to game engine");
+  
+    gameEngine.addTask(() -> {
+      harvesterComponent.setTargetId((Long) targetEntity.getId());
+    });
+    
   }
   
   private Optional<Entity> getEntity(long worldId, long entityId) {
     return Optional.ofNullable(entityCache.getEntities(worldId).get(entityId));
+  }
+  
+  private GameEngine getGameEngine(long worldId) {
+    return gameCoordinator.getGameEngineByWorldId(worldId);
   }
   
 }
