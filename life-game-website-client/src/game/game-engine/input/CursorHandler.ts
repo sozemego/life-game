@@ -1,7 +1,7 @@
 import { GameEngine } from '../GameEngine';
 import { Mouse } from '../../InputHandler';
 // @ts-ignore
-import { Cursor } from "../../gfx-engine/Cursor";
+import { Cursor } from '../../gfx-engine/Cursor';
 
 /**
  * Used to determine the cursor art on mouse move.

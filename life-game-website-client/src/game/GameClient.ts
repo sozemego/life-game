@@ -1,7 +1,7 @@
 import { createWebSocketClient } from '../api/WebSocketClient';
 import uuid from 'uuid/v4';
 import { User } from '../user/dto';
-import { EntityAction } from "./game-engine/EntityAction";
+import { EntityAction } from './game-engine/EntityAction';
 
 export const createGameClient = (user: User): GameClient => {
   const webSocketClient = createWebSocketClient({
@@ -32,7 +32,7 @@ export const createGameClient = (user: User): GameClient => {
       type: 'TARGET_ENTITY',
       sourceEntityId: source,
       targetEntityId: target,
-      action
+      action,
     };
     webSocketClient.send(targetEntityMessage);
   };

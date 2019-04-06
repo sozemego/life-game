@@ -25,9 +25,9 @@ import {
   WebGLRenderer,
 } from 'three/src/Three';
 import Stats from 'stats-js';
-import { InputHandler, Mouse } from "../InputHandler";
+import { InputHandler, Mouse } from '../InputHandler';
 import { World } from '../dto';
-import { Cursor, defaultCursor, selectCursor, targetCursor } from "./Cursor";
+import { Cursor, defaultCursor, selectCursor, targetCursor } from './Cursor';
 
 export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): GfxEngine => {
   const scene = new Scene();

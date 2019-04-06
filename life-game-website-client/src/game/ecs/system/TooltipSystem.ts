@@ -74,7 +74,6 @@ export const createTooltipSystem = (
         resourceSprite.position.y += 0.5;
       }
     } else {
-
     }
   };
 
