@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /*
   Object responsible for scheduling and running GameRunners.
@@ -20,6 +22,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GameCoordinator {
   
   private static final Logger LOG = LoggerFactory.getLogger(GameCoordinator.class);
+  
+  private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
   private final int enginesPerRunner = 4;
   
@@ -33,6 +37,7 @@ public class GameCoordinator {
     Objects.requireNonNull(gameEngine);
     LOG.info("Adding world for user id [{}]", gameEngine.getUserId());
     GameRunner gameRunner = getGameRunner();
+    executorService.submit(gameRunner);
     gameRunner.addGameEngine(gameEngine);
   }
   
