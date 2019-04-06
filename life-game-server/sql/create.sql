@@ -28,5 +28,6 @@ CREATE TABLE ENTITY (
   physics JSONB,
   graphics JSONB,
   resource_provider JSONB,
-  harvester JSONB
+  harvester JSONB,
+  movement JSONB
 );

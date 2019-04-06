@@ -14,10 +14,10 @@ INSERT INTO ENTITY (name, world_id, physics, graphics, resource_provider) VALUES
   '{"type": "RESOURCE_PROVIDER", "resource": "WOOD"}'
 );
 
-INSERT INTO ENTITY (name, world_id, physics, graphics, harvester) VALUES
+INSERT INTO ENTITY (name, world_id, physics, graphics, harvester, movement) VALUES
 (
   'WORKER_1', -1,
   '{"type": "PHYSICS", "width":  1, "height":  1}',
   '{"type": "GRAPHICS", "texture": "WORKER_1"}',
-  '{"type": "HARVESTER"}'
+  '{"type": "HARVESTER"}', '{"type": "MOVEMENT", "speed": 0.25}'
 );
