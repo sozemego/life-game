@@ -7,10 +7,12 @@ import com.soze.lifegame.common.ws.message.client.ClientMessage;
 import com.soze.lifegame.common.ws.message.server.AuthorizedMessage;
 import com.soze.lifegameserver.dto.User;
 import com.soze.lifegameserver.game.SessionCache;
+import com.soze.lifegameserver.game.handler.ClientMessageEvent;
 import com.soze.lifegameserver.tokenregistry.service.TokenRegistryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -30,18 +32,20 @@ public class AuthGameHandler extends TextWebSocketHandler {
   
   private static final Logger LOG = LoggerFactory.getLogger(AuthGameHandler.class);
   
-  private final GameService gameService;
   private final TokenRegistryService tokenRegistryService;
   private final SessionCache sessionCache;
+  private final ApplicationEventPublisher applicationEventPublisher;
   
   private final Set<WebSocketSession> unauthorizedSessions = new HashSet<WebSocketSession>();
   private final Map<WebSocketSession, GameSession> authorizedSessions = new ConcurrentHashMap<>();
   
   @Autowired
-  public AuthGameHandler(GameService gameService, TokenRegistryService tokenRegistryService, SessionCache sessionCache) {
-    this.gameService = gameService;
+  public AuthGameHandler(TokenRegistryService tokenRegistryService,
+                         SessionCache sessionCache,
+                         ApplicationEventPublisher applicationEventPublisher) {
     this.tokenRegistryService = tokenRegistryService;
     this.sessionCache = sessionCache;
+    this.applicationEventPublisher = applicationEventPublisher;
   }
   
   @Override
@@ -71,7 +75,7 @@ public class AuthGameHandler extends TextWebSocketHandler {
       //2. otherwise check if it's authorized already. If so, pass through
       GameSession existingSession = authorizedSessions.get(session);
       if (existingSession != null) {
-        gameService.handleMessage(existingSession, message);
+        applicationEventPublisher.publishEvent(new ClientMessageEvent(existingSession, message));
       }
     }
   }

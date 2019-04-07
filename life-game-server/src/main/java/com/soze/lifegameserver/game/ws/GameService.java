@@ -18,7 +18,6 @@ import org.glassfish.jersey.internal.util.Producer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -30,8 +29,6 @@ public class GameService {
   
   private static final Logger LOG = LoggerFactory.getLogger(GameService.class);
   
-  private final ApplicationEventPublisher applicationEventPublisher;
-  
   private final WorldService worldService;
   private final GameCoordinator gameCoordinator;
   private final EntityService entityService;
@@ -39,13 +36,11 @@ public class GameService {
   private final SessionCache sessionCache;
   
   @Autowired
-  public GameService(ApplicationEventPublisher applicationEventPublisher,
-                     WorldService worldService,
+  public GameService(WorldService worldService,
                      GameCoordinator gameCoordinator,
                      EntityService entityService,
                      EntityCache entityCache,
                      SessionCache sessionCache) {
-    this.applicationEventPublisher = applicationEventPublisher;
     this.worldService = worldService;
     this.gameCoordinator = gameCoordinator;
     this.entityService = entityService;
@@ -63,10 +58,6 @@ public class GameService {
         addGameEngine(world);
       }
     }
-  }
-  
-  public void handleMessage(GameSession session, ClientMessage message) {
-    applicationEventPublisher.publishEvent(new ClientMessageEvent(session, message));
   }
   
   public void addGameEngine(World world) {
