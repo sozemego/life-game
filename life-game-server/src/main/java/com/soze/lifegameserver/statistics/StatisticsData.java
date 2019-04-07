@@ -15,4 +15,8 @@ public class StatisticsData {
     return engines;
   }
   
+  public String getType() {
+    return "STATISTICS_ENGINES";
+  }
+  
 }

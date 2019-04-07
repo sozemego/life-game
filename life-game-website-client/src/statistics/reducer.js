@@ -1,8 +1,8 @@
 import { createPayloadSetter, createReducer } from '../store/utils';
-import { ADD_WORLD, SET_STATISTICS_MESSAGE } from './actions';
+import { FETCHED_ENGINES, SET_STATISTICS_MESSAGE } from './actions';
 
 const initialState = {
-  worlds: {},
+  engines: {},
   message: null,
 };
 
@@ -17,7 +17,26 @@ const addWorld = (state, action) => {
   return { ...state, worlds: nextWorlds };
 };
 
+const fetchedEngines = (state, action) => {
+  const { payload } = action;
+  const { engines } = payload;
+  const currentEngines = { ...state.engines };
+  const nextEngines = {};
+
+  Object.keys(currentEngines).forEach(key => {
+    const engine = currentEngines[key];
+    nextEngines[key] = { ...engine, running: false };
+  });
+
+  engines.forEach(engine => {
+    const currentEngine = currentEngines[engine.username];
+    nextEngines[engine.username] = { ...currentEngine, ...engine, running: true };
+  });
+
+  return { ...state, engines: nextEngines };
+};
+
 export const reducer = createReducer(initialState, {
   [SET_STATISTICS_MESSAGE]: createPayloadSetter('message'),
-  [ADD_WORLD]: addWorld,
+  [FETCHED_ENGINES]: fetchedEngines,
 });

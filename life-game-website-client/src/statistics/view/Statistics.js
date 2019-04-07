@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styles from './Statistics.module.css';
-import { WorldList } from './WorldList';
-import { getMessage, getWorlds } from '../selectors';
+import { EngineList } from './EngineList';
+import { getEngines, getMessage, getWorlds } from '../selectors';
 import * as statActions from '../actions';
 
 const Statistics = props => {
@@ -12,26 +12,26 @@ const Statistics = props => {
     return () => props.disconnect();
   }, []);
 
-  const { worlds, message } = props;
+  const { engines, message } = props;
 
   return (
     <div className={styles.container}>
-      <div>Here are some statistics about current servers!</div>
+      <div>Here are some statistics about current players!</div>
       <div>{message}</div>
-      <div>Game worlds [{worlds.length}]:</div>
-      <WorldList worlds={props.worlds} />
+      <div>Game worlds [{engines.length}]:</div>
+      <EngineList engines={engines} />
     </div>
   );
 };
 
 Statistics.propTypes = {
-  worlds: PropTypes.array.isRequired,
+  engines: PropTypes.array.isRequired,
   message: PropTypes.string,
 };
 
 const mapStateToProps = state => {
   return {
-    worlds: getWorlds(state),
+    engines: getEngines(state),
     message: getMessage(state),
   };
 };

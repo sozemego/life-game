@@ -4,8 +4,8 @@ import { createStatisticsClient } from './client';
 export const SET_STATISTICS_MESSAGE = 'SET_STATISTICS_MESSAGE';
 export const setStatisticsMessage = makePayloadActionCreator(SET_STATISTICS_MESSAGE);
 
-export const ADD_WORLD = 'ADD_WORLD';
-export const addWorld = makePayloadActionCreator(ADD_WORLD);
+export const FETCHED_ENGINES = 'FETCHED_ENGINES';
+export const fetchedEngines = makePayloadActionCreator(FETCHED_ENGINES);
 
 let client = null;
 
@@ -15,8 +15,9 @@ export const init = () => {
 
     client = createStatisticsClient();
 
-    client.onMessage('STATISTICS_WORLD', msg => {
-      dispatch(addWorld(msg));
+    client.onMessage('STATISTICS_ENGINES', msg => {
+      console.log(msg);
+      dispatch(fetchedEngines(msg));
     });
 
     return client

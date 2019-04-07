@@ -3,8 +3,12 @@ import { rootSelector } from '../store/utils';
 const root = rootSelector('statistics');
 
 export const getWorlds = state => {
-  const worlds = root(state).worlds;
-  return Object.values(worlds);
+  return [];
+};
+
+export const getEngines = state => {
+  const engines = root(state).engines;
+  return Object.values(engines);
 };
 
 export const getMessage = state => root(state).message;

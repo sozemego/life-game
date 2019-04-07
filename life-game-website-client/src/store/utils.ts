@@ -11,7 +11,7 @@ export const makeActionCreator = (type: string, ...argNames: string[]) => {
 };
 
 export const makePayloadActionCreator = (type: string) => {
-  return (arg: any) => {
+  return (arg: any): PayloadAction => {
     return {
       type,
       payload: arg,
@@ -74,5 +74,6 @@ export const createPayloadSetter = (property: string) => {
 };
 
 export interface PayloadAction {
+  type: string;
   payload: any;
 }
