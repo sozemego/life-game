@@ -70,5 +70,15 @@ public class GameCoordinator {
     }
     return null;
   }
+  
+  public void removeGameEngine(long userId) {
+    for (GameRunner gameRunner : gameRunners) {
+      for (GameEngine engine : gameRunner.getEngines()) {
+        if (engine.getUserId() == userId) {
+          gameRunner.removeEngine(engine);
+        }
+      }
+    }
+  }
 
 }

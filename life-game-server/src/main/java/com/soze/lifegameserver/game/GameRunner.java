@@ -1,12 +1,16 @@
 package com.soze.lifegameserver.game;
 
 import com.soze.lifegameserver.game.engine.GameEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameRunner implements Runnable {
+  
+  private static final Logger LOG = LoggerFactory.getLogger(GameRunner.class);
   
   private final List<GameEngine> engines = new CopyOnWriteArrayList<>();
   
@@ -17,6 +21,11 @@ public class GameRunner implements Runnable {
   
   public List<GameEngine> getEngines() {
     return engines;
+  }
+  
+  public void removeEngine(GameEngine gameEngine) {
+    LOG.info("Removing engine for user id [{}]", gameEngine.getUserId());
+    engines.remove(gameEngine);
   }
   
   @Override
