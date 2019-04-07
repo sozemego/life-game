@@ -31,7 +31,7 @@ public class EngineFactory {
   public GameEngine createEngine(World world, GameSession gameSession) {
     Engine engine = new Engine();
     engine.addSystem(new MovementSystem(engine, gameSession));
-    engine.addSystem(new ResourceHarvesterSystem(engine));
+    engine.addSystem(new ResourceHarvesterSystem(engine, gameSession));
     entityCache.attachToEngine(gameSession.getUser().getId(), engine);
     LOG.info("Adding [{}] entities to GameEngine for world with userId [{}]", world.getEntities().size(),
              world.getUserId());

@@ -75,6 +75,7 @@ public class TargetEntityHandler {
     LOG.info("Adding harvest task to game engine");
   
     gameEngine.addTask(() -> {
+      harvesterComponent.setHarvestingProgress(0f);
       harvesterComponent.setTargetId((Long) targetEntity.getId());
     });
     

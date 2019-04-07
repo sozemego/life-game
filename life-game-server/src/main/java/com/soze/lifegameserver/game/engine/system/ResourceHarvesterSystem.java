@@ -6,14 +6,18 @@ import com.soze.lifegameserver.game.engine.EntityUtils;
 import com.soze.lifegameserver.game.engine.component.HarvesterComponent;
 import com.soze.lifegameserver.game.engine.component.MovementComponent;
 import com.soze.lifegameserver.game.engine.Nodes;
+import com.soze.lifegameserver.game.ws.GameSession;
 
 import java.util.List;
 import java.util.Optional;
 
 public class ResourceHarvesterSystem extends BaseEntitySystem {
   
-  public ResourceHarvesterSystem(Engine engine) {
+  private final GameSession gameSession;
+  
+  public ResourceHarvesterSystem(Engine engine, GameSession gameSession) {
     super(engine);
+    this.gameSession = gameSession;
   }
   
   @Override
@@ -51,8 +55,18 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     }
     
     movement.setTargetEntityId(null);
-    //3. if we arrived, start harvesting
-    //4. when harvesting is done, clear target.
+  
+    //3. when harvesting is done, clear target, harvest resource
+    if (harvester.isHarvestComplete()) {
+      harvester.setTargetId(null);
+      harvester.setHarvestingProgress(0f);
+      return;
+    }
+    
+    //4. otherwise update harvesting progress
+    float progress = harvester.getHarvestingProgress();
+    System.out.println(progress);
+    harvester.setHarvestingProgress(progress + (delta / harvester.getHarvestingTime()));
     
   }
   
