@@ -16,7 +16,6 @@ export const init = () => {
     client = createStatisticsClient();
 
     client.onMessage('STATISTICS_ENGINES', msg => {
-      console.log(msg);
       dispatch(fetchedEngines(msg));
     });
 
