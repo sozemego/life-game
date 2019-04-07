@@ -24,7 +24,6 @@ public class GameEngine {
     while((task = tasks.poll()) != null) {
       task.run();
     }
-    engine.setMetrics(true);
     engine.update(delta);
   }
   
