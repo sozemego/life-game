@@ -7,7 +7,6 @@ import com.soze.lifegame.common.ws.message.client.ClientMessage;
 import com.soze.lifegame.common.ws.message.client.DisconnectMessage;
 import com.soze.lifegame.common.ws.message.server.AuthorizedMessage;
 import com.soze.lifegameserver.dto.User;
-import com.soze.lifegameserver.game.SessionCache;
 import com.soze.lifegameserver.game.handler.ClientMessageEvent;
 import com.soze.lifegameserver.tokenregistry.service.TokenRegistryService;
 import org.slf4j.Logger;
@@ -63,7 +62,7 @@ public class GameHandler extends TextWebSocketHandler {
           GameSession gameSession = createSession(session, authorizeMessage.getToken());
           LOG.info("Session [{}] authorized", gameSession);
           authorizedSessions.put(session, gameSession);
-          gameSession.send(JsonUtils.objectToJson(new AuthorizedMessage(UUID.randomUUID())));
+          gameSession.send(new AuthorizedMessage(UUID.randomUUID()));
         } else {
           LOG.info("User [{}] already authorized, ignoring message", authorizeMessage.getUsername());
         }
