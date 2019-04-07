@@ -1,7 +1,7 @@
 package com.soze.lifegameserver;
 
 import com.soze.lifegameserver.game.interceptor.GameConnectionInterceptor;
-import com.soze.lifegameserver.game.ws.AuthGameHandler;
+import com.soze.lifegameserver.game.ws.GameHandler;
 import com.soze.lifegameserver.statistics.StatisticsHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 public class WebSocketConfiguration implements WebSocketConfigurer {
 
   @Autowired
-  private AuthGameHandler gameHandler;
+  private GameHandler gameHandler;
   
   @Autowired
   private GameConnectionInterceptor gameConnectionInterceptor;

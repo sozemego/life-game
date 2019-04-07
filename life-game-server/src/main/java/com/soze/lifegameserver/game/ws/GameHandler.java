@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.soze.lifegame.common.json.JsonUtils;
 import com.soze.lifegame.common.ws.message.client.AuthorizeMessage;
 import com.soze.lifegame.common.ws.message.client.ClientMessage;
+import com.soze.lifegame.common.ws.message.client.DisconnectMessage;
 import com.soze.lifegame.common.ws.message.server.AuthorizedMessage;
 import com.soze.lifegameserver.dto.User;
 import com.soze.lifegameserver.game.SessionCache;
@@ -28,23 +29,20 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class AuthGameHandler extends TextWebSocketHandler {
+public class GameHandler extends TextWebSocketHandler {
   
-  private static final Logger LOG = LoggerFactory.getLogger(AuthGameHandler.class);
+  private static final Logger LOG = LoggerFactory.getLogger(GameHandler.class);
   
   private final TokenRegistryService tokenRegistryService;
-  private final SessionCache sessionCache;
   private final ApplicationEventPublisher applicationEventPublisher;
   
   private final Set<WebSocketSession> unauthorizedSessions = new HashSet<WebSocketSession>();
   private final Map<WebSocketSession, GameSession> authorizedSessions = new ConcurrentHashMap<>();
   
   @Autowired
-  public AuthGameHandler(TokenRegistryService tokenRegistryService,
-                         SessionCache sessionCache,
-                         ApplicationEventPublisher applicationEventPublisher) {
+  public GameHandler(TokenRegistryService tokenRegistryService,
+                     ApplicationEventPublisher applicationEventPublisher) {
     this.tokenRegistryService = tokenRegistryService;
-    this.sessionCache = sessionCache;
     this.applicationEventPublisher = applicationEventPublisher;
   }
   
@@ -93,7 +91,7 @@ public class AuthGameHandler extends TextWebSocketHandler {
     unauthorizedSessions.remove(session);
     GameSession gameSession = authorizedSessions.remove(session);
     if (gameSession != null) {
-      sessionCache.removeGameSession(gameSession);
+      applicationEventPublisher.publishEvent(new ClientMessageEvent(gameSession, new DisconnectMessage(UUID.randomUUID())));
     }
   }
   
