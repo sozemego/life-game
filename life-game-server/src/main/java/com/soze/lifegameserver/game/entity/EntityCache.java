@@ -39,9 +39,7 @@ public class EntityCache {
       }
       if (event instanceof RemovedEntityEvent) {
         entities.computeIfPresent(worldId, (key, value) -> {
-          if (value != null) {
-            value.remove(event.getEntity().getId());
-          }
+          value.remove(event.getEntity().getId());
           return value;
         });
       }
