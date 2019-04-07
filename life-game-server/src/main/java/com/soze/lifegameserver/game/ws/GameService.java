@@ -1,19 +1,11 @@
 package com.soze.lifegameserver.game.ws;
 
 import com.soze.klecs.engine.Engine;
-import com.soze.klecs.entity.Entity;
 import com.soze.lifegameserver.game.GameCoordinator;
-import com.soze.lifegameserver.game.SessionCache;
 import com.soze.lifegameserver.game.engine.EngineFactory;
 import com.soze.lifegameserver.game.engine.GameEngine;
-import com.soze.lifegameserver.game.engine.system.MovementSystem;
-import com.soze.lifegameserver.game.engine.system.ResourceHarvesterSystem;
-import com.soze.lifegameserver.game.entity.EntityCache;
-import com.soze.lifegameserver.game.entity.EntityService;
-import com.soze.lifegameserver.game.entity.PersistentEntity;
 import com.soze.lifegameserver.game.world.World;
 import com.soze.lifegameserver.game.world.WorldService;
-import org.glassfish.jersey.internal.util.Producer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GameService {
