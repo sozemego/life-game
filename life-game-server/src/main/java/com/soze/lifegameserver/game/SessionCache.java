@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Stores a map of worldId -> GameSession.
+ * Stores a map of userId -> GameSession.
  */
 @Service
 public class SessionCache {
@@ -19,9 +19,9 @@ public class SessionCache {
   
   private final Map<Long, GameSession> sessions = new ConcurrentHashMap<>();
   
-  public void addGameSession(long worldId, GameSession session) {
-    LOG.info("Adding session for world id [{}] to cache", worldId);
-    sessions.put(worldId, session);
+  public void addGameSession(long userId, GameSession session) {
+    LOG.info("Adding session for user id [{}] to cache", userId);
+    sessions.put(userId, session);
   }
   
   public void removeGameSession(long worldId) {
@@ -30,11 +30,11 @@ public class SessionCache {
   }
   
   public void removeGameSession(GameSession session) {
-    removeGameSession(session.getWorldId());
+    removeGameSession(session.getUser().getId());
   }
   
-  public Optional<GameSession> getSession(long worldId) {
-    return Optional.ofNullable(sessions.get(worldId));
+  public Optional<GameSession> getSession(long userId) {
+    return Optional.ofNullable(sessions.get(userId));
   }
   
 }

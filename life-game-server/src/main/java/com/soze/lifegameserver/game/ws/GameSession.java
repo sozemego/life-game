@@ -18,7 +18,6 @@ public class GameSession {
   private final WebSocketSession session;
   private final User user;
   private final Instant createdAt;
-  private Long worldId;
 
   public GameSession(WebSocketSession session, User user, Instant createdAt) {
     this.session = Objects.requireNonNull(session);
@@ -33,17 +32,13 @@ public class GameSession {
   public User getUser() {
     return user;
   }
+  
+  public long getUserId() {
+    return user.getId();
+  }
 
   public Instant getCreatedAt() {
     return createdAt;
-  }
-  
-  public Long getWorldId() {
-    return worldId;
-  }
-  
-  public void setWorldId(Long worldId) {
-    this.worldId = worldId;
   }
   
   public void send(Object object) {

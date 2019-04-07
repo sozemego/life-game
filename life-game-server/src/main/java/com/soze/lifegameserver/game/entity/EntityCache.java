@@ -6,6 +6,7 @@ import com.soze.klecs.engine.RemovedEntityEvent;
 import com.soze.klecs.entity.Entity;
 import com.soze.lifegameserver.game.engine.GameEngine;
 import com.soze.lifegameserver.game.world.World;
+import com.soze.lifegameserver.game.ws.GameSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,11 @@ public class EntityCache {
   
   private final Map<Long, Map<Long, Entity>> entities = new ConcurrentHashMap<>();
   
-  public void attachToEngine(World world, Engine engine) {
-    final long worldId = world.getId();
-    LOG.info("EntityCache attaching listeners for world with id [{}] and userId [{}]", worldId, world.getUserId());
+  public void attachToEngine(final long userId, Engine engine) {
+    LOG.info("EntityCache attaching listeners for user id [{}]", userId);
     engine.addEntityEventListener((event) -> {
       if (event instanceof AddedEntityEvent) {
-        entities.compute(worldId, (key, value) -> {
+        entities.compute(userId, (key, value) -> {
           if (value == null) {
             value = new HashMap<>();
           }
@@ -38,7 +38,7 @@ public class EntityCache {
         });
       }
       if (event instanceof RemovedEntityEvent) {
-        entities.computeIfPresent(worldId, (key, value) -> {
+        entities.computeIfPresent(userId, (key, value) -> {
           value.remove(event.getEntity().getId());
           return value;
         });
@@ -46,8 +46,8 @@ public class EntityCache {
     });
   }
   
-  public Map<Long, Entity> getEntities(long worldId) {
-    return entities.getOrDefault(worldId, Collections.emptyMap());
+  public Map<Long, Entity> getEntities(long userId) {
+    return entities.getOrDefault(userId, Collections.emptyMap());
   }
 
 }

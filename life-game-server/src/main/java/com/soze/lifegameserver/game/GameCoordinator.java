@@ -63,18 +63,7 @@ public class GameCoordinator {
   public GameEngine getGameEngineByUserId(long userId) {
     for (GameRunner gameRunner : gameRunners) {
       for (GameEngine engine : gameRunner.getEngines()) {
-        if(engine.getUserId() == userId) {
-          return engine;
-        }
-      }
-    }
-    return null;
-  }
-  
-  public GameEngine getGameEngineByWorldId(long worldId) {
-    for (GameRunner gameRunner : gameRunners) {
-      for (GameEngine engine : gameRunner.getEngines()) {
-        if (engine.getWorldId() == worldId) {
+        if (engine.getUserId() == userId) {
           return engine;
         }
       }

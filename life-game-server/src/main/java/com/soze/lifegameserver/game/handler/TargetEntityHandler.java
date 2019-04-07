@@ -55,9 +55,9 @@ public class TargetEntityHandler {
   
   private void handleHarvest(GameSession session, TargetEntity message) {
     //1. get both entities
-    Entity sourceEntity = getEntity(session.getWorldId(), message.getSourceEntityId())
+    Entity sourceEntity = getEntity(session.getUserId(), message.getSourceEntityId())
                             .orElseThrow(() -> new RuntimeException("SOURCE ENTITY DOES NOT EXIST"));
-    Entity targetEntity = getEntity(session.getWorldId(), message.getTargetEntityId())
+    Entity targetEntity = getEntity(session.getUserId(), message.getTargetEntityId())
                             .orElseThrow(() -> new RuntimeException("TARGET ENTITY DOES NOT EXIST"));
     
     //2. check if source is a harvester
@@ -71,7 +71,7 @@ public class TargetEntityHandler {
       throw new RuntimeException("Target entity is not a resource provider");
     }
     
-    GameEngine gameEngine = getGameEngine(session.getWorldId());
+    GameEngine gameEngine = getGameEngine(session.getUserId());
     LOG.info("Adding harvest task to game engine");
   
     gameEngine.addTask(() -> {
@@ -80,12 +80,12 @@ public class TargetEntityHandler {
     
   }
   
-  private Optional<Entity> getEntity(long worldId, long entityId) {
-    return Optional.ofNullable(entityCache.getEntities(worldId).get(entityId));
+  private Optional<Entity> getEntity(long userId, long entityId) {
+    return Optional.ofNullable(entityCache.getEntities(userId).get(entityId));
   }
   
-  private GameEngine getGameEngine(long worldId) {
-    return gameCoordinator.getGameEngineByWorldId(worldId);
+  private GameEngine getGameEngine(long userId) {
+    return gameCoordinator.getGameEngineByUserId(userId);
   }
   
 }

@@ -67,12 +67,8 @@ public class RequestWorldHandler {
     World world = worldExists ? worldOptional.get() : worldService.generateWorld(gameSession.getUser());
     WorldDto dto = convertToDto(world);
     
-    if (!worldExists) {
-      LOG.info("World did not exist, adding to GameCoordinator");
-      addGameEngine(world);
-    }
+    addGameEngine(world, gameSession);
     
-    gameSession.setWorldId(world.getId());
     sessionCache.addGameSession(world.getId(), gameSession);
     
     LOG.info("Sending world data to {}", gameSession.getSession().getId());
@@ -93,8 +89,8 @@ public class RequestWorldHandler {
     return new WorldDto(world.getId(), world.getCreatedAt(), tiles);
   }
   
-  private void addGameEngine(World world) {
-    GameEngine engine = engineFactory.createEngine(world);
+  private void addGameEngine(World world, GameSession gameSession) {
+    GameEngine engine = engineFactory.createEngine(world, gameSession);
     gameCoordinator.addGameEngine(engine);
   }
   
