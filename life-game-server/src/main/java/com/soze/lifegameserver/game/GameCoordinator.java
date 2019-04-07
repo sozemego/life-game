@@ -31,11 +31,10 @@ public class GameCoordinator {
   
   /**
    * Adds {@link GameEngine} to one of the runners.
-   * @param gameEngine
    */
   public void addGameEngine(GameEngine gameEngine) {
     Objects.requireNonNull(gameEngine);
-    LOG.info("Adding world for user id [{}]", gameEngine.getUserId());
+    LOG.info("Adding game engine for user id [{}]", gameEngine.getUserId());
     GameRunner gameRunner = getGameRunner();
     executorService.submit(gameRunner);
     gameRunner.addGameEngine(gameEngine);
