@@ -1,9 +1,7 @@
 package com.soze.lifegameserver.statistics;
 
 import com.soze.lifegame.common.dto.user.SimpleUserDto;
-import com.soze.lifegame.common.dto.world.StatisticsWorldDto;
 import com.soze.lifegame.common.json.JsonUtils;
-import com.soze.lifegame.common.ws.message.server.StatisticsWorldMessage;
 import com.soze.lifegameserver.game.GameCoordinator;
 import com.soze.lifegameserver.game.GameRunner;
 import com.soze.lifegameserver.game.engine.GameEngine;
@@ -22,11 +20,12 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -54,14 +53,16 @@ public class StatisticsHandler extends TextWebSocketHandler {
       return;
     }
     LOG.debug("Supplying clients with statistics data");
+    List<GameEngineDto> dtos = new ArrayList<>();
     for (GameRunner gameRunner : gameCoordinator.getGameRunners()) {
       for (GameEngine engine : gameRunner.getEngines()) {
-        StatisticsWorldDto dto = new StatisticsWorldDto(getUsername(engine.getUserId()), engine.getCreatedAt());
-        TextMessage textMessage = new TextMessage(JsonUtils.objectToJson(new StatisticsWorldMessage(UUID.randomUUID(), dto)));
-        for (WebSocketSession session : sessions) {
-          session.sendMessage(textMessage);
-        }
+        dtos.add(new GameEngineDto(getUsername(engine.getUserId()), engine.getCreatedAt()));
       }
+    }
+    
+    TextMessage textMessage = new TextMessage(JsonUtils.objectToJson(new StatisticsData(dtos)));
+    for (WebSocketSession session : sessions) {
+      session.sendMessage(textMessage);
     }
   }
   
