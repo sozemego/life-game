@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TokenRegistryService {
   private static final Logger LOG = LoggerFactory.getLogger(TokenRegistryService.class);
 
-  private Map<String, String> tokens = new ConcurrentHashMap();
+  private Map<String, String> tokens = new ConcurrentHashMap<>();
 
   public void registerToken(TokenRegistration tokenRegistration) {
     LOG.info("Registering token for username {}", tokenRegistration.getUsername());
@@ -30,10 +30,7 @@ public class TokenRegistryService {
 
   public boolean isTokenRegistered(String username, String token) {
     String existingToken = tokens.get(username);
-    if (token.equals(existingToken)) {
-      return true;
-    }
-    return false;
+    return token.equals(existingToken);
   }
 
 }
