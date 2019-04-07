@@ -6,13 +6,15 @@ import com.soze.lifegame.common.dto.world.WorldDto;
 import com.soze.lifegame.common.ws.message.client.RequestWorldMessage;
 import com.soze.lifegame.common.ws.message.server.EntityMessage;
 import com.soze.lifegame.common.ws.message.server.WorldMessage;
+import com.soze.lifegameserver.game.GameCoordinator;
 import com.soze.lifegameserver.game.SessionCache;
+import com.soze.lifegameserver.game.engine.EngineFactory;
+import com.soze.lifegameserver.game.engine.GameEngine;
 import com.soze.lifegameserver.game.entity.EntityCache;
 import com.soze.lifegameserver.game.entity.EntityService;
 import com.soze.lifegameserver.game.world.Tile;
 import com.soze.lifegameserver.game.world.World;
 import com.soze.lifegameserver.game.world.WorldService;
-import com.soze.lifegameserver.game.ws.GameService;
 import com.soze.lifegameserver.game.ws.GameSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,22 +34,25 @@ public class RequestWorldHandler {
   private static final Logger LOG = LoggerFactory.getLogger(RequestWorldHandler.class);
   
   private final WorldService worldService;
+  private final GameCoordinator gameCoordinator;
   private final EntityService entityService;
   private final EntityCache entityCache;
-  private final GameService gameService;
   private final SessionCache sessionCache;
+  private final EngineFactory engineFactory;
   
   @Autowired
   public RequestWorldHandler(WorldService worldService,
+                             GameCoordinator gameCoordinator,
                              EntityService entityService,
                              EntityCache entityCache,
-                             GameService gameService,
-                             SessionCache sessionCache) {
+                             SessionCache sessionCache,
+                             EngineFactory engineFactory) {
     this.worldService = worldService;
+    this.gameCoordinator = gameCoordinator;
     this.entityService = entityService;
     this.entityCache = entityCache;
-    this.gameService = gameService;
     this.sessionCache = sessionCache;
+    this.engineFactory = engineFactory;
   }
   
   @EventListener(condition = "#event.clientMessageType.equals('REQUEST_WORLD')")
@@ -89,7 +94,8 @@ public class RequestWorldHandler {
   }
   
   private void addGameEngine(World world) {
-    gameService.addGameEngine(world);
+    GameEngine engine = engineFactory.createEngine(world);
+    gameCoordinator.addGameEngine(engine);
   }
   
 }

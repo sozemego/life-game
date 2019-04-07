@@ -34,7 +34,7 @@ public class EngineFactory {
     this.entityService = entityService;
   }
   
-  public Engine createEngine(World world) {
+  public GameEngine createEngine(World world) {
     Engine engine = new Engine();
     Producer<Optional<GameSession>> sessionProducer = () -> sessionCache.getSession(world.getId());
     engine.addSystem(new MovementSystem(engine, sessionProducer));
@@ -46,7 +46,7 @@ public class EngineFactory {
       Entity entity = entityService.convert(engine, persistentEntity);
       engine.addEntity(entity);
     }
-    return engine;
+    return new GameEngine(world, engine);
   }
   
 }
