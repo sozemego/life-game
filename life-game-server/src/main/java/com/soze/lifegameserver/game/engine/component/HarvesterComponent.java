@@ -1,5 +1,8 @@
 package com.soze.lifegameserver.game.engine.component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 public class HarvesterComponent extends BaseComponent {
   
   private Long targetId;
@@ -41,6 +44,7 @@ public class HarvesterComponent extends BaseComponent {
     return harvestingProgress;
   }
   
+  @JsonIgnore
   public boolean isHarvestComplete() {
     float threshold = 0.01f;
     return Math.abs(1f - harvestingProgress) < threshold;

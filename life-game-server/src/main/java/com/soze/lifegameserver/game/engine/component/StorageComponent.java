@@ -1,5 +1,6 @@
 package com.soze.lifegameserver.game.engine.component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.soze.lifegameserver.game.world.Resource;
 
 public class StorageComponent extends BaseComponent {
@@ -45,10 +46,12 @@ public class StorageComponent extends BaseComponent {
     this.capacityTaken = capacityTaken;
   }
   
+  @JsonIgnore
   public boolean isFull() {
     return capacity == capacityTaken;
   }
   
+  @JsonIgnore
   public boolean hasFreeCapacity() {
     return capacityTaken < capacity;
   }
