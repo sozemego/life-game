@@ -2,6 +2,7 @@ import { TYPES } from './types';
 import { Component, Entity } from '../Entity';
 import { GfxEngine } from '../../gfx-engine/GfxEngine';
 import { Sprite } from 'three';
+import { Resource } from './Resource';
 
 const factories: ComponentFactories = {};
 
@@ -54,6 +55,12 @@ const createMovement = (component: any, context: FactoryRegistryContext): Moveme
 
 factories[TYPES.MOVEMENT] = createMovement;
 
+const createStorage = (component: any, context: FactoryRegistryContext): StorageComponent => {
+  return { ...component };
+};
+
+factories[TYPES.STORAGE] = createStorage;
+
 export interface ComponentFactories {
   [type: string]: (component: any, context: FactoryRegistryContext) => Component;
 }
@@ -84,6 +91,12 @@ export interface ResourceHarvesterComponent extends Component {
 export interface MovementComponent extends Component {
   speed: number;
   targetEntityId?: number;
+}
+
+export interface StorageComponent extends Component {
+  capacity: number;
+  resource: Resource | null;
+  capacityTaken: number;
 }
 
 export interface FactoryRegistryContext {
