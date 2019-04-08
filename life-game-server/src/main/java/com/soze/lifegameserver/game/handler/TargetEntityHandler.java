@@ -47,10 +47,14 @@ public class TargetEntityHandler {
              session.getSession().getId(), message.getSourceEntityId(), message.getTargetEntityId(), message.getAction()
     );
     
-    switch (message.getAction()) {
-      case HARVEST:
-        handleHarvest(session, message);
-        break;
+    try {
+      switch (message.getAction()) {
+        case HARVEST:
+          handleHarvest(session, message);
+          break;
+      }
+    } catch (Exception e) {
+      LOG.info("Exception while handling targeting type [{}]", message.getAction(), e);
     }
     
   }
