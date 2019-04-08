@@ -6,6 +6,8 @@ import com.soze.lifegameserver.game.engine.EntityUtils;
 import com.soze.lifegameserver.game.engine.component.HarvesterComponent;
 import com.soze.lifegameserver.game.engine.component.MovementComponent;
 import com.soze.lifegameserver.game.engine.Nodes;
+import com.soze.lifegameserver.game.engine.component.ResourceProviderComponent;
+import com.soze.lifegameserver.game.engine.component.StorageComponent;
 import com.soze.lifegameserver.game.ws.GameSession;
 
 import java.util.List;
@@ -60,12 +62,16 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     if (harvester.isHarvestComplete()) {
       harvester.setTargetId(null);
       harvester.setHarvestingProgress(0f);
+      //add resource to storage
+      StorageComponent storageComponent = entity.getComponent(StorageComponent.class);
+      ResourceProviderComponent resourceProvider = target.getComponent(ResourceProviderComponent.class);
+      storageComponent.setResource(resourceProvider.getResource());
+      storageComponent.setCapacityTaken(storageComponent.getCapacityTaken() + 1);
       return;
     }
     
     //4. otherwise update harvesting progress
     float progress = harvester.getHarvestingProgress();
-    System.out.println(progress);
     harvester.setHarvestingProgress(progress + (delta / harvester.getHarvestingTime()));
     
   }

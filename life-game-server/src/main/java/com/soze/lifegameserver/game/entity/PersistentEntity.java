@@ -7,6 +7,7 @@ import com.soze.lifegameserver.game.engine.component.MovementComponent;
 import com.soze.lifegameserver.game.engine.component.NameComponent;
 import com.soze.lifegameserver.game.engine.component.PhysicsComponent;
 import com.soze.lifegameserver.game.engine.component.ResourceProviderComponent;
+import com.soze.lifegameserver.game.engine.component.StorageComponent;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -61,6 +62,10 @@ public class PersistentEntity implements Serializable {
   @Type(type = "jsonb")
   @Column(name = "movement", columnDefinition = "jsonb")
   private MovementComponent movementComponent;
+  
+  @Type(type = "jsonb")
+  @Column(name = "storage", columnDefinition = "jsonb")
+  private StorageComponent storageComponent;
   
   public Long getId() {
     return id;
@@ -126,6 +131,14 @@ public class PersistentEntity implements Serializable {
     this.movementComponent = movementComponent;
   }
   
+  public StorageComponent getStorageComponent() {
+    return storageComponent;
+  }
+  
+  public void setStorageComponent(StorageComponent storageComponent) {
+    this.storageComponent = storageComponent;
+  }
+  
   public PersistentEntity copy() {
     PersistentEntity copy = new PersistentEntity();
     copy.setPhysicsComponent(physicsComponent != null ? physicsComponent.copy() : null);
@@ -134,6 +147,7 @@ public class PersistentEntity implements Serializable {
     copy.setResourceProviderComponent(resourceProviderComponent != null ? resourceProviderComponent.copy() : null);
     copy.setHarvesterComponent(harvesterComponent != null ? harvesterComponent.copy() : null);
     copy.setMovementComponent(movementComponent != null ? movementComponent.copy() : null);
+    copy.setStorageComponent(storageComponent != null ?  storageComponent.copy() : null);
     return copy;
   }
   
@@ -145,6 +159,7 @@ public class PersistentEntity implements Serializable {
     components.add(new NameComponent(name));
     components.add(harvesterComponent);
     components.add(movementComponent);
+    components.add(storageComponent);
     components.removeIf(Objects::isNull);
     return components;
   }

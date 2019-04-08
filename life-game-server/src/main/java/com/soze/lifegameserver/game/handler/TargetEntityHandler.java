@@ -6,7 +6,9 @@ import com.soze.lifegameserver.game.GameCoordinator;
 import com.soze.lifegameserver.game.engine.GameEngine;
 import com.soze.lifegameserver.game.engine.component.HarvesterComponent;
 import com.soze.lifegameserver.game.engine.component.ResourceProviderComponent;
+import com.soze.lifegameserver.game.engine.component.StorageComponent;
 import com.soze.lifegameserver.game.entity.EntityCache;
+import com.soze.lifegameserver.game.world.Resource;
 import com.soze.lifegameserver.game.ws.GameSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +71,20 @@ public class TargetEntityHandler {
     ResourceProviderComponent resourceProviderComponent = targetEntity.getComponent(ResourceProviderComponent.class);
     if (resourceProviderComponent == null) {
       throw new RuntimeException("Target entity is not a resource provider");
+    }
+  
+    StorageComponent storage = sourceEntity.getComponent(StorageComponent.class);
+    if (storage.isFull()) {
+      throw new RuntimeException("Source entity has no free space!");
+    }
+    
+    Resource resource = storage.getResource();
+    if (resource != null) {
+      Resource providedResource = resourceProviderComponent.getResource();
+      if (resource != providedResource) {
+        storage.setResource(null);
+        storage.setCapacityTaken(0);
+      }
     }
     
     GameEngine gameEngine = getGameEngine(session.getUserId());

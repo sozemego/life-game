@@ -29,5 +29,6 @@ CREATE TABLE ENTITY (
   graphics JSONB,
   resource_provider JSONB,
   harvester JSONB,
-  movement JSONB
+  movement JSONB,
+  storage JSONB
 );
