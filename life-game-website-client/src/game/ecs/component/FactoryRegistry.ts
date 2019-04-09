@@ -86,6 +86,7 @@ export interface ResourceProviderComponent extends Component {
 
 export interface ResourceHarvesterComponent extends Component {
   targetEntityId?: number;
+  harvestingProgress: number;
 }
 
 export interface MovementComponent extends Component {
