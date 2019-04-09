@@ -1,7 +1,6 @@
-import { EntityPositionChangeHandler } from "./EntityPositionChangeHandler";
+import { EntityPhysicsChangeHandler } from './EntityPhysicsChangeHandler';
+import { EntityHarvesterChangeHandler } from './EntityHarvesterChangeHandler';
 
-export interface EntityChangeData {
+export interface EntityChangeData {}
 
-}
-
-export type EntityChangeHandler = EntityPositionChangeHandler
+export type EntityChangeHandler = EntityPhysicsChangeHandler | EntityHarvesterChangeHandler;

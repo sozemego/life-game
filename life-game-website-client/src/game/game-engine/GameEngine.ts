@@ -12,8 +12,9 @@ import { createCursorHandler } from './input/CursorHandler';
 import { createTargetEntityHandler } from './input/TargetEntityHandler';
 import { GameClient } from '../GameClient';
 import { EntityAction } from './EntityAction';
-import { createEntityPositionChangeHandler, PositionChangeData } from "./entity-change/EntityPositionChangeHandler";
-import { EntityChangeHandler } from "./entity-change/EntityChangeHandler";
+import { createEntityPhysicsChangeHandler } from './entity-change/EntityPhysicsChangeHandler';
+import { EntityChangeHandler } from './entity-change/EntityChangeHandler';
+import { createEntityHarvesterChangeHandler } from './entity-change/EntityHarvesterChangeHandler';
 
 const TILE_SIZE = 1;
 
@@ -88,11 +89,13 @@ export const createGameEngine = (inputHandler: InputHandler, client: GameClient)
   };
 
   const handlers: EntityChangeHandlerTable = {
-    'POSITION': createEntityPositionChangeHandler(gameEngine),
+    PHYSICS: createEntityPhysicsChangeHandler(gameEngine),
+    HARVESTER: createEntityHarvesterChangeHandler(gameEngine),
   };
 
-  gameEngine.onEntityChanged = (changeType, entityId, data: any) => {
-    handlers[changeType](entityId, data);
+  gameEngine.onEntityChanged = (entityId, component) => {
+    const { type } = component;
+    handlers[type](entityId, component);
   };
 
   return gameEngine;
@@ -107,9 +110,9 @@ export interface GameEngine {
   setWorld: (world: any) => void;
   addEntity: (entity: any) => void;
   targetEntity: (sourceEntity: Entity, targetEntity: Entity, action: EntityAction) => void;
-  onEntityChanged: (type: string, entityId: number, data: any) => void;
+  onEntityChanged: (entityId: number, component: any) => void;
 }
 
 export interface EntityChangeHandlerTable {
-  [type: string]: EntityChangeHandler
+  [type: string]: EntityChangeHandler;
 }

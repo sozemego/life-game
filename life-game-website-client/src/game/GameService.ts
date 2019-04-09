@@ -56,8 +56,8 @@ export const createGameService = (
 
     client.onMessage('ENTITY_CHANGED', (msg: any) => {
       if (gameEngine) {
-        const { changeType, data } = msg;
-        gameEngine.onEntityChanged(changeType, msg.entityId, data);
+        const { entityId, component } = msg;
+        gameEngine.onEntityChanged(entityId, component);
       }
     });
   };

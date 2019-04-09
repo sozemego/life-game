@@ -1,17 +1,11 @@
 import { GameEngine } from '../GameEngine';
 import { TYPES } from "../../ecs/component/types";
 import { PhysicsComponent } from "../../ecs/component/FactoryRegistry";
-import { EntityChangeData } from "./EntityChangeHandler";
 
-export interface PositionChangeData extends EntityChangeData {
-  x: number;
-  y: number;
-}
+export type EntityPhysicsChangeHandler = (entityId: number, component: PhysicsComponent) => void;
 
-export type EntityPositionChangeHandler = (entityId: number, data: PositionChangeData) => void;
-
-export const createEntityPositionChangeHandler = (gameEngine: GameEngine): EntityPositionChangeHandler => {
-  return (entityId: number, data: PositionChangeData) => {
+export const createEntityPhysicsChangeHandler = (gameEngine: GameEngine): EntityPhysicsChangeHandler => {
+  return (entityId: number, data: PhysicsComponent) => {
     const { entityEngine } = gameEngine;
     if (!entityEngine) {
       return;
