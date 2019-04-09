@@ -12,8 +12,8 @@ import { createCursorHandler } from './input/CursorHandler';
 import { createTargetEntityHandler } from './input/TargetEntityHandler';
 import { GameClient } from '../GameClient';
 import { EntityAction } from './EntityAction';
-import { TYPES } from '../ecs/component/types';
-import { PositionChangeData } from "./EntityChange";
+import { createEntityPositionChangeHandler, PositionChangeData } from "./entity-change/EntityPositionChangeHandler";
+import { EntityChangeHandler } from "./entity-change/EntityChangeHandler";
 
 const TILE_SIZE = 1;
 
@@ -87,25 +87,12 @@ export const createGameEngine = (inputHandler: InputHandler, client: GameClient)
     client.targetEntity(sourceEntity.id, targetEntity.id, action);
   };
 
-  const setEntityPosition = (entityId: number, data: PositionChangeData) => {
-    const { entityEngine } = gameEngine;
-    if (!entityEngine) {
-      return;
-    }
-    const entity = entityEngine.getEntity(entityId);
-    if (!entity) {
-      return;
-    }
-    const physics = entity.getComponent(TYPES.PHYSICS) as PhysicsComponent;
-    physics.x = data.x;
-    physics.y = data.y;
+  const handlers: EntityChangeHandlerTable = {
+    'POSITION': createEntityPositionChangeHandler(gameEngine),
   };
 
-  gameEngine.onEntityChanged = (changeType, entityId, data) => {
-    switch (changeType) {
-      case 'POSITION': setEntityPosition(entityId, data as PositionChangeData); break;
-      default: void 0;
-    }
+  gameEngine.onEntityChanged = (changeType, entityId, data: any) => {
+    handlers[changeType](entityId, data);
   };
 
   return gameEngine;
@@ -120,5 +107,9 @@ export interface GameEngine {
   setWorld: (world: any) => void;
   addEntity: (entity: any) => void;
   targetEntity: (sourceEntity: Entity, targetEntity: Entity, action: EntityAction) => void;
-  onEntityChanged: (type: string, entityId: number, data: object) => void;
+  onEntityChanged: (type: string, entityId: number, data: any) => void;
+}
+
+export interface EntityChangeHandlerTable {
+  [type: string]: EntityChangeHandler
 }
