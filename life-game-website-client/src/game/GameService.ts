@@ -54,9 +54,13 @@ export const createGameService = (
       msg.dtos.forEach(gameEngine.addEntity);
     });
 
-    client.onMessage('ENTITY_POSITION', (msg: any) => {
+    client.onMessage('ENTITY_CHANGED', (msg: any) => {
       if (gameEngine) {
-        gameEngine.setEntityPosition(msg.entityId, msg.x, msg.y);
+        const { changeType, data } = msg;
+        switch (changeType) {
+          case 'POSITION': gameEngine.setEntityPosition(msg.entityId, data.x, data.y); break;
+          default: void 0;
+        }
       }
     });
   };
