@@ -98,7 +98,7 @@ public class TargetEntityHandler {
     gameEngine.addTask(() -> {
       harvesterComponent.setHarvestingProgress(0f);
       harvesterComponent.setTargetId((Long) targetEntity.getId());
-      session.send(new EntityChangedMessage((Long) targetEntity.getId(), harvesterComponent));
+      session.send(new EntityChangedMessage((Long) sourceEntity.getId(), harvesterComponent));
     });
     
   }
