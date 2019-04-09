@@ -13,6 +13,7 @@ import { createTargetEntityHandler } from './input/TargetEntityHandler';
 import { GameClient } from '../GameClient';
 import { EntityAction } from './EntityAction';
 import { TYPES } from '../ecs/component/types';
+import { PositionChangeData } from "./EntityChange";
 
 const TILE_SIZE = 1;
 
@@ -26,7 +27,7 @@ export const createGameEngine = (inputHandler: InputHandler, client: GameClient)
     setWorld: () => {},
     addEntity: () => {},
     targetEntity: () => {},
-    setEntityPosition: () => {},
+    onEntityChanged: () => {},
   };
 
   const updateCursor = createCursorHandler(gameEngine);
@@ -86,7 +87,7 @@ export const createGameEngine = (inputHandler: InputHandler, client: GameClient)
     client.targetEntity(sourceEntity.id, targetEntity.id, action);
   };
 
-  gameEngine.setEntityPosition = (entityId, x, y) => {
+  const setEntityPosition = (entityId: number, data: PositionChangeData) => {
     const { entityEngine } = gameEngine;
     if (!entityEngine) {
       return;
@@ -96,8 +97,15 @@ export const createGameEngine = (inputHandler: InputHandler, client: GameClient)
       return;
     }
     const physics = entity.getComponent(TYPES.PHYSICS) as PhysicsComponent;
-    physics.x = x;
-    physics.y = y;
+    physics.x = data.x;
+    physics.y = data.y;
+  };
+
+  gameEngine.onEntityChanged = (changeType, entityId, data) => {
+    switch (changeType) {
+      case 'POSITION': setEntityPosition(entityId, data as PositionChangeData); break;
+      default: void 0;
+    }
   };
 
   return gameEngine;
@@ -112,5 +120,5 @@ export interface GameEngine {
   setWorld: (world: any) => void;
   addEntity: (entity: any) => void;
   targetEntity: (sourceEntity: Entity, targetEntity: Entity, action: EntityAction) => void;
-  setEntityPosition: (entityId: number, x: number, y: number) => void;
+  onEntityChanged: (type: string, entityId: number, data: object) => void;
 }

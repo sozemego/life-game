@@ -57,10 +57,7 @@ export const createGameService = (
     client.onMessage('ENTITY_CHANGED', (msg: any) => {
       if (gameEngine) {
         const { changeType, data } = msg;
-        switch (changeType) {
-          case 'POSITION': gameEngine.setEntityPosition(msg.entityId, data.x, data.y); break;
-          default: void 0;
-        }
+        gameEngine.onEntityChanged(changeType, msg.entityId, data);
       }
     });
   };
