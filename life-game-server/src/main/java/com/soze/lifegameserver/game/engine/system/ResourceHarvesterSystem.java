@@ -46,6 +46,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     Optional<Entity> targetOptional = getEngine().getEntityById(targetId);
     if (!targetOptional.isPresent()) {
       harvester.setTargetId(null);
+      sendHarvesterChangedMessage(entity);
       return;
     }
     
@@ -65,6 +66,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     if (harvester.isHarvestComplete()) {
       harvester.setTargetId(null);
       harvester.setHarvestingProgress(0f);
+      sendHarvesterChangedMessage(entity);
       //add resource to storage
       StorageComponent storageComponent = entity.getComponent(StorageComponent.class);
       ResourceProviderComponent resourceProvider = target.getComponent(ResourceProviderComponent.class);
@@ -73,14 +75,15 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
       return;
     }
     
-    if (harvester.getHarvestingProgress() == 0f) {
-    
-    }
-    
     //4. otherwise update harvesting progress
     float progress = harvester.getHarvestingProgress();
     harvester.setHarvestingProgress(progress + (delta / harvester.getHarvestingTime()));
-    
+    sendHarvesterChangedMessage(entity);
+  }
+  
+  private void sendHarvesterChangedMessage(Entity entity) {
+    HarvesterComponent harvester = entity.getComponent(HarvesterComponent.class);
+    gameSession.send(new EntityChangedMessage((Long) entity.getId(), harvester));
   }
   
 }

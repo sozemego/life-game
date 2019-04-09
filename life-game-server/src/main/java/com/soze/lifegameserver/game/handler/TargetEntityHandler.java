@@ -2,6 +2,7 @@ package com.soze.lifegameserver.game.handler;
 
 import com.soze.klecs.entity.Entity;
 import com.soze.lifegame.common.ws.message.client.TargetEntity;
+import com.soze.lifegame.common.ws.message.server.EntityChangedMessage;
 import com.soze.lifegameserver.game.GameCoordinator;
 import com.soze.lifegameserver.game.engine.GameEngine;
 import com.soze.lifegameserver.game.engine.component.HarvesterComponent;
@@ -97,6 +98,7 @@ public class TargetEntityHandler {
     gameEngine.addTask(() -> {
       harvesterComponent.setHarvestingProgress(0f);
       harvesterComponent.setTargetId((Long) targetEntity.getId());
+      session.send(new EntityChangedMessage((Long) targetEntity.getId(), harvesterComponent));
     });
     
   }
