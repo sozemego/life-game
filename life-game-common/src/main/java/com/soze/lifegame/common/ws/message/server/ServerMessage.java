@@ -17,7 +17,7 @@ import java.util.UUID;
   @JsonSubTypes.Type(value = AuthorizedMessage.class, name = "AUTHORIZED"),
   @JsonSubTypes.Type(value = WorldMessage.class, name = "WORLD"),
   @JsonSubTypes.Type(value = EntityMessage.class, name = "ENTITY"),
-  @JsonSubTypes.Type(value = EntityPositionMessage.class, name = "ENTITY_POSITION")
+  @JsonSubTypes.Type(value = EntityChangedMessage.class, name = "ENTITY_CHANGED")
 }
 )
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -40,7 +40,7 @@ public abstract class ServerMessage {
   }
 
   public enum ServerMessageType {
-    AUTHORIZED, WORLD, ENTITY, ENTITY_POSITION
+    AUTHORIZED, WORLD, ENTITY, ENTITY_CHANGED
   }
 
 }
