@@ -2,6 +2,7 @@ package com.soze.lifegameserver.game.engine.system;
 
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
+import com.soze.lifegame.common.ws.message.server.EntityChangedMessage;
 import com.soze.lifegameserver.game.engine.EntityUtils;
 import com.soze.lifegameserver.game.engine.component.HarvesterComponent;
 import com.soze.lifegameserver.game.engine.component.MovementComponent;
@@ -10,7 +11,9 @@ import com.soze.lifegameserver.game.engine.component.ResourceProviderComponent;
 import com.soze.lifegameserver.game.engine.component.StorageComponent;
 import com.soze.lifegameserver.game.ws.GameSession;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class ResourceHarvesterSystem extends BaseEntitySystem {
@@ -68,6 +71,10 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
       storageComponent.setResource(resourceProvider.getResource());
       storageComponent.setCapacityTaken(storageComponent.getCapacityTaken() + 1);
       return;
+    }
+    
+    if (harvester.getHarvestingProgress() == 0f) {
+    
     }
     
     //4. otherwise update harvesting progress

@@ -3,9 +3,9 @@ package com.soze.lifegameserver.game.engine.system;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
 import com.soze.lifegame.common.ws.message.server.EntityChangedMessage;
-import com.soze.lifegame.common.ws.message.server.EntityChangedMessage.ChangeType;
 import com.soze.lifegameserver.game.engine.EntityUtils;
 import com.soze.lifegameserver.game.engine.Nodes;
+import com.soze.lifegameserver.game.engine.component.BaseComponent.ComponentType;
 import com.soze.lifegameserver.game.engine.component.MovementComponent;
 import com.soze.lifegameserver.game.engine.component.PhysicsComponent;
 import com.soze.lifegameserver.game.ws.GameSession;
@@ -57,10 +57,7 @@ public class MovementSystem extends BaseEntitySystem {
     physics.setX(x + (cos * speed * delta));
     physics.setY(y + (sin * speed * delta));
     
-    Map<String, Object> data = new HashMap<>();
-    data.put("x", physics.getX());
-    data.put("y", physics.getY());
-    gameSession.send(new EntityChangedMessage((Long) entity.getId(), ChangeType.POSITION, data));
+    gameSession.send(new EntityChangedMessage((Long) entity.getId(), physics));
   }
   
 }
