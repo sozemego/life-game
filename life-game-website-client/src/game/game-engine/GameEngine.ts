@@ -15,6 +15,7 @@ import { EntityAction } from './EntityAction';
 import { createEntityPhysicsChangeHandler } from './entity-change/EntityPhysicsChangeHandler';
 import { EntityChangeHandler } from './entity-change/EntityChangeHandler';
 import { createEntityHarvesterChangeHandler } from './entity-change/EntityHarvesterChangeHandler';
+import { createHarvestingGfxSystem } from "../ecs/system/HarvestingGfxSystem";
 
 const TILE_SIZE = 1;
 
@@ -41,6 +42,7 @@ export const createGameEngine = (inputHandler: InputHandler, client: GameClient)
     entityEngine.addSystem(createGraphicsSystem(gameEngine, entityEngine, gfxEngine));
     entityEngine.addSystem(createTooltipSystem(gameEngine, entityEngine, gfxEngine));
     entityEngine.addSystem(createSelectSystem(gameEngine, entityEngine, gfxEngine));
+    entityEngine.addSystem(createHarvestingGfxSystem(gameEngine, entityEngine, gfxEngine));
 
     gameEngine.entityEngine = entityEngine;
 
