@@ -16,6 +16,7 @@ import { createEntityPhysicsChangeHandler } from './entity-change/EntityPhysicsC
 import { EntityChangeHandler } from './entity-change/EntityChangeHandler';
 import { createEntityHarvesterChangeHandler } from './entity-change/EntityHarvesterChangeHandler';
 import { createHarvestingGfxSystem } from "../ecs/system/HarvestingGfxSystem";
+import { createEntityStorageChangeHandler } from "./entity-change/EntityStorageChangeHandler";
 
 const TILE_SIZE = 1;
 
@@ -93,6 +94,7 @@ export const createGameEngine = (inputHandler: InputHandler, client: GameClient)
   const handlers: EntityChangeHandlerTable = {
     PHYSICS: createEntityPhysicsChangeHandler(gameEngine),
     HARVESTER: createEntityHarvesterChangeHandler(gameEngine),
+    STORAGE: createEntityStorageChangeHandler(gameEngine),
   };
 
   gameEngine.onEntityChanged = (entityId, component) => {
