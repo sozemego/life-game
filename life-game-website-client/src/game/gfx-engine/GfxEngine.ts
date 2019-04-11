@@ -320,6 +320,8 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     options: CreateSpriteOptions = createSpriteOptions,
     group: Group | null,
   ): Sprite => {
+    options.depthTest = options.depthTest || true;
+    options.renderOrder = options.renderOrder || 0;
     const texture = textureLoader.load(`textures/${textureName}.png`);
     texture.wrapS = RepeatWrapping;
     texture.repeat.x = -1;
@@ -334,6 +336,8 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     const sprite = new Sprite(entityMaterial);
     sprite.position.x = options.x * tileSize;
     sprite.position.y = options.y * tileSize;
+    sprite.renderOrder = options.renderOrder;
+    sprite.material.depthTest = options.depthTest;
     group = group || world.sprites;
     group.add(sprite);
     const boxHelper = new BoxHelper(sprite);
@@ -524,4 +528,6 @@ export interface CreateSpriteOptions {
   y: number;
   width?: number;
   height?: number;
+  renderOrder?: number;
+  depthTest?: boolean;
 }

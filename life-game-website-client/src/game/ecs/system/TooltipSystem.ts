@@ -62,16 +62,14 @@ export const createTooltipSystem = (
         const resourceSprite = gfxEngine.createSprite(
           resource,
           {
-            x: x + width / 2,
-            y: y + height / 2,
+            x: (x + width / 2) + 0.5,
+            y: (y + height / 2) + 0.5,
           },
           group,
         );
         resourceSprite.renderOrder = 1;
         resourceSprite.material.depthTest = false;
         resourceSprite.scale.set(0.25, 0.25, 1);
-        resourceSprite.position.x += 0.5;
-        resourceSprite.position.y += 0.5;
       }
     } else {
     }
