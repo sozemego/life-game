@@ -4,6 +4,7 @@ import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
 import com.soze.lifegame.common.ws.message.server.EntityChangedMessage;
 import com.soze.lifegameserver.game.engine.EntityUtils;
+import com.soze.lifegameserver.game.engine.component.BaseComponent;
 import com.soze.lifegameserver.game.engine.component.HarvesterComponent;
 import com.soze.lifegameserver.game.engine.component.MovementComponent;
 import com.soze.lifegameserver.game.engine.Nodes;
@@ -46,7 +47,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     Optional<Entity> targetOptional = getEngine().getEntityById(targetId);
     if (!targetOptional.isPresent()) {
       harvester.setTargetId(null);
-      sendHarvesterChangedMessage(entity);
+      sendComponent(entity, harvester);
       return;
     }
     
@@ -66,24 +67,24 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     if (harvester.isHarvestComplete()) {
       harvester.setTargetId(null);
       harvester.setHarvestingProgress(0f);
-      sendHarvesterChangedMessage(entity);
+      sendComponent(entity, harvester);
       //add resource to storage
       StorageComponent storageComponent = entity.getComponent(StorageComponent.class);
       ResourceProviderComponent resourceProvider = target.getComponent(ResourceProviderComponent.class);
       storageComponent.setResource(resourceProvider.getResource());
       storageComponent.setCapacityTaken(storageComponent.getCapacityTaken() + 1);
+      sendComponent(entity, storageComponent);
       return;
     }
     
     //4. otherwise update harvesting progress
     float progress = harvester.getHarvestingProgress();
     harvester.setHarvestingProgress(progress + (delta / harvester.getHarvestingTime()));
-    sendHarvesterChangedMessage(entity);
+    sendComponent(entity, harvester);
   }
   
-  private void sendHarvesterChangedMessage(Entity entity) {
-    HarvesterComponent harvester = entity.getComponent(HarvesterComponent.class);
-    gameSession.send(new EntityChangedMessage((Long) entity.getId(), harvester));
+  private void sendComponent(Entity entity, BaseComponent component) {
+    gameSession.send(new EntityChangedMessage((Long) entity.getId(), component));
   }
   
 }
