@@ -1,5 +1,5 @@
 import { GameEngine } from '../GameEngine';
-import { PhysicsComponent, ResourceHarvesterComponent } from "../../ecs/component/FactoryRegistry";
+import { ResourceHarvesterComponent } from "../../ecs/component/FactoryRegistry";
 import { TYPES } from "../../ecs/component/types";
 
 
