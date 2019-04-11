@@ -1,5 +1,5 @@
 import { GameEngine } from '../GameEngine';
-import { ResourceHarvesterComponent, StorageComponent } from "../../ecs/component/FactoryRegistry";
+import { StorageComponent } from "../../ecs/component/FactoryRegistry";
 import { TYPES } from "../../ecs/component/types";
 
 
@@ -15,6 +15,9 @@ export const createEntityStorageChangeHandler = (gameEngine: GameEngine): Entity
     if (!entity) {
       return;
     }
-    console.log(data);
+    const storage = entity.getComponent(TYPES.STORAGE) as StorageComponent;
+    storage.resource = data.resource;
+    storage.capacityTaken = data.capacityTaken;
+    storage.capacity = data.capacity;
   };
 };

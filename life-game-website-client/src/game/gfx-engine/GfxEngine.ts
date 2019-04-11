@@ -6,11 +6,13 @@ import {
   CameraHelper,
   DirectionalLight,
   DirectionalLightHelper,
+  Font,
   FrontSide,
   Geometry,
   GridHelper,
   Group,
   Mesh,
+  MeshBasicMaterial,
   MeshLambertMaterial,
   PCFShadowMap,
   PerspectiveCamera,
@@ -20,6 +22,7 @@ import {
   Scene,
   Sprite,
   SpriteMaterial,
+  TextGeometry,
   TextureLoader,
   Vector3,
   WebGLRenderer,
@@ -28,6 +31,7 @@ import Stats from 'stats-js';
 import { InputHandler, Mouse } from '../InputHandler';
 import { World } from '../dto';
 import { Cursor, defaultCursor, selectCursor, targetCursor } from './Cursor';
+import fontData from 'three/examples/fonts/helvetiker_regular.typeface.json';
 
 export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): GfxEngine => {
   const scene = new Scene();
@@ -350,6 +354,22 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     return sprite;
   };
 
+  const createText = (text: string, group: Group) => {
+    const font = new Font(fontData);
+    const geometry = new TextGeometry(text, {
+      font: font,
+    });
+    const mesh = new Mesh(
+      geometry,
+      new MeshBasicMaterial({ color: 0xffffff, opacity: 1, transparent: true }),
+    );
+    group.add(mesh);
+    const removeMesh = () => {
+      group.remove(mesh);
+    };
+    return [mesh, removeMesh] as [Mesh, Function];
+  };
+
   const stop = () => {
     console.log('Stopping engine');
     running = false;
@@ -502,6 +522,7 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     start,
     setWorld,
     createSprite,
+    createText,
     getSpriteUnderMouse,
     getClickedSprite,
     createGroup,
@@ -515,6 +536,7 @@ export interface GfxEngine {
   start: Function;
   setWorld: (world: World) => void;
   createSprite: (name: string, options: CreateSpriteOptions, group: Group | null) => Sprite;
+  createText: (text: string, group: Group) => [Mesh, Function];
   getSpriteUnderMouse: () => Sprite | null;
   getClickedSprite: () => Sprite | null;
   createGroup: (layer: number | null) => [Group, Function];
