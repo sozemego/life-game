@@ -1,7 +1,7 @@
 import { TYPES } from './types';
 import { Component, Entity } from '../Entity';
 import { GfxEngine } from '../../gfx-engine/GfxEngine';
-import { Sprite } from 'three';
+import { Mesh, Sprite } from "three";
 import { Resource } from './Resource';
 
 const factories: ComponentFactories = {};
@@ -24,9 +24,10 @@ factories[TYPES.PHYSICS] = createPhysics;
 
 const createGraphics = (component: any, context: FactoryRegistryContext): GraphicsComponent => {
   const { gfxEngine } = context;
+  const mesh = gfxEngine.createMesh(component.texture, { x: 0, y: 0 }, null);
   const sprite = gfxEngine.createSprite(component.texture, { x: 0, y: 0 }, null);
   sprite['userData']['entityId'] = context.entity.id;
-  return { ...component, sprite };
+  return { ...component, mesh };
 };
 
 factories[TYPES.GRAPHICS] = createGraphics;
@@ -66,7 +67,7 @@ export interface ComponentFactories {
 }
 
 export interface GraphicsComponent extends Component {
-  sprite: Sprite | null;
+  mesh: Mesh | null;
 }
 
 export interface NameComponent extends Component {

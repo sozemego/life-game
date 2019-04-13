@@ -25,14 +25,14 @@ export const createSelectSystem = (
     }
 
     const [graphics, physics] = selectedEntity.getComponents([TYPES.GRAPHICS, TYPES.PHYSICS]);
-    const { sprite: selectedSprite } = graphics as GraphicsComponent;
-    if (!selectedSprite) {
+    const { mesh: selectedMesh } = graphics as GraphicsComponent;
+    if (!selectedMesh) {
       return;
     }
 
     const { x, y, width, height } = physics as PhysicsComponent;
-    const spriteX = selectedSprite.position.x;
-    const spriteY = selectedSprite.position.y;
+    const spriteX = selectedMesh.position.x;
+    const spriteY = selectedMesh.position.y;
 
     if (previousSelectedEntity !== selectedEntity) {
       //different selected than the last time!
@@ -54,9 +54,9 @@ export const createSelectSystem = (
       panel.renderOrder = 1;
       panel.scale.x = width;
       panel.scale.y = height;
-      selectedSprite['userData']['panel'] = panel;
+      selectedMesh['userData']['panel'] = panel;
     } else {
-      const panel = selectedSprite['userData']['panel'];
+      const panel = selectedMesh['userData']['panel'];
       //same as last time
       panel.renderOrder = 1;
       panel.scale.x = width;

@@ -31,7 +31,7 @@ export const createSelectEntityHandler = (gameEngine: GameEngine) => {
     const [selectedEntity] = getEntities(entityEngine, [TYPES.GRAPHICS]).filter(
       (entity: Entity) => {
         const graphics = entity.getComponent(TYPES.GRAPHICS) as GraphicsComponent;
-        return graphics.sprite === clickedSprite;
+        return false;
       },
     );
 

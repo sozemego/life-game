@@ -5,7 +5,7 @@ import {
   BoxHelper,
   CameraHelper,
   DirectionalLight,
-  DirectionalLightHelper,
+  DirectionalLightHelper, DoubleSide,
   Font,
   FrontSide,
   Geometry,
@@ -14,8 +14,10 @@ import {
   Mesh,
   MeshBasicMaterial,
   MeshLambertMaterial,
+  Object3D,
   PCFShadowMap,
   PerspectiveCamera,
+  Plane,
   PlaneGeometry,
   Raycaster,
   RepeatWrapping,
@@ -25,13 +27,12 @@ import {
   TextGeometry,
   TextureLoader,
   Vector3,
-  WebGLRenderer,
-} from 'three/src/Three';
+  WebGLRenderer
+} from "three/src/Three";
 import Stats from 'stats-js';
 import { InputHandler, Mouse } from '../InputHandler';
 import { World } from '../dto';
 import { Cursor, defaultCursor, selectCursor, targetCursor } from './Cursor';
-import fontData from 'three/examples/fonts/helvetiker_regular.typeface.json';
 
 export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): GfxEngine => {
   const scene = new Scene();
@@ -39,7 +40,7 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
   const width = window.innerWidth - 17;
   const height = window.innerHeight - 36 - 25;
   const aspect = width / height;
-  const camera = new PerspectiveCamera(70, aspect, 1, 1000);
+  const camera = new PerspectiveCamera(70, aspect, 0.001, 1000);
   camera.up.set(0, 0, 1);
   camera.position.y = -5 * tileSize;
   camera.position.z = 10 * tileSize;
@@ -67,8 +68,8 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
   scene.add(light);
   scene.add(light.target);
 
-  const cameraHelper = new CameraHelper(light.shadow.camera);
-  // scene.add(cameraHelper);
+  const cameraHelper = new CameraHelper(camera);
+  scene.add(cameraHelper);
 
   const ambientLight = new AmbientLight(0xffffff, 0.25);
   scene.add(ambientLight);
@@ -221,6 +222,7 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
 
   const world = {
     tiles: {},
+    meshes: new Group(),
     tilesGroup: new Group(),
     sprites: new Group(),
     groups: [],
@@ -311,8 +313,9 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
   };
 
   spriteScene.add(world.sprites);
+  scene.add(world.meshes);
 
-  const createSpriteOptions: CreateSpriteOptions = {
+  const createSpriteOptions: CreateObjectOptions = {
     x: 0,
     y: 0,
     width: 0,
@@ -321,7 +324,7 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
 
   const createSprite = (
     textureName: string,
-    options: CreateSpriteOptions = createSpriteOptions,
+    options: CreateObjectOptions = createSpriteOptions,
     group: Group | null,
   ): Sprite => {
     options.depthTest = options.depthTest || true;
@@ -354,20 +357,25 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     return sprite;
   };
 
-  const createText = (text: string, group: Group) => {
-    const font = new Font(fontData);
-    const geometry = new TextGeometry(text, {
-      font: font,
+  const createMesh = (name: string, options: CreateObjectOptions, group: Group | null) => {
+    group = group || world.meshes;
+    const texture = textureLoader.load(`textures/${name}.png`);
+    // texture.wrapS = RepeatWrapping;
+    // texture.repeat.x = -1;
+    const material = new MeshLambertMaterial({
+      map: texture,
+      color: 0xffffff,
+      side: FrontSide,
+      transparent: true,
+      opacity: 1,
     });
-    const mesh = new Mesh(
-      geometry,
-      new MeshBasicMaterial({ color: 0xffffff, opacity: 1, transparent: true }),
-    );
+    const { x = 0, y = 0, width = 1, height = 1 } = options;
+    const geometry = new PlaneGeometry(width, height, 1, 1);
+    const mesh = new Mesh(geometry, material);
+    mesh.position.set(x, y, 0.5);
+    mesh.rotation.z = Math.PI;
     group.add(mesh);
-    const removeMesh = () => {
-      group.remove(mesh);
-    };
-    return [mesh, removeMesh] as [Mesh, Function];
+    return mesh;
   };
 
   const stop = () => {
@@ -522,7 +530,7 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
     start,
     setWorld,
     createSprite,
-    createText,
+    createMesh,
     getSpriteUnderMouse,
     getClickedSprite,
     createGroup,
@@ -535,8 +543,8 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
 export interface GfxEngine {
   start: Function;
   setWorld: (world: World) => void;
-  createSprite: (name: string, options: CreateSpriteOptions, group: Group | null) => Sprite;
-  createText: (text: string, group: Group) => [Mesh, Function];
+  createSprite: (name: string, options: CreateObjectOptions, group: Group | null) => Sprite;
+  createMesh: (name: string, options: CreateObjectOptions, group: Group | null) => Mesh;
   getSpriteUnderMouse: () => Sprite | null;
   getClickedSprite: () => Sprite | null;
   createGroup: (layer: number | null) => [Group, Function];
@@ -545,7 +553,7 @@ export interface GfxEngine {
   getMouse: () => Mouse;
 }
 
-export interface CreateSpriteOptions {
+export interface CreateObjectOptions {
   x: number;
   y: number;
   width?: number;
