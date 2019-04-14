@@ -1,7 +1,8 @@
 import {
+  AdditiveBlending,
   AmbientLight,
-  AxesHelper,
-  Box3,
+  AxesHelper, Blending,
+  Box3, BoxGeometry,
   BoxHelper,
   CameraHelper,
   DirectionalLight,
@@ -241,8 +242,6 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
       map: texture,
       color: 0x00ff00,
       side: FrontSide,
-      opacity: 1,
-      transparent: true,
     });
 
     newWorld.tiles
@@ -360,19 +359,18 @@ export const createGfxEngine = (inputHandler: InputHandler, tileSize: number): G
   const createMesh = (name: string, options: CreateObjectOptions, group: Group | null) => {
     group = group || world.meshes;
     const texture = textureLoader.load(`textures/${name}.png`);
-    // texture.wrapS = RepeatWrapping;
-    // texture.repeat.x = -1;
-    const material = new MeshLambertMaterial({
+    const material = new MeshBasicMaterial({
       map: texture,
       color: 0xffffff,
       side: FrontSide,
       transparent: true,
       opacity: 1,
+      // alphaTest: 0.5
     });
     const { x = 0, y = 0, width = 1, height = 1 } = options;
     const geometry = new PlaneGeometry(width, height, 1, 1);
     const mesh = new Mesh(geometry, material);
-    mesh.position.set(x, y, 0.5);
+    mesh.position.set(x, y, 0.25);
     mesh.rotation.z = Math.PI;
     group.add(mesh);
     return mesh;

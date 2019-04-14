@@ -25,8 +25,7 @@ factories[TYPES.PHYSICS] = createPhysics;
 const createGraphics = (component: any, context: FactoryRegistryContext): GraphicsComponent => {
   const { gfxEngine } = context;
   const mesh = gfxEngine.createMesh(component.texture, { x: 0, y: 0 }, null);
-  const sprite = gfxEngine.createSprite(component.texture, { x: 0, y: 0 }, null);
-  sprite['userData']['entityId'] = context.entity.id;
+  mesh['userData']['entityId'] = context.entity.id;
   return { ...component, mesh };
 };
 
